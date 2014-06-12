@@ -11,6 +11,7 @@
 		7143078A194951F400375FFD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 71430789194951F400375FFD /* AppDelegate.m */; };
 		7143078C194951F400375FFD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7143078B194951F400375FFD /* Images.xcassets */; };
 		71430798194951F400375FFD /* CloudKit_ManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 71430797194951F400375FFD /* CloudKit_ManagerTests.m */; };
+		714307A31949523000375FFD /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 714307A21949523000375FFD /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +34,8 @@
 		71430791194951F400375FFD /* CloudKit ManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CloudKit ManagerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		71430796194951F400375FFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71430797194951F400375FFD /* CloudKit_ManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CloudKit_ManagerTests.m; sourceTree = "<group>"; };
+		714307A11949521700375FFD /* CloudKit Manager.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "CloudKit Manager.entitlements"; sourceTree = "<group>"; };
+		714307A21949523000375FFD /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				714307A31949523000375FFD /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +60,7 @@
 		71430778194951F400375FFD = {
 			isa = PBXGroup;
 			children = (
+				714307A21949523000375FFD /* CloudKit.framework */,
 				71430783194951F400375FFD /* CloudKit Manager */,
 				71430794194951F400375FFD /* CloudKit ManagerTests */,
 				71430782194951F400375FFD /* Products */,
@@ -74,6 +79,7 @@
 		71430783194951F400375FFD /* CloudKit Manager */ = {
 			isa = PBXGroup;
 			children = (
+				714307A11949521700375FFD /* CloudKit Manager.entitlements */,
 				71430788194951F400375FFD /* AppDelegate.h */,
 				71430789194951F400375FFD /* AppDelegate.m */,
 				7143078B194951F400375FFD /* Images.xcassets */,
@@ -152,11 +158,18 @@
 		71430779194951F400375FFD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = SPR;
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = Sprynthesis;
 				TargetAttributes = {
 					71430780194951F400375FFD = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = P4VPL484Y6;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					71430790194951F400375FFD = {
 						CreatedOnToolsVersion = 6.0;
@@ -310,9 +323,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = "CloudKit Manager/CloudKit Manager.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "CloudKit Manager/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -321,9 +338,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = "CloudKit Manager/CloudKit Manager.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "CloudKit Manager/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
