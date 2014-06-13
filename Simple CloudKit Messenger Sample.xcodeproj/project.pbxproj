@@ -1,0 +1,311 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		716E5238194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */; };
+		716E523B194ACC8E00E1477E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5232194ACC8E00E1477E /* AppDelegate.m */; };
+		716E523C194ACC8E00E1477E /* CloudKit Manager.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 716E5233194ACC8E00E1477E /* CloudKit Manager.entitlements */; };
+		716E523D194ACC8E00E1477E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 716E5234194ACC8E00E1477E /* Images.xcassets */; };
+		716E523E194ACC8E00E1477E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 716E5235194ACC8E00E1477E /* Info.plist */; };
+		716E523F194ACC8E00E1477E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5236194ACC8E00E1477E /* main.m */; };
+		716E5240194ACC8E00E1477E /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */; };
+		716E5246194ACD3D00E1477E /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 716E5245194ACD3D00E1477E /* CloudKit.framework */; };
+		716E5249194ACE8200E1477E /* SPRFriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		710385FC194AC9F200E59EBB /* Simple CloudKit Messenger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Simple CloudKit Messenger.entitlements"; sourceTree = "<group>"; };
+		71430781194951F400375FFD /* Simple CloudKit Messenger Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple CloudKit Messenger Sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		716E522B194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRSimpleCloudKitMessenger.h; sourceTree = "<group>"; };
+		716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRSimpleCloudKitMessenger.m; sourceTree = "<group>"; };
+		716E5231194ACC8E00E1477E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		716E5232194ACC8E00E1477E /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		716E5233194ACC8E00E1477E /* CloudKit Manager.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "CloudKit Manager.entitlements"; sourceTree = "<group>"; };
+		716E5234194ACC8E00E1477E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		716E5235194ACC8E00E1477E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		716E5236194ACC8E00E1477E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
+		716E5245194ACD3D00E1477E /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		716E5247194ACE8200E1477E /* SPRFriendsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRFriendsTableViewController.h; sourceTree = "<group>"; };
+		716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRFriendsTableViewController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7143077E194951F400375FFD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				716E5246194ACD3D00E1477E /* CloudKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		71430778194951F400375FFD = {
+			isa = PBXGroup;
+			children = (
+				716E5245194ACD3D00E1477E /* CloudKit.framework */,
+				716E522A194ACC8E00E1477E /* Simple CloudKit Messenger */,
+				716E5230194ACC8E00E1477E /* Source */,
+				710385FC194AC9F200E59EBB /* Simple CloudKit Messenger.entitlements */,
+				71430782194951F400375FFD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		71430782194951F400375FFD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				71430781194951F400375FFD /* Simple CloudKit Messenger Sample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		716E522A194ACC8E00E1477E /* Simple CloudKit Messenger */ = {
+			isa = PBXGroup;
+			children = (
+				716E522B194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.h */,
+				716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */,
+			);
+			path = "Simple CloudKit Messenger";
+			sourceTree = "<group>";
+		};
+		716E5230194ACC8E00E1477E /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				716E5231194ACC8E00E1477E /* AppDelegate.h */,
+				716E5232194ACC8E00E1477E /* AppDelegate.m */,
+				716E5233194ACC8E00E1477E /* CloudKit Manager.entitlements */,
+				716E5234194ACC8E00E1477E /* Images.xcassets */,
+				716E5235194ACC8E00E1477E /* Info.plist */,
+				716E5236194ACC8E00E1477E /* main.m */,
+				716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */,
+				716E5247194ACE8200E1477E /* SPRFriendsTableViewController.h */,
+				716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		71430780194951F400375FFD /* Simple CloudKit Messenger Sample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7143079B194951F400375FFD /* Build configuration list for PBXNativeTarget "Simple CloudKit Messenger Sample" */;
+			buildPhases = (
+				7143077D194951F400375FFD /* Sources */,
+				7143077E194951F400375FFD /* Frameworks */,
+				7143077F194951F400375FFD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Simple CloudKit Messenger Sample";
+			productName = "CloudKit Manager";
+			productReference = 71430781194951F400375FFD /* Simple CloudKit Messenger Sample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		71430779194951F400375FFD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = SPR;
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = Sprynthesis;
+				TargetAttributes = {
+					71430780194951F400375FFD = {
+						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = P4VPL484Y6;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 7143077C194951F400375FFD /* Build configuration list for PBXProject "Simple CloudKit Messenger Sample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 71430778194951F400375FFD;
+			productRefGroup = 71430782194951F400375FFD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				71430780194951F400375FFD /* Simple CloudKit Messenger Sample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7143077F194951F400375FFD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				716E523E194ACC8E00E1477E /* Info.plist in Resources */,
+				716E5240194ACC8E00E1477E /* MainStoryboard.storyboard in Resources */,
+				716E523D194ACC8E00E1477E /* Images.xcassets in Resources */,
+				716E523C194ACC8E00E1477E /* CloudKit Manager.entitlements in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7143077D194951F400375FFD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				716E5238194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m in Sources */,
+				716E5249194ACE8200E1477E /* SPRFriendsTableViewController.m in Sources */,
+				716E523F194ACC8E00E1477E /* main.m in Sources */,
+				716E523B194ACC8E00E1477E /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		71430799194951F400375FFD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				METAL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		7143079A194951F400375FFD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				METAL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7143079C194951F400375FFD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = "Simple CloudKit Messenger.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = Source/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "Simple CloudKit Messenger Sample";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Debug;
+		};
+		7143079D194951F400375FFD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = "Simple CloudKit Messenger.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = Source/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "Simple CloudKit Messenger Sample";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7143077C194951F400375FFD /* Build configuration list for PBXProject "Simple CloudKit Messenger Sample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				71430799194951F400375FFD /* Debug */,
+				7143079A194951F400375FFD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7143079B194951F400375FFD /* Build configuration list for PBXNativeTarget "Simple CloudKit Messenger Sample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7143079C194951F400375FFD /* Debug */,
+				7143079D194951F400375FFD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 71430779194951F400375FFD /* Project object */;
+}

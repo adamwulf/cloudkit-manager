@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:CloudKit Manager.xcodeproj">
+      location = "self:Simple CloudKit Messenger Sample.xcodeproj">
    </FileRef>
 </Workspace>

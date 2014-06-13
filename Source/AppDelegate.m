@@ -1,0 +1,53 @@
+//
+//  AppDelegate.m
+//  CloudKit Manager
+//
+//  Created by Bob Spryn on 6/11/14.
+//  Copyright (c) 2014 Sprynthesis. All rights reserved.
+//
+
+#import "AppDelegate.h"
+#import "SPRSimpleCloudKitMessenger.h"
+
+@interface AppDelegate ()
+            
+@property (nonatomic, strong) SPRSimpleCloudKitMessenger *simpleCloudKitMessenger;
+@end
+
+@implementation AppDelegate
+            
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [application registerForRemoteNotifications];
+    return YES;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+#warning Might not need to do this on didBecomeActive since actions requiring these things will throw relevent errors.
+    [[SPRSimpleCloudKitMessenger sharedMessenger] verifyiCloudAccountStatusWithCompletionHandler:^(NSError *error) {
+        __block NSError *theError;
+        if (error) {
+            theError = error;
+        } else {
+            [[SPRSimpleCloudKitMessenger sharedMessenger] promptToBeDiscoverableIfNeededWithCompletionHandler:^(NSError *error) {
+                if (error) {
+                    theError = error;
+                }
+            }];
+        }
+        if (error) {
+            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+        }
+    }];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)info {
+}
+
+@end
