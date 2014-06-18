@@ -51,7 +51,9 @@ NSString *const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitM
         }
         // theError will either be an error or nil
         dispatch_async(dispatch_get_main_queue(), ^{
-            completionHandler(theError);
+            if (completionHandler) {
+                completionHandler(theError);
+            }
         });
     }];
 }
@@ -71,7 +73,9 @@ NSString *const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitM
         }
         // theError will either be an error or nil
         dispatch_async(dispatch_get_main_queue(), ^{
-            completionHandler(theError);
+            if (completionHandler) {
+                completionHandler(theError);
+            }
         });
     }];
 }
@@ -81,11 +85,15 @@ NSString *const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitM
         if (error) {
             NSError *theError = [self simpleCloudMessengerErrorForError:error];
             dispatch_async(dispatch_get_main_queue(), ^{
-                completionHandler(nil, theError);
+                if (completionHandler) {
+                    completionHandler(nil, theError);
+                }
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-                completionHandler(userInfos, nil);
+                if (completionHandler) {
+                    completionHandler(userInfos, nil);
+                }
             });
         }
     }];
