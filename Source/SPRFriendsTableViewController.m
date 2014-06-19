@@ -21,7 +21,6 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
         self.friends = @[];
     }
     return self;
@@ -34,7 +33,7 @@
     
     [[SPRSimpleCloudKitMessenger sharedMessenger] discoverAllFriendsWithCompletionHandler:^(NSArray *friendRecords, NSError *error) {
         if (error) {
-            //alert
+            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.friends = friendRecords;

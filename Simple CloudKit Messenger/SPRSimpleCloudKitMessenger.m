@@ -12,10 +12,18 @@
 @interface SPRSimpleCloudKitMessenger ()
 @property (readonly) CKContainer *container;
 @property (readonly) CKDatabase *publicDatabase;
+@property (nonatomic, getter=isSubscribed) BOOL subscribed;
 
 @end
 
 NSString *const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitMessenger.ErrorDomain";
+
+static NSString *const SPRMessageRecordType = @"Message";
+static NSString *const SPRMessageTextField = @"text";
+static NSString *const SPRMessageImageField = @"image";
+static NSString *const SPRMessageSenderField = @"sender";
+static NSString *const SPRMessageReceiverField = @"receiver";
+static NSString *const SPRActiveUserInfo = @"SPRActiveUserInfo";
 
 @implementation SPRSimpleCloudKitMessenger
 - (id)init {
@@ -35,6 +43,8 @@ NSString *const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitM
     });
     return messenger;
 }
+
+#pragma mark - Account status and discovery
 
 - (void) verifyiCloudAccountStatusWithCompletionHandler:(void (^)(NSError *error)) completionHandler {
     [self.container accountStatusWithCompletionHandler:^(CKAccountStatus accountStatus, NSError *error) {
@@ -80,23 +90,138 @@ NSString *const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitM
     }];
 }
 
+- (void) fetchActiveUserInfoWithCompletionHandler:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
+    id userObject = [[NSUserDefaults standardUserDefaults] objectForKey:SPRActiveUserInfo];
+    if (userObject) {
+        completionHandler(userObject, nil);
+    } else {
+        [self.container fetchUserRecordIDWithCompletionHandler:^(CKRecordID *recordID, NSError *error) {
+            if (error) {
+                NSError *theError = [self simpleCloudMessengerErrorForError:error];
+                completionHandler(nil, theError);
+            } else {
+                [self.container discoverUserInfoWithUserRecordID:recordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
+                    NSError *theError = nil;
+                    if (error) {
+                        theError = [self simpleCloudMessengerErrorForError:error];
+                    } else {
+                        [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:SPRActiveUserInfo];
+                    }
+                    completionHandler(userInfo, theError);
+                }];
+            }
+        }];
+    }
+}
+
+#pragma mark - friends
+
 - (void) discoverAllFriendsWithCompletionHandler:(void (^)(NSArray *friendRecords, NSError *error)) completionHandler {
     [self.container discoverAllContactUserInfosWithCompletionHandler:^(NSArray *userInfos, NSError *error) {
+        NSError *theError = nil;
         if (error) {
-            NSError *theError = [self simpleCloudMessengerErrorForError:error];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completionHandler) {
-                    completionHandler(nil, theError);
-                }
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (completionHandler) {
-                    completionHandler(userInfos, nil);
-                }
-            });
+            theError = [self simpleCloudMessengerErrorForError:error];
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionHandler) {
+                completionHandler(userInfos, theError);
+            }
+        });
     }];
+}
+
+#pragma mark - Subscription handling
+
+- (void)subscribeWithCompletionHandler:(void (^)(NSError *error)) completionHandler {
+    
+    if (self.subscribed == NO) {
+        
+        NSPredicate *truePredicate = [NSPredicate predicateWithValue:YES];
+        CKSubscription *itemSubscription = [[CKSubscription alloc] initWithRecordType:SPRMessageRecordType
+                                                                            predicate:truePredicate
+                                                                              options:CKSubscriptionOptionsFiresOnRecordCreation];
+        
+        
+        CKNotificationInfo *notification = [[CKNotificationInfo alloc] init];
+        notification.alertBody = @"New Item Added!";
+        itemSubscription.notificationInfo = notification;
+        
+        [self.publicDatabase saveSubscription:itemSubscription completionHandler:^(CKSubscription *subscription, NSError *error) {
+            NSError *theError = nil;
+            if (error) {
+                theError = [self simpleCloudMessengerErrorForError:error];
+            } else {
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"Subscribed to Item");
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                //                [defaults setBool:YES forKey:@"subscribed"];
+                //                [defaults setObject:subscription.subscriptionID forKey:@"subscriptionID"];
+
+                if (completionHandler) {
+                    completionHandler(theError);
+                }
+            });
+        }];
+    }
+}
+
+- (void)unsubscribe {
+    if (self.subscribed == YES) {
+        
+        NSString *subscriptionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"subscriptionID"];
+        
+        CKModifySubscriptionsOperation *modifyOperation = [[CKModifySubscriptionsOperation alloc] init];
+        modifyOperation.subscriptionIDsToDelete = @[subscriptionID];
+        
+        modifyOperation.modifySubscriptionsCompletionBlock = ^(NSArray *savedSubscriptions, NSArray *deletedSubscriptionIDs, NSError *error) {
+            if (error) {
+                // In your app, handle this error beautifully.
+                NSLog(@"An error occured in %@: %@", NSStringFromSelector(_cmd), error);
+                abort();
+            } else {
+                NSLog(@"Unsubscribed to Item");
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"subscriptionID"];
+            }
+        };
+        
+        [self.publicDatabase addOperation:modifyOperation];
+    }
+}
+
+- (BOOL)isSubscribed {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:@"subscriptionID"] != nil;
+}
+
+#pragma mark - Messaging
+
+- (void) sendMessage:(NSString *)message withImageURL:(NSURL *)imageURL toUserRecordID:(CKRecordID*)userRecordID withCompletionHandler:(void (^)(NSError *error)) completionHandler {
+    CKRecord *record = [[CKRecord alloc] initWithRecordType:SPRMessageRecordType];
+    record[SPRMessageTextField] = message;
+    if (imageURL) {
+        CKAsset *asset = [[CKAsset alloc] initWithFileURL:imageURL];
+        record[SPRMessageImageField] = asset;
+    }
+    CKReference *sender = [[CKReference alloc] initWithRecordID:userRecordID action:CKReferenceActionNone];
+    record[SPRMessageSenderField] = sender;
+    CKReference *receiver = [[CKReference alloc] initWithRecordID:userRecordID action:CKReferenceActionNone];
+    record[SPRMessageReceiverField] = receiver;
+    
+    [self.publicDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
+        NSError *theError = nil;
+        if (error) {
+            theError = [self simpleCloudMessengerErrorForError:error];
+        } else {
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionHandler) {
+                completionHandler(theError);
+            }
+        });
+    }];
+
 }
 
 #pragma mark - Error handling utility methods
@@ -135,37 +260,37 @@ NSString *const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitM
 
 - (SPRSimpleCloudMessengerError) simpleCloudMessengerErrorCodeForCKErrorCode: (CKErrorCode) code {
     switch (code) {
-        CKErrorNetworkUnavailable:
-        CKErrorNetworkFailure:
+        case CKErrorNetworkUnavailable:
+        case CKErrorNetworkFailure:
             return SPRSimpleCloudMessengerErrorNetwork;
-        CKErrorServiceUnavailable:
+        case CKErrorServiceUnavailable:
             return SPRSimpleCloudMessengerErrorServiceUnavailable;
-        CKErrorNotAuthenticated:
+        case CKErrorNotAuthenticated:
             return SPRSimpleCloudMessengerErroriCloudAccount;
-        CKErrorPermissionFailure:
+        case CKErrorPermissionFailure:
             // right now the ONLY permission is for discovery
             // if that changes in the future, will want to make this more accurate
             return SPRSimpleCloudMessengerErrorMissingDiscoveryPermissions;
-        CKErrorOperationCancelled:
+        case CKErrorOperationCancelled:
             return SPRSimpleCloudMessengerErrorCancelled;
-        CKErrorBadDatabase:
-        CKErrorQuotaExceeded:
-        CKErrorZoneNotFound:
-        CKErrorBadContainer:
-        CKErrorInternalError:
-        CKErrorPartialFailure:
-        CKErrorMissingEntitlement:
-        CKErrorUnknownItem:
-        CKErrorInvalidArguments:
-        CKErrorResultsTruncated:
-        CKErrorServerRecordChanged:
-        CKErrorServerRejectedRequest:
-        CKErrorAssetFileNotFound:
-        CKErrorAssetFileModified:
-        CKErrorIncompatibleVersion:
-        CKErrorConstraintViolation:
-        CKErrorChangeTokenExpired:
-        CKErrorBatchRequestFailed:
+        case CKErrorBadDatabase:
+        case CKErrorQuotaExceeded:
+        case CKErrorZoneNotFound:
+        case CKErrorBadContainer:
+        case CKErrorInternalError:
+        case CKErrorPartialFailure:
+        case CKErrorMissingEntitlement:
+        case CKErrorUnknownItem:
+        case CKErrorInvalidArguments:
+        case CKErrorResultsTruncated:
+        case CKErrorServerRecordChanged:
+        case CKErrorServerRejectedRequest:
+        case CKErrorAssetFileNotFound:
+        case CKErrorAssetFileModified:
+        case CKErrorIncompatibleVersion:
+        case CKErrorConstraintViolation:
+        case CKErrorChangeTokenExpired:
+        case CKErrorBatchRequestFailed:
         default:
             return SPRSimpleCloudMessengerErrorUnexpected;
     }

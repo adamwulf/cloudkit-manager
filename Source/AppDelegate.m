@@ -23,22 +23,29 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-#warning Might not need to do this on didBecomeActive since actions requiring these things will throw relevent errors.
     [[SPRSimpleCloudKitMessenger sharedMessenger] verifyiCloudAccountStatusWithCompletionHandler:^(NSError *error) {
-        __block NSError *theError;
         if (error) {
-            theError = error;
+            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
         } else {
             [[SPRSimpleCloudKitMessenger sharedMessenger] promptToBeDiscoverableIfNeededWithCompletionHandler:^(NSError *error) {
                 if (error) {
-                    theError = error;
+                    [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                } else {
+                    [[SPRSimpleCloudKitMessenger sharedMessenger] fetchActiveUserInfoWithCompletionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
+                        if (error) {
+                            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                        }
+                    }];
                 }
             }];
         }
-        if (error) {
-            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-        }
     }];
+    
+//    [[SPRSimpleCloudKitMessenger sharedMessenger] subscribeWithCompletionHandler:^(NSError *error) {
+//        if (error) {
+//            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+//        }
+//    }];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
