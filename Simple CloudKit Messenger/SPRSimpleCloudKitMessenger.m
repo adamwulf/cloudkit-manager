@@ -116,7 +116,11 @@ static NSString *const SPRActiveUserRecordID = @"SPRActiveUserRecordID";
                 if (error) {
                     theError = [self simpleCloudMessengerErrorForError:error];
                 }
-                completionHandler(userInfo, theError);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completionHandler) {
+                        completionHandler(userInfo, theError);
+                    }
+                });
             }];
         }
     }];
@@ -140,7 +144,11 @@ static NSString *const SPRActiveUserRecordID = @"SPRActiveUserRecordID";
                                            userInfo:@{NSLocalizedDescriptionKey:[self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAcountChanged]}];
             }
         }
-        completionHandler(recordID, theError);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionHandler) {
+                completionHandler(recordID, theError);
+            }
+        });
     }];
 }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		711DE13A1952CD4000A8839D /* Michael.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 711DE1391952CD4000A8839D /* Michael.jpg */; };
 		716E5238194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */; };
 		716E523B194ACC8E00E1477E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5232194ACC8E00E1477E /* AppDelegate.m */; };
 		716E523C194ACC8E00E1477E /* CloudKit Manager.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 716E5233194ACC8E00E1477E /* CloudKit Manager.entitlements */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		710385FC194AC9F200E59EBB /* Simple CloudKit Messenger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Simple CloudKit Messenger.entitlements"; sourceTree = "<group>"; };
+		711DE1391952CD4000A8839D /* Michael.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Michael.jpg; sourceTree = "<group>"; };
 		71430781194951F400375FFD /* Simple CloudKit Messenger Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple CloudKit Messenger Sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		716E522B194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRSimpleCloudKitMessenger.h; sourceTree = "<group>"; };
 		716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRSimpleCloudKitMessenger.m; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 		716E5230194ACC8E00E1477E /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				711DE1391952CD4000A8839D /* Michael.jpg */,
 				716E5231194ACC8E00E1477E /* AppDelegate.h */,
 				716E5232194ACC8E00E1477E /* AppDelegate.m */,
 				716E5233194ACC8E00E1477E /* CloudKit Manager.entitlements */,
@@ -155,6 +158,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				716E523E194ACC8E00E1477E /* Info.plist in Resources */,
+				711DE13A1952CD4000A8839D /* Michael.jpg in Resources */,
 				716E5240194ACC8E00E1477E /* MainStoryboard.storyboard in Resources */,
 				716E523D194ACC8E00E1477E /* Images.xcassets in Resources */,
 				716E523C194ACC8E00E1477E /* CloudKit Manager.entitlements in Resources */,
