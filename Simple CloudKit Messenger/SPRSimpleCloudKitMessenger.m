@@ -13,7 +13,7 @@
 @property (readonly) CKContainer *container;
 @property (readonly) CKDatabase *publicDatabase;
 @property (nonatomic, getter=isSubscribed) BOOL subscribed;
-
+@property (nonatomic, strong) CKRecordID *activeUserRecordID;
 @end
 
 NSString *const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitMessenger.ErrorDomain";
@@ -23,7 +23,7 @@ static NSString *const SPRMessageTextField = @"text";
 static NSString *const SPRMessageImageField = @"image";
 static NSString *const SPRMessageSenderField = @"sender";
 static NSString *const SPRMessageReceiverField = @"receiver";
-static NSString *const SPRActiveUserInfo = @"SPRActiveUserInfo";
+static NSString *const SPRActiveUserRecordID = @"SPRActiveUserRecordID";
 
 @implementation SPRSimpleCloudKitMessenger
 - (id)init {
@@ -45,6 +45,22 @@ static NSString *const SPRActiveUserInfo = @"SPRActiveUserInfo";
 }
 
 #pragma mark - Account status and discovery
+
+- (void) verifyAndFetchActiveiCloudUserWithCompletionHandler:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
+    [self verifyiCloudAccountStatusWithCompletionHandler:^(NSError *error) {
+        if (error) {
+            completionHandler(nil, error);
+        } else {
+            [self promptToBeDiscoverableIfNeededWithCompletionHandler:^(NSError *error) {
+                if (error) {
+                    completionHandler(nil, error);
+                } else {
+                    [self fetchActiveUserInfoWithCompletionHandler:completionHandler];
+                }
+            }];
+        }
+    }];
+}
 
 - (void) verifyiCloudAccountStatusWithCompletionHandler:(void (^)(NSError *error)) completionHandler {
     [self.container accountStatusWithCompletionHandler:^(CKAccountStatus accountStatus, NSError *error) {
@@ -91,27 +107,41 @@ static NSString *const SPRActiveUserInfo = @"SPRActiveUserInfo";
 }
 
 - (void) fetchActiveUserInfoWithCompletionHandler:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
-    id userObject = [[NSUserDefaults standardUserDefaults] objectForKey:SPRActiveUserInfo];
-    if (userObject) {
-        completionHandler(userObject, nil);
-    } else {
-        [self.container fetchUserRecordIDWithCompletionHandler:^(CKRecordID *recordID, NSError *error) {
-            if (error) {
-                NSError *theError = [self simpleCloudMessengerErrorForError:error];
-                completionHandler(nil, theError);
-            } else {
-                [self.container discoverUserInfoWithUserRecordID:recordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
-                    NSError *theError = nil;
-                    if (error) {
-                        theError = [self simpleCloudMessengerErrorForError:error];
-                    } else {
-                        [[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:SPRActiveUserInfo];
-                    }
-                    completionHandler(userInfo, theError);
-                }];
+    [self fetchActiveUserRecordIDWithCompletionHandler:^(CKRecordID *recordID, NSError *error) {
+        if (error) {
+            completionHandler(nil, error);
+        } else {
+            [self.container discoverUserInfoWithUserRecordID:recordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
+                NSError *theError = nil;
+                if (error) {
+                    theError = [self simpleCloudMessengerErrorForError:error];
+                }
+                completionHandler(userInfo, theError);
+            }];
+        }
+    }];
+}
+
+- (void) fetchActiveUserRecordIDWithCompletionHandler:(void (^)(CKRecordID *recordID, NSError *error))completionHandler {
+    [self.container fetchUserRecordIDWithCompletionHandler:^(CKRecordID *recordID, NSError *error) {
+        NSError *theError = nil;
+        if (error) {
+            theError = [self simpleCloudMessengerErrorForError:error];
+        } else {
+#warning Need to somehow store and check against previously logged in user, potentially with ubiquityIdentityToken off of the NSFileManager
+//            CKRecordID *previousRecordID  = [[NSUserDefaults standardUserDefaults] objectForKey:SPRActiveUserRecordID];
+//            [[NSUserDefaults standardUserDefaults] setObject:recordID forKey:SPRActiveUserRecordID];
+            // if the iCloud account changed, raise an error with the record ID
+            CKRecordID *previousRecordID = self.activeUserRecordID;
+            self.activeUserRecordID = recordID;
+            if (previousRecordID && ![previousRecordID isEqual:recordID]) {
+                theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
+                                               code:SPRSimpleCloudMessengerErroriCloudAcountChanged
+                                           userInfo:@{NSLocalizedDescriptionKey:[self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAcountChanged]}];
             }
-        }];
-    }
+        }
+        completionHandler(recordID, theError);
+    }];
 }
 
 #pragma mark - friends
@@ -155,7 +185,7 @@ static NSString *const SPRActiveUserInfo = @"SPRActiveUserInfo";
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"Subscribed to Item");
-                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 //                [defaults setBool:YES forKey:@"subscribed"];
                 //                [defaults setObject:subscription.subscriptionID forKey:@"subscriptionID"];
 
@@ -203,7 +233,7 @@ static NSString *const SPRActiveUserInfo = @"SPRActiveUserInfo";
         CKAsset *asset = [[CKAsset alloc] initWithFileURL:imageURL];
         record[SPRMessageImageField] = asset;
     }
-    CKReference *sender = [[CKReference alloc] initWithRecordID:userRecordID action:CKReferenceActionNone];
+    CKReference *sender = [[CKReference alloc] initWithRecordID:self.activeUserRecordID action:CKReferenceActionNone];
     record[SPRMessageSenderField] = sender;
     CKReference *receiver = [[CKReference alloc] initWithRecordID:userRecordID action:CKReferenceActionNone];
     record[SPRMessageReceiverField] = receiver;
@@ -252,6 +282,8 @@ static NSString *const SPRActiveUserInfo = @"SPRActiveUserInfo";
             return NSLocalizedString(@"The server is currently unavailable. Please try again later.", nil);
         case SPRSimpleCloudMessengerErrorCancelled:
             return NSLocalizedString(@"The request was cancelled.", nil);
+        case SPRSimpleCloudMessengerErroriCloudAcountChanged:
+            return NSLocalizedString(@"The iCloud account in user has changed.", nil);
         case SPRSimpleCloudMessengerErrorUnexpected:
         default:
             return NSLocalizedString(@"There was an unexpected error. Please try again later.", nil);

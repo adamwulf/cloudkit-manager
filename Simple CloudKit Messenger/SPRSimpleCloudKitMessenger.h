@@ -17,6 +17,7 @@ typedef NS_ENUM(NSUInteger, SPRSimpleCloudMessengerError) {
     SPRSimpleCloudMessengerErrorNetwork,
     SPRSimpleCloudMessengerErrorServiceUnavailable,
     SPRSimpleCloudMessengerErrorCancelled,
+    SPRSimpleCloudMessengerErroriCloudAcountChanged,
 };
 
 extern NSString *const SPRSimpleCloudKitMessengerErrorDomain;
@@ -30,4 +31,6 @@ extern NSString *const SPRSimpleCloudKitMessengerErrorDomain;
 - (void) subscribeWithCompletionHandler:(void (^)(NSError *error)) completionHandler;
 - (void) sendMessage:(NSString *)message withImageURL:(NSURL *)imageURL toUserRecordID:(CKRecordID*)userRecordID withCompletionHandler:(void (^)(NSError *error)) completionHandler;
 - (void) fetchActiveUserInfoWithCompletionHandler:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler;
+
+- (void) verifyAndFetchActiveiCloudUserWithCompletionHandler:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler;
 @end

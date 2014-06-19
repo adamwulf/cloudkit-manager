@@ -23,21 +23,9 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [[SPRSimpleCloudKitMessenger sharedMessenger] verifyiCloudAccountStatusWithCompletionHandler:^(NSError *error) {
+    [[SPRSimpleCloudKitMessenger sharedMessenger] verifyAndFetchActiveiCloudUserWithCompletionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
         if (error) {
             [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-        } else {
-            [[SPRSimpleCloudKitMessenger sharedMessenger] promptToBeDiscoverableIfNeededWithCompletionHandler:^(NSError *error) {
-                if (error) {
-                    [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-                } else {
-                    [[SPRSimpleCloudKitMessenger sharedMessenger] fetchActiveUserInfoWithCompletionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
-                        if (error) {
-                            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-                        }
-                    }];
-                }
-            }];
         }
     }];
     
