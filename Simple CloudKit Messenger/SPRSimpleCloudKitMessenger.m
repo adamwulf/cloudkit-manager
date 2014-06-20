@@ -82,11 +82,9 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
                                                    code:SPRSimpleCloudMessengerErroriCloudAcountChanged
                                                userInfo:@{NSLocalizedDescriptionKey:[self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAcountChanged]}];
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRActiveiCloudIdentity];
-                    [self unsubscribe];
+                    self.activeUserRecordID = nil;
                 } else {
                     [[NSUserDefaults standardUserDefaults] setObject:currentiCloudToken forKey:SPRActiveiCloudIdentity];
-                    [self unsubscribe];
-                    [self subscribe];
                 }
             }
         }
@@ -148,6 +146,7 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
             theError = [self simpleCloudMessengerErrorForError:error];
         } else {
             self.activeUserRecordID = recordID;
+            [self subscribe];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionHandler) {
@@ -205,7 +204,7 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
 - (void) setupSubscription {
 
     CKReference *receiver = [[CKReference alloc] initWithRecordID:self.activeUserRecordID action:CKReferenceActionNone];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%@ == %@", SPRMessageReceiverField, receiver];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", SPRMessageReceiverField, receiver];
     CKSubscription *itemSubscription = [[CKSubscription alloc] initWithRecordType:SPRMessageRecordType
                                                                         predicate:predicate
                                                                           options:CKSubscriptionOptionsFiresOnRecordCreation];
@@ -248,6 +247,17 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
 #pragma mark - Messaging
 
 - (void) sendMessage:(NSString *)message withImageURL:(NSURL *)imageURL toUserRecordID:(CKRecordID*)userRecordID withCompletionHandler:(void (^)(NSError *error)) completionHandler {
+    if (self.activeUserRecordID) {
+        NSError *error = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
+                                             code:SPRSimpleCloudMessengerErroriCloudAccount
+                                         userInfo:@{NSLocalizedDescriptionKey: [self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAccount]}];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionHandler) {
+                completionHandler(error);
+            }
+        });
+        return;
+    }
     CKRecord *record = [[CKRecord alloc] initWithRecordType:SPRMessageRecordType];
     record[SPRMessageTextField] = message;
     if (imageURL) {
