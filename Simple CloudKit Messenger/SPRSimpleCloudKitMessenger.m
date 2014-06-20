@@ -23,7 +23,7 @@ static NSString *const SPRMessageTextField = @"text";
 static NSString *const SPRMessageImageField = @"image";
 static NSString *const SPRMessageSenderField = @"sender";
 static NSString *const SPRMessageReceiverField = @"receiver";
-static NSString *const SPRActiveUserRecordID = @"SPRActiveUserRecordID";
+static NSString *const SPRActiveiCloudIdentity = @"SPRActiveiCloudIdentity";
 
 @implementation SPRSimpleCloudKitMessenger
 - (id)init {
@@ -73,6 +73,18 @@ static NSString *const SPRActiveUserRecordID = @"SPRActiveUserRecordID";
                 theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
                                                         code:SPRSimpleCloudMessengerErroriCloudAccount
                                                     userInfo:@{NSLocalizedDescriptionKey: errorString }];
+            } else {
+                id currentiCloudToken = [[NSFileManager defaultManager] ubiquityIdentityToken];
+                id previousiCloudToken = [[NSUserDefaults standardUserDefaults] objectForKey:SPRActiveiCloudIdentity];
+                if (previousiCloudToken && ![previousiCloudToken isEqual:currentiCloudToken]) {
+                    theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
+                                                   code:SPRSimpleCloudMessengerErroriCloudAcountChanged
+                                               userInfo:@{NSLocalizedDescriptionKey:[self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAcountChanged]}];
+                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRActiveiCloudIdentity];
+                    [self unsubscribe];
+                } else {
+                    [[NSUserDefaults standardUserDefaults] setObject:currentiCloudToken forKey:SPRActiveiCloudIdentity];
+                }
             }
         }
         // theError will either be an error or nil
@@ -132,17 +144,7 @@ static NSString *const SPRActiveUserRecordID = @"SPRActiveUserRecordID";
         if (error) {
             theError = [self simpleCloudMessengerErrorForError:error];
         } else {
-#warning Need to somehow store and check against previously logged in user, potentially with ubiquityIdentityToken off of the NSFileManager
-//            CKRecordID *previousRecordID  = [[NSUserDefaults standardUserDefaults] objectForKey:SPRActiveUserRecordID];
-//            [[NSUserDefaults standardUserDefaults] setObject:recordID forKey:SPRActiveUserRecordID];
-            // if the iCloud account changed, raise an error with the record ID
-            CKRecordID *previousRecordID = self.activeUserRecordID;
             self.activeUserRecordID = recordID;
-            if (previousRecordID && ![previousRecordID isEqual:recordID]) {
-                theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
-                                               code:SPRSimpleCloudMessengerErroriCloudAcountChanged
-                                           userInfo:@{NSLocalizedDescriptionKey:[self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAcountChanged]}];
-            }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionHandler) {
