@@ -24,6 +24,7 @@ static NSString *const SPRMessageImageField = @"image";
 static NSString *const SPRMessageSenderField = @"sender";
 static NSString *const SPRMessageReceiverField = @"receiver";
 static NSString *const SPRActiveiCloudIdentity = @"SPRActiveiCloudIdentity";
+static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
 
 @implementation SPRSimpleCloudKitMessenger
 - (id)init {
@@ -84,6 +85,8 @@ static NSString *const SPRActiveiCloudIdentity = @"SPRActiveiCloudIdentity";
                     [self unsubscribe];
                 } else {
                     [[NSUserDefaults standardUserDefaults] setObject:currentiCloudToken forKey:SPRActiveiCloudIdentity];
+                    [self unsubscribe];
+                    [self subscribe];
                 }
             }
         }
@@ -172,57 +175,65 @@ static NSString *const SPRActiveiCloudIdentity = @"SPRActiveiCloudIdentity";
 
 #pragma mark - Subscription handling
 
-- (void)subscribeWithCompletionHandler:(void (^)(NSError *error)) completionHandler {
+- (void)subscribe {
     
     if (self.subscribed == NO) {
-        
-        NSPredicate *truePredicate = [NSPredicate predicateWithValue:YES];
-        CKSubscription *itemSubscription = [[CKSubscription alloc] initWithRecordType:SPRMessageRecordType
-                                                                            predicate:truePredicate
-                                                                              options:CKSubscriptionOptionsFiresOnRecordCreation];
-        
-        
-        CKNotificationInfo *notification = [[CKNotificationInfo alloc] init];
-        notification.alertBody = @"New Item Added!";
-        itemSubscription.notificationInfo = notification;
-        
-        [self.publicDatabase saveSubscription:itemSubscription completionHandler:^(CKSubscription *subscription, NSError *error) {
-            NSError *theError = nil;
-            if (error) {
-                theError = [self simpleCloudMessengerErrorForError:error];
-            } else {
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"Subscribed to Item");
-//                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                //                [defaults setBool:YES forKey:@"subscribed"];
-                //                [defaults setObject:subscription.subscriptionID forKey:@"subscriptionID"];
+        CKFetchSubscriptionsOperation *fetchAllSubscriptions = [CKFetchSubscriptionsOperation fetchAllSubscriptionsOperation];
+        fetchAllSubscriptions.fetchSubscriptionCompletionBlock = ^( NSDictionary *subscriptionsBySubscriptionID, NSError *operationError) {
+#warning this operation silently fails for now
+            if (!operationError) {
+                if (subscriptionsBySubscriptionID.count > 0) {
+                    CKModifySubscriptionsOperation *modifyOperation = [[CKModifySubscriptionsOperation alloc] init];
+                    modifyOperation.subscriptionIDsToDelete = subscriptionsBySubscriptionID.allKeys;
+                    modifyOperation.modifySubscriptionsCompletionBlock = ^(NSArray *savedSubscriptions, NSArray *deletedSubscriptionIDs, NSError *error) {
+#warning right now subscription errors fail silently.
+                        if (!error) {
+                            [self setupSubscription];
+                        }
+                    };
+                    [self.publicDatabase addOperation:modifyOperation];
 
-                if (completionHandler) {
-                    completionHandler(theError);
+                } else {
+                    [self setupSubscription];
                 }
-            });
-        }];
+            }
+        };
+        [self.publicDatabase addOperation:fetchAllSubscriptions];
     }
+}
+
+- (void) setupSubscription {
+
+    CKReference *receiver = [[CKReference alloc] initWithRecordID:self.activeUserRecordID action:CKReferenceActionNone];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%@ == %@", SPRMessageReceiverField, receiver];
+    CKSubscription *itemSubscription = [[CKSubscription alloc] initWithRecordType:SPRMessageRecordType
+                                                                        predicate:predicate
+                                                                          options:CKSubscriptionOptionsFiresOnRecordCreation];
+    CKNotificationInfo *notification = [[CKNotificationInfo alloc] init];
+    notification.alertBody = @"New Message!";
+    itemSubscription.notificationInfo = notification;
+    
+    [self.publicDatabase saveSubscription:itemSubscription completionHandler:^(CKSubscription *subscription, NSError *error) {
+#warning right now subscription errors fail silently.
+        if (!error) {
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setObject:subscription.subscriptionID forKey:SPRSubscriptionID];
+        }
+    }];
 }
 
 - (void)unsubscribe {
     if (self.subscribed == YES) {
         
-        NSString *subscriptionID = [[NSUserDefaults standardUserDefaults] objectForKey:@"subscriptionID"];
+        NSString *subscriptionID = [[NSUserDefaults standardUserDefaults] objectForKey:SPRSubscriptionID];
         
         CKModifySubscriptionsOperation *modifyOperation = [[CKModifySubscriptionsOperation alloc] init];
         modifyOperation.subscriptionIDsToDelete = @[subscriptionID];
         
         modifyOperation.modifySubscriptionsCompletionBlock = ^(NSArray *savedSubscriptions, NSArray *deletedSubscriptionIDs, NSError *error) {
-            if (error) {
-                // In your app, handle this error beautifully.
-                NSLog(@"An error occured in %@: %@", NSStringFromSelector(_cmd), error);
-                abort();
-            } else {
-                NSLog(@"Unsubscribed to Item");
-                [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"subscriptionID"];
+#warning right now subscription errors fail silently.
+            if (!error) {
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRSubscriptionID];
             }
         };
         
@@ -231,7 +242,7 @@ static NSString *const SPRActiveiCloudIdentity = @"SPRActiveiCloudIdentity";
 }
 
 - (BOOL)isSubscribed {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"subscriptionID"] != nil;
+    return [[NSUserDefaults standardUserDefaults] objectForKey:SPRSubscriptionID] != nil;
 }
 
 #pragma mark - Messaging

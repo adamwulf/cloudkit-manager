@@ -37,6 +37,7 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)info {
+    NSLog(@"%@", info);
 }
 
 @end
