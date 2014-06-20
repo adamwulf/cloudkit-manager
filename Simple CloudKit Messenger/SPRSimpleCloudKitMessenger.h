@@ -22,11 +22,51 @@ typedef NS_ENUM(NSUInteger, SPRSimpleCloudMessengerError) {
 
 extern NSString *const SPRSimpleCloudKitMessengerErrorDomain;
 
+/**
+ * Provides a messaging service using CloudKit
+ *
+ * This class is a bare bones implementation of messaging built on top of CloudKit
+ */
 @interface SPRSimpleCloudKitMessenger : NSObject
 
+/** @return The configured SPRSimpleCloudKitMessenger instance */
 + (SPRSimpleCloudKitMessenger *) sharedMessenger;
-- (void) discoverAllFriendsWithCompletionHandler:(void (^)(NSArray *friendRecords, NSError *error)) completionHandler;
-- (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler;
-- (void) sendMessage:(NSString *)message withImageURL:(NSURL *)imageURL toUserRecordID:(CKRecordID*)userRecordID withCompletionHandler:(void (^)(NSError *error)) completionHandler;
+
+/** The main entry point for using this class
+ * 
+ * This method does the majority of the heavy lifting for setting up for the active iCloud user.
+ * It checks if they have a valid iCloud account and prompts for them to be discoverable. It will return an error
+ * if they don't have a valid iCloud account, or if their discovery permissions are disabled.
+ *
+ * This method will also return an error if the user changed iCloud accounts since the last time they used your app.
+ * You should check for error code == SPRSimpleCloudMessengerErroriCloudAcountChanged and clean up any private user data. You may or may
+ * not want to display the error message from this error.
+ * This would be a good hook for "logging out" if that applies to your app. Once you have cleaned up old user data, call this method 
+ * again to prepare for the new iCloud user (or when they tap a "log in" button.
+ *
+ * Any errors returned from this method, or any other method on this class, will have a friendly error message in NSLocalizedDescription.
+ * All serious errors will carry the code SPRSimpleCloudMessengerErrorUnexpected.
+ * 
+ * Once "logged in", you should call this method every time your app becomes active so it can perform it's checks.
+ * @param completionHandler will either return a CKDiscoveredUserInfo or an NSError
+ */
 - (void) verifyAndFetchActiveiCloudUserWithCompletionHandler:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler;
+
+/** Method for retrieving all discoverable friends from the user's address book.
+ * @param completionHandler will either return an NSArray of CKDiscoveredUserInfo or an NSError
+ */
+- (void) discoverAllFriendsWithCompletionHandler:(void (^)(NSArray *friendRecords, NSError *error)) completionHandler;
+
+/** Method for retrieving all new messages
+ * @param completionHandler that will either return an NSArray of message CKRecords or an NSError
+ */
+- (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler;
+
+/** Method for sending a message to the specified user record ID
+ * @param message an NSString of the text you want to send
+ * @param imageURL a NSURL to the image on disk
+ * @param userRecordID a valid CKRecordID for the user the message is destined for
+ * @param completionHandler will return an NSError if the send failed
+ */
+- (void) sendMessage:(NSString *)message withImageURL:(NSURL *)imageURL toUserRecordID:(CKRecordID*)userRecordID withCompletionHandler:(void (^)(NSError *error)) completionHandler;
 @end
