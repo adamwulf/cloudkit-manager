@@ -17,6 +17,7 @@
 		716E5240194ACC8E00E1477E /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */; };
 		716E5246194ACD3D00E1477E /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 716E5245194ACD3D00E1477E /* CloudKit.framework */; };
 		716E5249194ACE8200E1477E /* SPRFriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */; };
+		71F9209A1954343500FC7FA5 /* SPRInboxTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,8 @@
 		716E5245194ACD3D00E1477E /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		716E5247194ACE8200E1477E /* SPRFriendsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRFriendsTableViewController.h; sourceTree = "<group>"; };
 		716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRFriendsTableViewController.m; sourceTree = "<group>"; };
+		71F920981954343500FC7FA5 /* SPRInboxTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRInboxTableViewController.h; sourceTree = "<group>"; };
+		71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRInboxTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +93,8 @@
 				716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */,
 				716E5247194ACE8200E1477E /* SPRFriendsTableViewController.h */,
 				716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */,
+				71F920981954343500FC7FA5 /* SPRInboxTableViewController.h */,
+				71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -178,6 +183,7 @@
 				716E5238194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m in Sources */,
 				716E5249194ACE8200E1477E /* SPRFriendsTableViewController.m in Sources */,
 				716E523F194ACC8E00E1477E /* main.m in Sources */,
+				71F9209A1954343500FC7FA5 /* SPRInboxTableViewController.m in Sources */,
 				716E523B194ACC8E00E1477E /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

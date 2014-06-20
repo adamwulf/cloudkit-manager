@@ -282,7 +282,28 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
             }
         });
     }];
+}
 
+- (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler {
+    CKFetchNotificationChangesOperation *operation = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:nil];
+    NSMutableArray *notifications = [@[] mutableCopy];
+    operation.notificationChangedBlock = ^ (CKNotification *notification) {
+        [notifications addObject:notification];
+        NSLog(@"%@", notification);
+    };
+    operation.fetchNotificationChangesCompletionBlock = ^ (CKServerChangeToken *serverChangeToken, NSError *operationError) {
+        NSError *theError = nil;
+        if (operationError) {
+            theError = [self simpleCloudMessengerErrorForError:operationError];
+        }
+        NSLog(@"%@", notifications);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionHandler) {
+                completionHandler([notifications copy], theError);
+            }
+        });
+    };
+    [self.container addOperation:operation];
 }
 
 #pragma mark - Error handling utility methods
