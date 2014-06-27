@@ -15,9 +15,10 @@
 		716E523E194ACC8E00E1477E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 716E5235194ACC8E00E1477E /* Info.plist */; };
 		716E523F194ACC8E00E1477E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5236194ACC8E00E1477E /* main.m */; };
 		716E5240194ACC8E00E1477E /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */; };
-		716E5246194ACD3D00E1477E /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 716E5245194ACD3D00E1477E /* CloudKit.framework */; };
 		716E5249194ACE8200E1477E /* SPRFriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */; };
 		71F9209A1954343500FC7FA5 /* SPRInboxTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */; };
+		FA36F238195D292800E22F2D /* SPRMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA36F237195D292800E22F2D /* SPRMessageViewController.m */; };
+		FAFE4CCF195BBB190047A257 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFE4CCE195BBB190047A257 /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,11 +34,13 @@
 		716E5235194ACC8E00E1477E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		716E5236194ACC8E00E1477E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
-		716E5245194ACD3D00E1477E /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		716E5247194ACE8200E1477E /* SPRFriendsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRFriendsTableViewController.h; sourceTree = "<group>"; };
 		716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRFriendsTableViewController.m; sourceTree = "<group>"; };
 		71F920981954343500FC7FA5 /* SPRInboxTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRInboxTableViewController.h; sourceTree = "<group>"; };
 		71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRInboxTableViewController.m; sourceTree = "<group>"; };
+		FA36F236195D292800E22F2D /* SPRMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRMessageViewController.h; sourceTree = "<group>"; };
+		FA36F237195D292800E22F2D /* SPRMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRMessageViewController.m; sourceTree = "<group>"; };
+		FAFE4CCE195BBB190047A257 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,7 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				716E5246194ACD3D00E1477E /* CloudKit.framework in Frameworks */,
+				FAFE4CCF195BBB190047A257 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,7 +58,7 @@
 		71430778194951F400375FFD = {
 			isa = PBXGroup;
 			children = (
-				716E5245194ACD3D00E1477E /* CloudKit.framework */,
+				FAFE4CCE195BBB190047A257 /* CloudKit.framework */,
 				716E522A194ACC8E00E1477E /* Simple CloudKit Messenger */,
 				716E5230194ACC8E00E1477E /* Source */,
 				710385FC194AC9F200E59EBB /* Simple CloudKit Messenger.entitlements */,
@@ -95,6 +98,8 @@
 				716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */,
 				71F920981954343500FC7FA5 /* SPRInboxTableViewController.h */,
 				71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */,
+				FA36F236195D292800E22F2D /* SPRMessageViewController.h */,
+				FA36F237195D292800E22F2D /* SPRMessageViewController.m */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -180,6 +185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA36F238195D292800E22F2D /* SPRMessageViewController.m in Sources */,
 				716E5238194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m in Sources */,
 				716E5249194ACE8200E1477E /* SPRFriendsTableViewController.m in Sources */,
 				716E523F194ACC8E00E1477E /* main.m in Sources */,
@@ -276,9 +282,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Source/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "Simple CloudKit Messenger Sample";
-				PROVISIONING_PROFILE = "283B6787-B54C-43EB-8C2C-04DD7AA49986";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -291,9 +299,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Source/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "Simple CloudKit Messenger Sample";
-				PROVISIONING_PROFILE = "283B6787-B54C-43EB-8C2C-04DD7AA49986";
+				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

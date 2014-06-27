@@ -14,15 +14,17 @@
 @property (readonly) CKDatabase *publicDatabase;
 @property (nonatomic, getter=isSubscribed) BOOL subscribed;
 @property (nonatomic, strong) CKRecordID *activeUserRecordID;
+@property (nonatomic, strong) CKDiscoveredUserInfo *activeUserInfo;
 @end
 
 NSString *const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitMessenger.ErrorDomain";
 
 static NSString *const SPRMessageRecordType = @"Message";
-static NSString *const SPRMessageTextField = @"text";
-static NSString *const SPRMessageImageField = @"image";
-static NSString *const SPRMessageSenderField = @"sender";
+NSString *const SPRMessageTextField = @"text";
+NSString *const SPRMessageImageField = @"image";
+NSString *const SPRMessageSenderField = @"sender";
 static NSString *const SPRMessageReceiverField = @"receiver";
+static NSString *const SPRMessageSenderFirstNameField = @"sender-first-name";
 static NSString *const SPRActiveiCloudIdentity = @"SPRActiveiCloudIdentity";
 static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
 
@@ -142,6 +144,8 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
                 NSError *theError = nil;
                 if (error) {
                     theError = [self simpleCloudMessengerErrorForError:error];
+                } else {
+                    self.activeUserInfo = userInfo;
                 }
                 // theError will either be an error or nil, so we can always pass it in
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -201,14 +205,14 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
         CKFetchSubscriptionsOperation *fetchAllSubscriptions = [CKFetchSubscriptionsOperation fetchAllSubscriptionsOperation];
 
         fetchAllSubscriptions.fetchSubscriptionCompletionBlock = ^( NSDictionary *subscriptionsBySubscriptionID, NSError *operationError) {
-#warning this operation silently fails, which is probably the right way to go
+            // this operation silently fails, which is probably the right way to go
             if (!operationError) {
                 // if there are existing subscriptions, delete them
                 if (subscriptionsBySubscriptionID.count > 0) {
                     CKModifySubscriptionsOperation *modifyOperation = [[CKModifySubscriptionsOperation alloc] init];
                     modifyOperation.subscriptionIDsToDelete = subscriptionsBySubscriptionID.allKeys;
                     modifyOperation.modifySubscriptionsCompletionBlock = ^(NSArray *savedSubscriptions, NSArray *deletedSubscriptionIDs, NSError *error) {
-#warning right now subscription errors fail silently.
+                        // right now subscription errors fail silently.
                         if (!error) {
                             // then setup a new subscription
                             [self setupSubscription];
@@ -235,12 +239,13 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
                                                                           options:CKSubscriptionOptionsFiresOnRecordCreation];
     CKNotificationInfo *notification = [[CKNotificationInfo alloc] init];
     // TODO: Beef up the notification to actually substitute in the text from the message
-    notification.alertBody = @"New Message!";
+    notification.alertBody = @"";
+    notification.alertLocalizationArgs = @[SPRMessageSenderField, SPRMessageTextField];
     itemSubscription.notificationInfo = notification;
     
     // create the subscription
     [self.publicDatabase saveSubscription:itemSubscription completionHandler:^(CKSubscription *subscription, NSError *error) {
-#warning right now subscription errors fail silently.
+        // right now subscription errors fail silently.
         if (!error) {
             // save the subscription ID so we aren't constantly trying to create a new one
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -259,7 +264,7 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
         modifyOperation.subscriptionIDsToDelete = @[subscriptionID];
         
         modifyOperation.modifySubscriptionsCompletionBlock = ^(NSArray *savedSubscriptions, NSArray *deletedSubscriptionIDs, NSError *error) {
-#warning right now subscription errors fail silently.
+            // right now subscription errors fail silently.
             if (!error) {
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRSubscriptionID];
             }
@@ -301,6 +306,9 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
     CKReference *receiver = [[CKReference alloc] initWithRecordID:userRecordID action:CKReferenceActionNone];
     record[SPRMessageReceiverField] = receiver;
     
+#warning This probably wouldn't fly through review. Shouldn't store personal info with a record like this. Probably want to do a username instead.
+    record[SPRMessageSenderFirstNameField] = self.activeUserInfo.firstName;
+    
     // save the record
     [self.publicDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
         NSError *theError = nil;
@@ -319,27 +327,49 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
 
 // Method for fetching all new messages
 // For now just grabs all CKNotifications ever for this user
-- (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler {
+- (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSDictionary *messagesByID, NSError *error)) completionHandler {
     CKFetchNotificationChangesOperation *operation = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:nil];
     NSMutableArray *notifications = [@[] mutableCopy];
     operation.notificationChangedBlock = ^ (CKNotification *notification) {
         [notifications addObject:notification];
-        NSLog(@"%@", notification);
     };
     operation.fetchNotificationChangesCompletionBlock = ^ (CKServerChangeToken *serverChangeToken, NSError *operationError) {
         NSError *theError = nil;
         if (operationError) {
             theError = [self simpleCloudMessengerErrorForError:operationError];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (completionHandler) {
+                    // theError will either be an error or nil, so we can always pass it in
+                    completionHandler(nil, theError);
+                }
+            });
+        } else {
+            NSArray *recordIDs = [notifications valueForKey:@"recordID"];
+            CKFetchRecordsOperation *fetchMessagesOperation = [[CKFetchRecordsOperation alloc] initWithRecordIDs:recordIDs];
+            fetchMessagesOperation.desiredKeys = @[SPRMessageTextField, SPRMessageSenderField];
+            fetchMessagesOperation.fetchRecordsCompletionBlock = ^ (NSDictionary *recordsByID, NSError *operationalError) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (completionHandler) {
+                        // error will either be an error or nil, so we can always pass it in
+                        completionHandler(recordsByID, operationalError);
+                    }
+                });
+            };
+            [self.publicDatabase addOperation:fetchMessagesOperation];
         }
-        NSLog(@"%@", notifications);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionHandler) {
-                // theError will either be an error or nil, so we can always pass it in
-                completionHandler([notifications copy], theError);
-            }
-        });
     };
     [self.container addOperation:operation];
+}
+
+- (void) fetchDetailForMessageRecord:(CKRecord *)messageRecord withCompletionHandler:(void (^)(CKRecord *messageRecord, NSError *error)) completionHandler {
+    [self.publicDatabase fetchRecordWithID:messageRecord.recordID completionHandler:^(CKRecord *record, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionHandler) {
+                // error will either be an error or nil, so we can always pass it in
+                completionHandler(record, error);
+            }
+        });
+    }];
 }
 
 #pragma mark - Error handling utility methods

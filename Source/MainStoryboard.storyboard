@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.21" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="d2n-Wa-DKB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.21" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="d2n-Wa-DKB">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.13"/>
     </dependencies>
@@ -9,9 +9,10 @@
             <objects>
                 <tableViewController id="SfM-QX-5GZ" customClass="SPRFriendsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="daY-vk-OFc">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="default" indentationWidth="10" id="ahl-xX-zG2">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -29,7 +30,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D6g-dx-0d2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="851" y="-78"/>
+            <point key="canvasLocation" x="1276.5" y="-65.91549295774648"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="kbT-eV-h2X">
@@ -48,22 +49,26 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SqN-sJ-Mbl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-219" y="171"/>
+            <point key="canvasLocation" x="-328.5" y="144.50704225352112"/>
         </scene>
         <!--Inbox Table View Controller-->
         <scene sceneID="ew5-dx-Pp8">
             <objects>
                 <tableViewController id="G8O-Fg-xKl" customClass="SPRInboxTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="h3t-RP-rC5">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="default" indentationWidth="10" id="k1S-Fn-Kgt">
+                            <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SPRMessageCell" id="k1S-Fn-Kgt">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k1S-Fn-Kgt" id="TgQ-HM-8N7">
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="vE0-Po-OhU" kind="show" id="hZG-UI-tbc"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -75,7 +80,50 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9pM-0V-mkO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="851" y="571"/>
+            <point key="canvasLocation" x="1276.5" y="482.53521126760563"/>
+        </scene>
+        <!--Message View Controller-->
+        <scene sceneID="UZL-KL-06z">
+            <objects>
+                <viewController id="vE0-Po-OhU" customClass="SPRMessageViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="UYv-vv-Cr9"/>
+                        <viewControllerLayoutGuide type="bottom" id="xED-On-Lec"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="sNA-gF-g4j">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QxV-BD-IKe">
+                                <rect key="frame" x="20" y="81" width="440" height="310"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="440" translatesAutoresizingMaskIntoConstraints="NO" id="WzS-Wq-2wC">
+                                <rect key="frame" x="20" y="399" width="440" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="QxV-BD-IKe" secondAttribute="trailing" constant="20" symbolic="YES" id="6oC-Rt-zh4"/>
+                            <constraint firstItem="QxV-BD-IKe" firstAttribute="leading" secondItem="WzS-Wq-2wC" secondAttribute="leading" id="H34-4h-JVE"/>
+                            <constraint firstItem="WzS-Wq-2wC" firstAttribute="top" secondItem="QxV-BD-IKe" secondAttribute="bottom" constant="8" symbolic="YES" id="KQB-oN-tAd"/>
+                            <constraint firstItem="WzS-Wq-2wC" firstAttribute="trailing" secondItem="QxV-BD-IKe" secondAttribute="trailing" id="Pb3-0T-XAp"/>
+                            <constraint firstItem="xED-On-Lec" firstAttribute="top" secondItem="WzS-Wq-2wC" secondAttribute="bottom" constant="11" id="heY-Ng-4O9"/>
+                            <constraint firstItem="QxV-BD-IKe" firstAttribute="leading" secondItem="sNA-gF-g4j" secondAttribute="leading" constant="20" symbolic="YES" id="qJM-MK-EXr"/>
+                            <constraint firstItem="QxV-BD-IKe" firstAttribute="top" secondItem="UYv-vv-Cr9" secondAttribute="bottom" constant="17" id="xwe-Gh-vcS"/>
+                        </constraints>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="QxV-BD-IKe" id="abW-qV-xOB"/>
+                        <outlet property="messageLabel" destination="WzS-Wq-2wC" id="liF-5T-3uy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9in-5u-y3A" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1823" y="482"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="vqG-oY-zyr">
@@ -94,7 +142,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T3c-KK-Qlp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="319" y="-78"/>
+            <point key="canvasLocation" x="478.5" y="-65.91549295774648"/>
         </scene>
         <!--Navigation Controller - Inbox-->
         <scene sceneID="nov-ix-UNB">
@@ -113,12 +161,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A5F-0o-heC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="319" y="571"/>
+            <point key="canvasLocation" x="478.5" y="482.53521126760563"/>
         </scene>
     </scenes>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

@@ -35,10 +35,8 @@
         if (error) {
             [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.friends = friendRecords;
-                [self.tableView reloadData];
-            });
+            self.friends = friendRecords;
+            [self.tableView reloadData];
         }
     }];
 }

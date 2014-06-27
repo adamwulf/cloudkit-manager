@@ -22,6 +22,10 @@ typedef NS_ENUM(NSUInteger, SPRSimpleCloudMessengerError) {
 
 extern NSString *const SPRSimpleCloudKitMessengerErrorDomain;
 
+extern NSString *const SPRMessageTextField;
+extern NSString *const SPRMessageImageField;
+extern NSString *const SPRMessageSenderField;
+
 /**
  * Provides a messaging service using CloudKit
  *
@@ -58,9 +62,15 @@ extern NSString *const SPRSimpleCloudKitMessengerErrorDomain;
 - (void) discoverAllFriendsWithCompletionHandler:(void (^)(NSArray *friendRecords, NSError *error)) completionHandler;
 
 /** Method for retrieving all new messages
- * @param completionHandler that will either return an NSArray of message CKRecords or an NSError
+ * @param completionHandler that will be called after fetching new notifications. Will include either an nsdictionary messagesByID param, or an NSError param.
  */
-- (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler;
+- (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSDictionary *messagesByID, NSError *error)) completionHandler;
+/** Method for retrieving the details about a certain messge
+ * 
+ * Use this when trying to display the detail view of a message including the image
+ * @param completionHandler will be called after the fetching is complete with either the full message record or an NSError
+ */
+- (void) fetchDetailForMessageRecord:(CKRecord *)messageRecord withCompletionHandler:(void (^)(CKRecord *messageRecord, NSError *error)) completionHandler;
 
 /** Method for sending a message to the specified user record ID
  * @param message an NSString of the text you want to send
