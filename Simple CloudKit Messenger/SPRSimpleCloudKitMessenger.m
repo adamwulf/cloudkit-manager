@@ -24,7 +24,7 @@ NSString *const SPRMessageTextField = @"text";
 NSString *const SPRMessageImageField = @"image";
 NSString *const SPRMessageSenderField = @"sender";
 static NSString *const SPRMessageReceiverField = @"receiver";
-static NSString *const SPRMessageSenderFirstNameField = @"sender-first-name";
+static NSString *const SPRMessageSenderFirstNameField = @"senderFirstName";
 static NSString *const SPRActiveiCloudIdentity = @"SPRActiveiCloudIdentity";
 static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
 
