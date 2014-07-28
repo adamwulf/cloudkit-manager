@@ -27,6 +27,7 @@ static NSString *const SPRMessageReceiverField = @"receiver";
 static NSString *const SPRMessageSenderFirstNameField = @"senderFirstName";
 static NSString *const SPRActiveiCloudIdentity = @"SPRActiveiCloudIdentity";
 static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
+static NSString *const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
 
 @implementation SPRSimpleCloudKitMessenger
 - (id)init {
@@ -91,8 +92,9 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
                     theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
                                                    code:SPRSimpleCloudMessengerErroriCloudAcountChanged
                                                userInfo:@{NSLocalizedDescriptionKey:[self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAcountChanged]}];
-                    // also clear the stored ubiquityIdentityToken and nil the active user record
+                    // also clear the stored ubiquityIdentityToken, the subscription ID and nil the active user record
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRActiveiCloudIdentity];
+                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRSubscriptionID];
                     self.activeUserRecordID = nil;
                 } else {
                     // else everything is good, store the ubiquityIdentityToken
@@ -201,25 +203,17 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
 - (void)subscribe {
     if (self.subscribed == NO) {
         // find existing subscriptions and deletes them
-#warning Should probably be more specific here so we don't kill any extra subscriptions the developer made
+        // TODO: Could be more specific here so we don't kill any extra subscriptions the developer made. Need to learn more about when to delete/refresh subscriptions from Apple.
         CKFetchSubscriptionsOperation *fetchAllSubscriptions = [CKFetchSubscriptionsOperation fetchAllSubscriptionsOperation];
+        fetchAllSubscriptions.subscriptionIDs = @[SPRSubscriptionIDIncomingMessages];
 
         fetchAllSubscriptions.fetchSubscriptionCompletionBlock = ^( NSDictionary *subscriptionsBySubscriptionID, NSError *operationError) {
             // this operation silently fails, which is probably the right way to go
             if (!operationError) {
                 // if there are existing subscriptions, delete them
                 if (subscriptionsBySubscriptionID.count > 0) {
-                    CKModifySubscriptionsOperation *modifyOperation = [[CKModifySubscriptionsOperation alloc] init];
-                    modifyOperation.subscriptionIDsToDelete = subscriptionsBySubscriptionID.allKeys;
-                    modifyOperation.modifySubscriptionsCompletionBlock = ^(NSArray *savedSubscriptions, NSArray *deletedSubscriptionIDs, NSError *error) {
-                        // right now subscription errors fail silently.
-                        if (!error) {
-                            // then setup a new subscription
-                            [self setupSubscription];
-                        }
-                    };
-                    [self.publicDatabase addOperation:modifyOperation];
-                    
+                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                    [defaults setBool:YES forKey:SPRSubscriptionID];
                 // else if there are no subscriptions, just setup a new one
                 } else {
                     [self setupSubscription];
@@ -230,26 +224,37 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
     }
 }
 
-- (void) setupSubscription {
+// we have a known, unique ID for the subscription that we can use to identify the subscription in the future
+// delete this if it turns out subscription IDs only must be unique among users
+//- (NSString *) subscriptionIDForActiveUser {
+//    return [NSString stringWithFormat:@"%@%@", @"Monkeys", @"IncomingMessages"];
+//}
+
+- (CKSubscription *) incomingMessageSubscription {
     // setup a subscription watching for new messages with the active user as the receiver
     CKReference *receiver = [[CKReference alloc] initWithRecordID:self.activeUserRecordID action:CKReferenceActionNone];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", SPRMessageReceiverField, receiver];
     CKSubscription *itemSubscription = [[CKSubscription alloc] initWithRecordType:SPRMessageRecordType
                                                                         predicate:predicate
+                                                                   subscriptionID:SPRSubscriptionIDIncomingMessages
                                                                           options:CKSubscriptionOptionsFiresOnRecordCreation];
     CKNotificationInfo *notification = [[CKNotificationInfo alloc] init];
     // TODO: Beef up the notification to actually substitute in the text from the message
-    notification.alertBody = @"";
-    notification.alertLocalizationArgs = @[SPRMessageSenderField, SPRMessageTextField];
+    notification.alertBody = @"Hey you received a message.";
+    notification.alertLocalizationArgs = @[SPRMessageSenderFirstNameField, SPRMessageTextField];
     itemSubscription.notificationInfo = notification;
+    return itemSubscription;
+}
+
+- (void) setupSubscription {
     
     // create the subscription
-    [self.publicDatabase saveSubscription:itemSubscription completionHandler:^(CKSubscription *subscription, NSError *error) {
+    [self.publicDatabase saveSubscription:[self incomingMessageSubscription] completionHandler:^(CKSubscription *subscription, NSError *error) {
         // right now subscription errors fail silently.
         if (!error) {
             // save the subscription ID so we aren't constantly trying to create a new one
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            [defaults setObject:subscription.subscriptionID forKey:SPRSubscriptionID];
+            [defaults setBool:YES forKey:SPRSubscriptionID];
         }
     }];
 }
@@ -258,15 +263,13 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
 - (void)unsubscribe {
     if (self.subscribed == YES) {
         
-        NSString *subscriptionID = [[NSUserDefaults standardUserDefaults] objectForKey:SPRSubscriptionID];
-        
         CKModifySubscriptionsOperation *modifyOperation = [[CKModifySubscriptionsOperation alloc] init];
-        modifyOperation.subscriptionIDsToDelete = @[subscriptionID];
+        modifyOperation.subscriptionIDsToDelete = @[SPRSubscriptionIDIncomingMessages];
         
         modifyOperation.modifySubscriptionsCompletionBlock = ^(NSArray *savedSubscriptions, NSArray *deletedSubscriptionIDs, NSError *error) {
             // right now subscription errors fail silently.
             if (!error) {
-                [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRSubscriptionID];
+                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:SPRSubscriptionID];
             }
         };
         
@@ -275,7 +278,7 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
 }
 
 - (BOOL)isSubscribed {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:SPRSubscriptionID] != nil;
+    return [[NSUserDefaults standardUserDefaults] boolForKey:SPRSubscriptionID];
 }
 
 #pragma mark - Messaging
@@ -283,7 +286,7 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
 // Does the work of "sending the message" e.g. Creating the message record.
 - (void) sendMessage:(NSString *)message withImageURL:(NSURL *)imageURL toUserRecordID:(CKRecordID*)userRecordID withCompletionHandler:(void (^)(NSError *error)) completionHandler {
     // if we somehow don't have an active user record ID, raise an error about the iCloud account
-    if (self.activeUserRecordID) {
+    if (!self.activeUserRecordID) {
         NSError *error = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
                                              code:SPRSimpleCloudMessengerErroriCloudAccount
                                          userInfo:@{NSLocalizedDescriptionKey: [self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAccount]}];

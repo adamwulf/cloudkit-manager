@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.21" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="d2n-Wa-DKB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.7" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="d2n-Wa-DKB">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.13"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6181.2"/>
     </dependencies>
     <scenes>
         <!--Friends Table View Controller-->
@@ -12,7 +12,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="default" indentationWidth="10" id="ahl-xX-zG2">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -59,7 +58,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" ambiguous="YES" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SPRMessageCell" id="k1S-Fn-Kgt">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -77,6 +75,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="X61-XU-19e"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="aNg-0K-Vu5">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9pM-0V-mkO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -114,7 +115,6 @@
                             <constraint firstItem="QxV-BD-IKe" firstAttribute="leading" secondItem="sNA-gF-g4j" secondAttribute="leading" constant="20" symbolic="YES" id="qJM-MK-EXr"/>
                             <constraint firstItem="QxV-BD-IKe" firstAttribute="top" secondItem="UYv-vv-Cr9" secondAttribute="bottom" constant="17" id="xwe-Gh-vcS"/>
                         </constraints>
-                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <connections>
                         <outlet property="imageView" destination="QxV-BD-IKe" id="abW-qV-xOB"/>
@@ -144,7 +144,7 @@
             </objects>
             <point key="canvasLocation" x="478.5" y="-65.91549295774648"/>
         </scene>
-        <!--Navigation Controller - Inbox-->
+        <!--Inbox-->
         <scene sceneID="nov-ix-UNB">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="QVs-6G-2B1" sceneMemberID="viewController">
