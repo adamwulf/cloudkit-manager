@@ -8,6 +8,7 @@
 
 #import "SPRSimpleCloudKitMessenger.h"
 @import CloudKit;
+#import "SPRMessage.h"
 
 @interface SPRSimpleCloudKitMessenger ()
 @property (readonly) CKContainer *container;
@@ -23,8 +24,8 @@ static NSString *const SPRMessageRecordType = @"Message";
 NSString *const SPRMessageTextField = @"text";
 NSString *const SPRMessageImageField = @"image";
 NSString *const SPRMessageSenderField = @"sender";
+NSString *const SPRMessageSenderFirstNameField = @"senderFirstName";
 static NSString *const SPRMessageReceiverField = @"receiver";
-static NSString *const SPRMessageSenderFirstNameField = @"senderFirstName";
 static NSString *const SPRActiveiCloudIdentity = @"SPRActiveiCloudIdentity";
 static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
 static NSString *const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
@@ -209,7 +210,8 @@ static NSString *const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
 
         fetchAllSubscriptions.fetchSubscriptionCompletionBlock = ^( NSDictionary *subscriptionsBySubscriptionID, NSError *operationError) {
             // this operation silently fails, which is probably the right way to go
-            if (!operationError) {
+            // Partial failure means this operation likely doesn't exist
+            if (!operationError || operationError.code == CKErrorPartialFailure) {
                 // if there are existing subscriptions, delete them
                 if (subscriptionsBySubscriptionID.count > 0) {
                     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -224,12 +226,6 @@ static NSString *const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
     }
 }
 
-// we have a known, unique ID for the subscription that we can use to identify the subscription in the future
-// delete this if it turns out subscription IDs only must be unique among users
-//- (NSString *) subscriptionIDForActiveUser {
-//    return [NSString stringWithFormat:@"%@%@", @"Monkeys", @"IncomingMessages"];
-//}
-
 - (CKSubscription *) incomingMessageSubscription {
     // setup a subscription watching for new messages with the active user as the receiver
     CKReference *receiver = [[CKReference alloc] initWithRecordID:self.activeUserRecordID action:CKReferenceActionNone];
@@ -239,9 +235,9 @@ static NSString *const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
                                                                    subscriptionID:SPRSubscriptionIDIncomingMessages
                                                                           options:CKSubscriptionOptionsFiresOnRecordCreation];
     CKNotificationInfo *notification = [[CKNotificationInfo alloc] init];
-    // TODO: Beef up the notification to actually substitute in the text from the message
-    notification.alertBody = @"Hey you received a message.";
+    notification.alertLocalizationKey = @"Message from %@: %@.";
     notification.alertLocalizationArgs = @[SPRMessageSenderFirstNameField, SPRMessageTextField];
+    notification.desiredKeys = @[SPRMessageSenderFirstNameField, SPRMessageTextField, SPRMessageSenderField];
     itemSubscription.notificationInfo = notification;
     return itemSubscription;
 }
@@ -347,18 +343,32 @@ static NSString *const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
                 }
             });
         } else {
-            NSArray *recordIDs = [notifications valueForKey:@"recordID"];
-            CKFetchRecordsOperation *fetchMessagesOperation = [[CKFetchRecordsOperation alloc] initWithRecordIDs:recordIDs];
-            fetchMessagesOperation.desiredKeys = @[SPRMessageTextField, SPRMessageSenderField];
-            fetchMessagesOperation.fetchRecordsCompletionBlock = ^ (NSDictionary *recordsByID, NSError *operationalError) {
+            NSMutableArray *recordIDStrings = [[notifications valueForKeyPath:@"recordFields.sender"] mutableCopy];
+            
+            [recordIDStrings removeObjectIdenticalTo:[NSNull null]];
+            NSMutableArray *recordIDs = [@[] mutableCopy];
+            for (NSString *recordIDString in recordIDStrings) {
+                [recordIDs addObject:[[CKRecordID alloc]initWithRecordName:recordIDString]];
+            }
+            CKFetchRecordsOperation *fetchSendersOperation = [[CKFetchRecordsOperation alloc] initWithRecordIDs:[recordIDs copy]];
+            fetchSendersOperation.desiredKeys = @[SPRMessageTextField, SPRMessageSenderField];
+            fetchSendersOperation.fetchRecordsCompletionBlock = ^ (NSDictionary *recordsByID, NSError *operationalError) {
+                
+                NSMutableArray *objects = [@[] mutableCopy];
+                for (CKQueryNotification *notification in notifications) {
+                    SPRMessage *message = [[SPRMessage alloc] initWithNotification:notification senderRecord:recordsByID[notification.recordFields[SPRMessageSenderField]]];
+                    [objects addObject:message];
+                }
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (completionHandler) {
                         // error will either be an error or nil, so we can always pass it in
-                        completionHandler(recordsByID, operationalError);
+                        completionHandler([objects copy], operationalError);
                     }
                 });
             };
-            [self.publicDatabase addOperation:fetchMessagesOperation];
+
+            [self.publicDatabase addOperation:fetchSendersOperation];
         }
     };
     [self.container addOperation:operation];

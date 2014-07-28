@@ -25,6 +25,7 @@ extern NSString *const SPRSimpleCloudKitMessengerErrorDomain;
 extern NSString *const SPRMessageTextField;
 extern NSString *const SPRMessageImageField;
 extern NSString *const SPRMessageSenderField;
+extern NSString *const SPRMessageSenderFirstNameField;
 
 /**
  * Provides a messaging service using CloudKit

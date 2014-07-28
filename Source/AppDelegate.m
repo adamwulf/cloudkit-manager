@@ -19,6 +19,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [application registerForRemoteNotifications];
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
+                          |UIUserNotificationTypeSound) categories:nil];
+    [application registerUserNotificationSettings:settings];
     return YES;
 }
 

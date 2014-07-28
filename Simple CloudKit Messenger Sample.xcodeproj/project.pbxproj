@@ -16,6 +16,7 @@
 		716E523F194ACC8E00E1477E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5236194ACC8E00E1477E /* main.m */; };
 		716E5240194ACC8E00E1477E /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */; };
 		716E5249194ACE8200E1477E /* SPRFriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */; };
+		71E6163C1985FF9A00737883 /* SPRMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6163B1985FF9A00737883 /* SPRMessage.m */; };
 		71F9209A1954343500FC7FA5 /* SPRInboxTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */; };
 		FA36F238195D292800E22F2D /* SPRMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA36F237195D292800E22F2D /* SPRMessageViewController.m */; };
 		FAFE4CCF195BBB190047A257 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFE4CCE195BBB190047A257 /* CloudKit.framework */; };
@@ -36,6 +37,8 @@
 		716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		716E5247194ACE8200E1477E /* SPRFriendsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRFriendsTableViewController.h; sourceTree = "<group>"; };
 		716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRFriendsTableViewController.m; sourceTree = "<group>"; };
+		71E6163A1985FF9A00737883 /* SPRMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRMessage.h; sourceTree = "<group>"; };
+		71E6163B1985FF9A00737883 /* SPRMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRMessage.m; sourceTree = "<group>"; };
 		71F920981954343500FC7FA5 /* SPRInboxTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRInboxTableViewController.h; sourceTree = "<group>"; };
 		71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRInboxTableViewController.m; sourceTree = "<group>"; };
 		FA36F236195D292800E22F2D /* SPRMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRMessageViewController.h; sourceTree = "<group>"; };
@@ -79,6 +82,8 @@
 			children = (
 				716E522B194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.h */,
 				716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */,
+				71E6163A1985FF9A00737883 /* SPRMessage.h */,
+				71E6163B1985FF9A00737883 /* SPRMessage.m */,
 			);
 			path = "Simple CloudKit Messenger";
 			sourceTree = "<group>";
@@ -191,6 +196,7 @@
 				716E523F194ACC8E00E1477E /* main.m in Sources */,
 				71F9209A1954343500FC7FA5 /* SPRInboxTableViewController.m in Sources */,
 				716E523B194ACC8E00E1477E /* AppDelegate.m in Sources */,
+				71E6163C1985FF9A00737883 /* SPRMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
