@@ -29,13 +29,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[SPRSimpleCloudKitMessenger sharedMessenger] fetchDetailForMessageRecord:self.messageRecord withCompletionHandler:^(CKRecord *messageRecord, NSError *error) {
-        self.messageLabel.text = messageRecord[SPRMessageTextField];
-        CKAsset *imageAsset = messageRecord[SPRMessageImageField];
-        NSData *imageData = [NSData dataWithContentsOfURL:imageAsset.fileURL];
-        UIImage *image = [UIImage imageWithData:imageData];
-        self.imageView.image = image;
-    }];
+    if (!self.message.messageImage) {
+        [[SPRSimpleCloudKitMessenger sharedMessenger] fetchDetailsForMessage:self.message withCompletionHandler:^(SPRMessage *message, NSError *error) {
+            self.messageLabel.text = message.messageText;
+            self.imageView.image = message.messageImage;
+        }];
+    }
 }
 
 - (void)didReceiveMemoryWarning

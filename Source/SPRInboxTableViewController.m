@@ -9,6 +9,7 @@
 #import "SPRInboxTableViewController.h"
 #import "SPRSimpleCloudKitMessenger.h"
 #import "SPRMessageViewController.h"
+#import "SPRMessage.h"
 
 @interface SPRInboxTableViewController ()
 @property (nonatomic, strong) NSArray *messages;
@@ -26,8 +27,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[SPRSimpleCloudKitMessenger sharedMessenger] fetchNewMessagesWithCompletionHandler:^(NSDictionary *messagesByID, NSError *error) {
-        self.messages = [self.messages arrayByAddingObjectsFromArray:[messagesByID allValues]];
+    [[SPRSimpleCloudKitMessenger sharedMessenger] fetchNewMessagesWithCompletionHandler:^(NSArray *messages, NSError *error) {
+        self.messages = [self.messages arrayByAddingObjectsFromArray:messages];
         [self.tableView reloadData];
     }];
 }
@@ -52,14 +53,14 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"SPRMessageCell"];
-    CKRecord *message = self.messages[indexPath.row];
-    cell.textLabel.text = message[@"text"];
+    SPRMessage *message = self.messages[indexPath.row];
+    cell.textLabel.text = message.messageText;
     return cell;
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     NSUInteger index = [self.tableView indexPathForCell:(UITableViewCell *) sender].row;
-    ((SPRMessageViewController *)segue.destinationViewController).messageRecord = self.messages[index];
+    ((SPRMessageViewController *)segue.destinationViewController).message = self.messages[index];
 }
 
 

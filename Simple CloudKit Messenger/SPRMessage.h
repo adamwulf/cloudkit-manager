@@ -15,7 +15,9 @@
 @property (nonatomic, copy, readonly) NSString *senderLastName;
 @property (nonatomic, copy, readonly) NSString *messageText;
 @property (nonatomic, strong, readonly) UIImage *messageImage;
+@property (nonatomic, strong, readonly) CKRecordID *senderRecordID;
+@property (nonatomic, strong, readonly) CKRecordID *messageRecordID;
 
-- (id) initWithNotification:(CKQueryNotification *) notification senderRecord:(CKRecord *)sender;
-
+- (id) initWithNotification:(CKQueryNotification *) notification senderInfo:(CKDiscoveredUserInfo *)sender;
+- (void) updateMessageWithMessageRecord:(CKRecord*) messageRecord;
 @end

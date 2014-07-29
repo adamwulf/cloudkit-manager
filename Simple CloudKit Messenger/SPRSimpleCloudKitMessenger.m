@@ -326,7 +326,7 @@ static NSString *const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
 
 // Method for fetching all new messages
 // For now just grabs all CKNotifications ever for this user
-- (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSDictionary *messagesByID, NSError *error)) completionHandler {
+- (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler {
     CKFetchNotificationChangesOperation *operation = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:nil];
     NSMutableArray *notifications = [@[] mutableCopy];
     operation.notificationChangedBlock = ^ (CKNotification *notification) {
@@ -350,14 +350,18 @@ static NSString *const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
             for (NSString *recordIDString in recordIDStrings) {
                 [recordIDs addObject:[[CKRecordID alloc]initWithRecordName:recordIDString]];
             }
-            CKFetchRecordsOperation *fetchSendersOperation = [[CKFetchRecordsOperation alloc] initWithRecordIDs:[recordIDs copy]];
-            fetchSendersOperation.desiredKeys = @[SPRMessageTextField, SPRMessageSenderField];
-            fetchSendersOperation.fetchRecordsCompletionBlock = ^ (NSDictionary *recordsByID, NSError *operationalError) {
+            CKDiscoverUserInfosOperation *fetchSendersOperation = [[CKDiscoverUserInfosOperation alloc] initWithEmailAddresses:nil userRecordIDs:[recordIDs copy]];
+            fetchSendersOperation.discoverUserInfosCompletionBlock = ^ (NSDictionary *emailsToUserInfos, NSDictionary *userRecordIDsToUserInfos, NSError *operationalError) {
                 
                 NSMutableArray *objects = [@[] mutableCopy];
                 for (CKQueryNotification *notification in notifications) {
-                    SPRMessage *message = [[SPRMessage alloc] initWithNotification:notification senderRecord:recordsByID[notification.recordFields[SPRMessageSenderField]]];
-                    [objects addObject:message];
+                    NSString *recordIDString = notification.recordFields[SPRMessageSenderField];
+                    if (recordIDString) {
+                        CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:notification.recordFields[SPRMessageSenderField]];
+                        SPRMessage *message = [[SPRMessage alloc] initWithNotification:notification
+                                                                          senderInfo:userRecordIDsToUserInfos[recordID]];
+                        [objects addObject:message];
+                    }
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -368,18 +372,21 @@ static NSString *const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
                 });
             };
 
-            [self.publicDatabase addOperation:fetchSendersOperation];
+            [self.container addOperation:fetchSendersOperation];
         }
     };
     [self.container addOperation:operation];
 }
 
-- (void) fetchDetailForMessageRecord:(CKRecord *)messageRecord withCompletionHandler:(void (^)(CKRecord *messageRecord, NSError *error)) completionHandler {
-    [self.publicDatabase fetchRecordWithID:messageRecord.recordID completionHandler:^(CKRecord *record, NSError *error) {
+- (void) fetchDetailsForMessage:(SPRMessage *)message withCompletionHandler:(void (^)(SPRMessage *message, NSError *error)) completionHandler {
+    [self.publicDatabase fetchRecordWithID:message.messageRecordID completionHandler:^(CKRecord *record, NSError *error) {
+        if (!error) {
+            [message updateMessageWithMessageRecord:record];
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionHandler) {
                 // error will either be an error or nil, so we can always pass it in
-                completionHandler(record, error);
+                completionHandler(message, error);
             }
         });
     }];

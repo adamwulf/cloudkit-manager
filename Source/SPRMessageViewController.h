@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-@import CloudKit;
+#import "SPRMessage.h"
 
 @interface SPRMessageViewController : UIViewController
-@property (nonatomic, strong) CKRecord *messageRecord;
+@property (nonatomic, strong) SPRMessage *message;
 @end
