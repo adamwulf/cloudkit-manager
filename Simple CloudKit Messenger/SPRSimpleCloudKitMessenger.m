@@ -207,25 +207,17 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
 - (void)subscribe {
     if (self.subscribed == NO) {
         // find existing subscriptions and deletes them
-        // TODO: Could be more specific here so we don't kill any extra subscriptions the developer made. Need to learn more about when to delete/refresh subscriptions from Apple.
-        CKFetchSubscriptionsOperation *fetchAllSubscriptions = [CKFetchSubscriptionsOperation fetchAllSubscriptionsOperation];
-        fetchAllSubscriptions.subscriptionIDs = @[SPRSubscriptionIDIncomingMessages];
-
-        fetchAllSubscriptions.fetchSubscriptionCompletionBlock = ^( NSDictionary *subscriptionsBySubscriptionID, NSError *operationError) {
+        [self.publicDatabase fetchSubscriptionWithID:SPRSubscriptionIDIncomingMessages completionHandler:^(CKSubscription *subscription, NSError *error) {
             // this operation silently fails, which is probably the right way to go
-            // Partial failure means this operation likely doesn't exist
-            if (!operationError || operationError.code == CKErrorPartialFailure) {
-                // if there are existing subscriptions, delete them
-                if (subscriptionsBySubscriptionID.count > 0) {
-                    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                    [defaults setBool:YES forKey:SPRSubscriptionID];
+            if (subscription) {
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setBool:YES forKey:SPRSubscriptionID];
                 // else if there are no subscriptions, just setup a new one
-                } else {
-                    [self setupSubscription];
-                }
+            } else {
+                [self setupSubscription];
             }
-        };
-        [self.publicDatabase addOperation:fetchAllSubscriptions];
+
+        }];
     }
 }
 
