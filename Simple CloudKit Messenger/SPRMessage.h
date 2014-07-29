@@ -9,7 +9,7 @@
 @import UIKit;
 @import CloudKit;
 
-@interface SPRMessage : NSObject
+@interface SPRMessage : NSObject <NSCoding>
 
 @property (nonatomic, copy, readonly) NSString *senderFirstName;
 @property (nonatomic, copy, readonly) NSString *senderLastName;

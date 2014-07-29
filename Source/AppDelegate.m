@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "SPRSimpleCloudKitMessenger.h"
+#import "SPRMessage.h"
 
 @interface AppDelegate ()
             
@@ -22,6 +23,16 @@
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
                           |UIUserNotificationTypeSound) categories:nil];
     [application registerUserNotificationSettings:settings];
+    
+    if (launchOptions != nil)
+    {
+        NSDictionary *dictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        if (dictionary != nil)
+        {
+            [self checkForNotificationToHandleWithUserInfo:dictionary];
+        }
+    }
+
     return YES;
 }
 
@@ -42,7 +53,22 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)info {
-    NSLog(@"%@", info);
+    
+    // Do something if the app was in background. Could handle foreground notifications differently
+    if (application.applicationState != UIApplicationStateActive) {
+        [self checkForNotificationToHandleWithUserInfo:info];
+    }
+}
+
+- (void) checkForNotificationToHandleWithUserInfo:(NSDictionary *)userInfo {
+    NSString *notificationKey = [userInfo valueForKeyPath:@"ck.qry.sid"];
+    if ([notificationKey isEqualToString:SPRSubscriptionIDIncomingMessages]) {
+        CKQueryNotification *notification = [CKQueryNotification notificationFromRemoteNotificationDictionary:userInfo];
+        [[SPRSimpleCloudKitMessenger sharedMessenger] messageForQueryNotification:notification withCompletionHandler:^(SPRMessage *message, NSError *error) {
+            // Do something with the message, like pushing it onto the stack
+            NSLog(@"%@", message);
+        }];
+    }
 }
 
 @end

@@ -31,6 +31,17 @@
         self.messages = [self.messages arrayByAddingObjectsFromArray:messages];
         [self.tableView reloadData];
     }];
+    
+    [self.refreshControl addTarget:self action:@selector(refreshView:) forControlEvents:UIControlEventValueChanged];
+}
+
+- (void)refreshView:(UIRefreshControl *)sender {
+    // Do something...
+    [[SPRSimpleCloudKitMessenger sharedMessenger] fetchNewMessagesWithCompletionHandler:^(NSArray *messages, NSError *error) {
+        self.messages = [self.messages arrayByAddingObjectsFromArray:messages];
+        [self.tableView reloadData];
+        [self.refreshControl endRefreshing];
+    }];
 }
 
 - (void)didReceiveMemoryWarning

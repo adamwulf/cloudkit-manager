@@ -40,4 +40,34 @@
     self.messageImage = image;
 }
 
+- (id)initWithCoder:(NSCoder *)decoder {
+    if (self = [super init]) {
+        _messageText = [decoder decodeObjectForKey:SPRMessageTextField];
+        _messageImage = [decoder decodeObjectForKey:SPRMessageImageField];
+        _senderFirstName = [decoder decodeObjectForKey:SPRMessageSenderFirstNameField];
+        _senderLastName = [decoder decodeObjectForKey:@"lastName"];
+        
+        NSData *data = [decoder decodeObjectForKey:@"senderID"];
+        _senderRecordID = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+
+        data = [decoder decodeObjectForKey:@"recordID"];
+        _messageRecordID = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder {
+    [encoder encodeObject:_messageText forKey:SPRMessageTextField];
+    [encoder encodeObject:_messageImage forKey:SPRMessageImageField];
+    [encoder encodeObject:_senderFirstName forKey:SPRMessageSenderFirstNameField];
+    [encoder encodeObject:_senderLastName forKey:@"lastName"];
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_senderRecordID];
+    [encoder encodeObject:data forKey:@"senderID"];
+    
+    data = [NSKeyedArchiver archivedDataWithRootObject:_messageRecordID];
+    [encoder encodeObject:data forKey:@"recordID"];
+}
+
+
 @end

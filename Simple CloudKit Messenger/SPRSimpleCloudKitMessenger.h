@@ -27,6 +27,7 @@ extern NSString *const SPRMessageTextField;
 extern NSString *const SPRMessageImageField;
 extern NSString *const SPRMessageSenderField;
 extern NSString *const SPRMessageSenderFirstNameField;
+extern NSString *const SPRSubscriptionIDIncomingMessages;
 
 /**
  * Provides a messaging service using CloudKit
@@ -81,4 +82,12 @@ extern NSString *const SPRMessageSenderFirstNameField;
  * @param completionHandler will return an NSError if the send failed
  */
 - (void) sendMessage:(NSString *)message withImageURL:(NSURL *)imageURL toUserRecordID:(CKRecordID*)userRecordID withCompletionHandler:(void (^)(NSError *error)) completionHandler;
+
+/** Method for turning a CKQueryNotification into a SPRMessage object
+*
+* Use this when trying to convert a one off CKQueryNotification into a message object.
+* For fetching all new message notifications and creating message objects see `fetchNewMessagesWithCompletionHandler`
+* @param completionHandler will be called after the fetching is complete with either the full message object or an NSError
+*/
+- (void) messageForQueryNotification:(CKQueryNotification *) notification withCompletionHandler:(void (^)(SPRMessage *message, NSError *error)) completionHandler;
 @end
