@@ -70,7 +70,8 @@ extern NSString *const SPRSubscriptionIDIncomingMessages;
 - (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler;
 /** Method for retrieving the details about a certain messge
  * 
- * Use this when trying to display the detail view of a message including the image
+ * Use this when trying to display the detail view of a message including the image. You can check for the image on the message 
+ * to decide whether to call this. It updates the existing message object, and returns it again in the callback
  * @param completionHandler will be called after the fetching is complete with either the full message object or an NSError
  */
 - (void) fetchDetailsForMessage:(SPRMessage *)message withCompletionHandler:(void (^)(SPRMessage *message, NSError *error)) completionHandler;
