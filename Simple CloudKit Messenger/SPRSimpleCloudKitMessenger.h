@@ -65,7 +65,7 @@ extern NSString *const SPRSubscriptionIDIncomingMessages;
 - (void) discoverAllFriendsWithCompletionHandler:(void (^)(NSArray *friendRecords, NSError *error)) completionHandler;
 
 /** Method for retrieving all new messages
- * @param completionHandler that will be called after fetching new notifications. Will include either an nsdictionary messagesByID param, or an NSError param.
+ * @param completionHandler that will be called after fetching new notifications. Will include an NSArray of SPRMessage objects, or an NSError param.
  */
 - (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler;
 /** Method for retrieving the details about a certain messge
