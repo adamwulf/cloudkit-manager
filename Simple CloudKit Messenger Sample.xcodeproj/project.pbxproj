@@ -10,7 +10,6 @@
 		711DE13A1952CD4000A8839D /* Michael.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 711DE1391952CD4000A8839D /* Michael.jpg */; };
 		716E5238194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */; };
 		716E523B194ACC8E00E1477E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5232194ACC8E00E1477E /* AppDelegate.m */; };
-		716E523C194ACC8E00E1477E /* CloudKit Manager.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 716E5233194ACC8E00E1477E /* CloudKit Manager.entitlements */; };
 		716E523D194ACC8E00E1477E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 716E5234194ACC8E00E1477E /* Images.xcassets */; };
 		716E523E194ACC8E00E1477E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 716E5235194ACC8E00E1477E /* Info.plist */; };
 		716E523F194ACC8E00E1477E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5236194ACC8E00E1477E /* main.m */; };
@@ -30,7 +29,6 @@
 		716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRSimpleCloudKitMessenger.m; sourceTree = "<group>"; };
 		716E5231194ACC8E00E1477E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		716E5232194ACC8E00E1477E /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		716E5233194ACC8E00E1477E /* CloudKit Manager.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "CloudKit Manager.entitlements"; sourceTree = "<group>"; };
 		716E5234194ACC8E00E1477E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		716E5235194ACC8E00E1477E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		716E5236194ACC8E00E1477E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -94,7 +92,6 @@
 				711DE1391952CD4000A8839D /* Michael.jpg */,
 				716E5231194ACC8E00E1477E /* AppDelegate.h */,
 				716E5232194ACC8E00E1477E /* AppDelegate.m */,
-				716E5233194ACC8E00E1477E /* CloudKit Manager.entitlements */,
 				716E5234194ACC8E00E1477E /* Images.xcassets */,
 				716E5235194ACC8E00E1477E /* Info.plist */,
 				716E5236194ACC8E00E1477E /* main.m */,
@@ -141,7 +138,7 @@
 				TargetAttributes = {
 					71430780194951F400375FFD = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = P4VPL484Y6;
+						DevelopmentTeam = MU27A4SCKC;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -179,7 +176,6 @@
 				711DE13A1952CD4000A8839D /* Michael.jpg in Resources */,
 				716E5240194ACC8E00E1477E /* MainStoryboard.storyboard in Resources */,
 				716E523D194ACC8E00E1477E /* Images.xcassets in Resources */,
-				716E523C194ACC8E00E1477E /* CloudKit Manager.entitlements in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,14 +280,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_ENTITLEMENTS = "Simple CloudKit Messenger.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Source/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "Simple CloudKit Messenger Sample";
-				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -301,14 +293,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_ENTITLEMENTS = "Simple CloudKit Messenger.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Source/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "Simple CloudKit Messenger Sample";
-				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
