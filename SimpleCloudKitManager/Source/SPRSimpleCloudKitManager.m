@@ -125,7 +125,9 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
                     [[NSUserDefaults standardUserDefaults] setObject:currentiCloudToken forKey:SPRActiveiCloudIdentity];
                 }else{
                     // we're available, but we don't have a valid public container.
-                    // they need to re-login to icloud
+                    // they need to re-login to icloud.
+                    //
+                    // another possibility is that wifi is down (?)
                     NSString *errorString = [self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAccount];
                     theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
                                                    code:SPRSimpleCloudMessengerErroriCloudAccount
