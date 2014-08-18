@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6623F68D19A2A3C700E21399 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660549E319A29F6D00F5B17F /* Foundation.framework */; };
-		6623F69219A2A3C700E21399 /* SimpleCloudKitManager-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 6623F69119A2A3C700E21399 /* SimpleCloudKitManager-Prefix.pch */; };
-		6623F69419A2A3C700E21399 /* SimpleCloudKitManager-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6623F69319A2A3C700E21399 /* SimpleCloudKitManager-Info.plist */; };
 		6623F6A419A2A44C00E21399 /* SPRMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6623F6A019A2A44C00E21399 /* SPRMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6623F6A519A2A44C00E21399 /* SPRMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6623F6A119A2A44C00E21399 /* SPRMessage.m */; };
 		6623F6A619A2A44C00E21399 /* SPRSimpleCloudKitMessenger.h in Headers */ = {isa = PBXBuildFile; fileRef = 6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitMessenger.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -20,9 +18,6 @@
 		660549DD19A29E0F00F5B17F /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		660549E319A29F6D00F5B17F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6623F68C19A2A3C700E21399 /* SimpleCloudKitManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = SimpleCloudKitManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6623F69019A2A3C700E21399 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6623F69119A2A3C700E21399 /* SimpleCloudKitManager-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimpleCloudKitManager-Prefix.pch"; sourceTree = "<group>"; };
-		6623F69319A2A3C700E21399 /* SimpleCloudKitManager-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SimpleCloudKitManager-Info.plist"; sourceTree = "<group>"; };
 		6623F6A019A2A44C00E21399 /* SPRMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRMessage.h; sourceTree = "<group>"; };
 		6623F6A119A2A44C00E21399 /* SPRMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRMessage.m; sourceTree = "<group>"; };
 		6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitMessenger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRSimpleCloudKitMessenger.h; sourceTree = "<group>"; };
@@ -45,7 +40,6 @@
 			isa = PBXGroup;
 			children = (
 				6623F66B19A2A1E100E21399 /* Source */,
-				6623F68E19A2A3C700E21399 /* SimpleCloudKitManager */,
 				6605499B19A29BF300F5B17F /* Frameworks */,
 				6605499A19A29BF300F5B17F /* Products */,
 			);
@@ -79,25 +73,6 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
-		6623F68E19A2A3C700E21399 /* SimpleCloudKitManager */ = {
-			isa = PBXGroup;
-			children = (
-				6623F69119A2A3C700E21399 /* SimpleCloudKitManager-Prefix.pch */,
-				6623F69319A2A3C700E21399 /* SimpleCloudKitManager-Info.plist */,
-				6623F68F19A2A3C700E21399 /* Supporting Files */,
-			);
-			name = SimpleCloudKitManager;
-			path = Source;
-			sourceTree = "<group>";
-		};
-		6623F68F19A2A3C700E21399 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				6623F69019A2A3C700E21399 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -107,7 +82,6 @@
 			files = (
 				6623F6A419A2A44C00E21399 /* SPRMessage.h in Headers */,
 				6623F6A619A2A44C00E21399 /* SPRSimpleCloudKitMessenger.h in Headers */,
-				6623F69219A2A3C700E21399 /* SimpleCloudKitManager-Prefix.pch in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,7 +143,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6623F69419A2A3C700E21399 /* SimpleCloudKitManager-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,7 +260,6 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Source/Info.plist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
@@ -300,7 +272,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = Source/Info.plist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
