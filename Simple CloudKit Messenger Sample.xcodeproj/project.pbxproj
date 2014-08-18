@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6605490119A2926900F5B17F /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6605490019A2926900F5B17F /* CloudKit.framework */; };
 		711DE13A1952CD4000A8839D /* Michael.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 711DE1391952CD4000A8839D /* Michael.jpg */; };
 		716E5238194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */; };
 		716E523B194ACC8E00E1477E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5232194ACC8E00E1477E /* AppDelegate.m */; };
@@ -18,10 +19,11 @@
 		71E6163C1985FF9A00737883 /* SPRMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6163B1985FF9A00737883 /* SPRMessage.m */; };
 		71F9209A1954343500FC7FA5 /* SPRInboxTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */; };
 		FA36F238195D292800E22F2D /* SPRMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA36F237195D292800E22F2D /* SPRMessageViewController.m */; };
-		FAFE4CCF195BBB190047A257 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFE4CCE195BBB190047A257 /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6605490019A2926900F5B17F /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		66A02F9D19A290790013EFAE /* Simple CloudKit Messenger Sample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Simple CloudKit Messenger Sample.entitlements"; sourceTree = "<group>"; };
 		710385FC194AC9F200E59EBB /* Simple CloudKit Messenger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Simple CloudKit Messenger.entitlements"; sourceTree = "<group>"; };
 		711DE1391952CD4000A8839D /* Michael.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Michael.jpg; sourceTree = "<group>"; };
 		71430781194951F400375FFD /* Simple CloudKit Messenger Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple CloudKit Messenger Sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -41,7 +43,6 @@
 		71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRInboxTableViewController.m; sourceTree = "<group>"; };
 		FA36F236195D292800E22F2D /* SPRMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRMessageViewController.h; sourceTree = "<group>"; };
 		FA36F237195D292800E22F2D /* SPRMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRMessageViewController.m; sourceTree = "<group>"; };
-		FAFE4CCE195BBB190047A257 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,7 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAFE4CCF195BBB190047A257 /* CloudKit.framework in Frameworks */,
+				6605490119A2926900F5B17F /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +60,8 @@
 		71430778194951F400375FFD = {
 			isa = PBXGroup;
 			children = (
-				FAFE4CCE195BBB190047A257 /* CloudKit.framework */,
+				6605490019A2926900F5B17F /* CloudKit.framework */,
+				66A02F9D19A290790013EFAE /* Simple CloudKit Messenger Sample.entitlements */,
 				716E522A194ACC8E00E1477E /* Simple CloudKit Messenger */,
 				716E5230194ACC8E00E1477E /* Source */,
 				710385FC194AC9F200E59EBB /* Simple CloudKit Messenger.entitlements */,
@@ -280,10 +282,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = "Simple CloudKit Messenger Sample.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "Simple CloudKit Messenger Sample";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -293,10 +299,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = "Simple CloudKit Messenger Sample.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "Simple CloudKit Messenger Sample";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

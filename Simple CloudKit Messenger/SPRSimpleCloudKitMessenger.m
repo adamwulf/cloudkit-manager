@@ -39,6 +39,11 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
     if (self) {
         _container = [CKContainer defaultContainer];
         _publicDatabase = [_container publicCloudDatabase];
+        
+        if(!_container.containerIdentifier){
+            NSLog(@"no container");
+            _container = nil;
+        }
     }
     return self;
 }
@@ -75,6 +80,8 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
 
 // Verifies iCloud Account Status and that the iCloud ubiquityIdentityToken hasn't changed
 - (void) verifyiCloudAccountStatusWithCompletionHandler:(void (^)(NSError *error)) completionHandler {
+    NSLog(@"container: %@", self.container);
+    NSLog(@"database: %@", self.publicDatabase);
     [self.container accountStatusWithCompletionHandler:^(CKAccountStatus accountStatus, NSError *error) {
         __block NSError *theError = nil;
         if (error) {
@@ -188,6 +195,9 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
 
 // grabs all friends discoverable in the address book, fairly straightforward
 - (void) discoverAllFriendsWithCompletionHandler:(void (^)(NSArray *friendRecords, NSError *error)) completionHandler {
+    
+    NSLog(@"container: %@", self.container);
+    
     [self.container discoverAllContactUserInfosWithCompletionHandler:^(NSArray *userInfos, NSError *error) {
         NSError *theError = nil;
         if (error) {
