@@ -109,6 +109,7 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
             } else {
                 // grab the ubiquityIdentityToken
                 id currentiCloudToken = [[NSFileManager defaultManager] ubiquityIdentityToken];
+                NSLog(@"current token: %@", currentiCloudToken);
                 id previousiCloudToken = [[NSUserDefaults standardUserDefaults] objectForKey:SPRActiveiCloudIdentity];
                 // if it's a different ubiquityIdentityToken than previously stored, raise an error
                 // so the developer can clear sensitive data
@@ -120,18 +121,9 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRActiveiCloudIdentity];
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRSubscriptionID];
                     self.activeUserRecordID = nil;
-                } else if(currentiCloudToken){
+                } else{
                     // else everything is good, store the ubiquityIdentityToken
                     [[NSUserDefaults standardUserDefaults] setObject:currentiCloudToken forKey:SPRActiveiCloudIdentity];
-                }else{
-                    // we're available, but we don't have a valid public container.
-                    // they need to re-login to icloud.
-                    //
-                    // another possibility is that wifi is down (?)
-                    NSString *errorString = [self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAccount];
-                    theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
-                                                   code:SPRSimpleCloudMessengerErroriCloudAccount
-                                               userInfo:@{NSLocalizedDescriptionKey: errorString }];
                 }
             }
         }
