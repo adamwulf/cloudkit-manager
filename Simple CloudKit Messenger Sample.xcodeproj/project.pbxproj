@@ -12,7 +12,6 @@
 		716E5238194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */; };
 		716E523B194ACC8E00E1477E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5232194ACC8E00E1477E /* AppDelegate.m */; };
 		716E523D194ACC8E00E1477E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 716E5234194ACC8E00E1477E /* Images.xcassets */; };
-		716E523E194ACC8E00E1477E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 716E5235194ACC8E00E1477E /* Info.plist */; };
 		716E523F194ACC8E00E1477E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5236194ACC8E00E1477E /* main.m */; };
 		716E5240194ACC8E00E1477E /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */; };
 		716E5249194ACE8200E1477E /* SPRFriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */; };
@@ -23,8 +22,7 @@
 
 /* Begin PBXFileReference section */
 		6605490019A2926900F5B17F /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		66A02F9D19A290790013EFAE /* Simple CloudKit Messenger Sample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Simple CloudKit Messenger Sample.entitlements"; sourceTree = "<group>"; };
-		710385FC194AC9F200E59EBB /* Simple CloudKit Messenger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Simple CloudKit Messenger.entitlements"; sourceTree = "<group>"; };
+		66A02F9D19A290790013EFAE /* Simple CloudKit Messenger Sample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Simple CloudKit Messenger Sample.entitlements"; path = "../Simple CloudKit Messenger Sample.entitlements"; sourceTree = "<group>"; };
 		711DE1391952CD4000A8839D /* Michael.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Michael.jpg; sourceTree = "<group>"; };
 		71430781194951F400375FFD /* Simple CloudKit Messenger Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple CloudKit Messenger Sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		716E522B194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRSimpleCloudKitMessenger.h; sourceTree = "<group>"; };
@@ -57,14 +55,55 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		71430778194951F400375FFD = {
+		6605490219A2976D00F5B17F /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				716E5247194ACE8200E1477E /* SPRFriendsTableViewController.h */,
+				716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */,
+				71F920981954343500FC7FA5 /* SPRInboxTableViewController.h */,
+				71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */,
+				FA36F236195D292800E22F2D /* SPRMessageViewController.h */,
+				FA36F237195D292800E22F2D /* SPRMessageViewController.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		6605490319A2977D00F5B17F /* App Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				716E5231194ACC8E00E1477E /* AppDelegate.h */,
+				716E5232194ACC8E00E1477E /* AppDelegate.m */,
+			);
+			name = "App Delegate";
+			sourceTree = "<group>";
+		};
+		6605490419A2978600F5B17F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				66A02F9D19A290790013EFAE /* Simple CloudKit Messenger Sample.entitlements */,
+				711DE1391952CD4000A8839D /* Michael.jpg */,
+				716E5234194ACC8E00E1477E /* Images.xcassets */,
+				716E5235194ACC8E00E1477E /* Info.plist */,
+				716E5236194ACC8E00E1477E /* main.m */,
+				716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6605490519A297B600F5B17F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				6605490019A2926900F5B17F /* CloudKit.framework */,
-				66A02F9D19A290790013EFAE /* Simple CloudKit Messenger Sample.entitlements */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		71430778194951F400375FFD = {
+			isa = PBXGroup;
+			children = (
 				716E522A194ACC8E00E1477E /* Simple CloudKit Messenger */,
 				716E5230194ACC8E00E1477E /* Source */,
-				710385FC194AC9F200E59EBB /* Simple CloudKit Messenger.entitlements */,
+				6605490519A297B600F5B17F /* Frameworks */,
 				71430782194951F400375FFD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -91,19 +130,9 @@
 		716E5230194ACC8E00E1477E /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				711DE1391952CD4000A8839D /* Michael.jpg */,
-				716E5231194ACC8E00E1477E /* AppDelegate.h */,
-				716E5232194ACC8E00E1477E /* AppDelegate.m */,
-				716E5234194ACC8E00E1477E /* Images.xcassets */,
-				716E5235194ACC8E00E1477E /* Info.plist */,
-				716E5236194ACC8E00E1477E /* main.m */,
-				716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */,
-				716E5247194ACE8200E1477E /* SPRFriendsTableViewController.h */,
-				716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */,
-				71F920981954343500FC7FA5 /* SPRInboxTableViewController.h */,
-				71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */,
-				FA36F236195D292800E22F2D /* SPRMessageViewController.h */,
-				FA36F237195D292800E22F2D /* SPRMessageViewController.m */,
+				6605490319A2977D00F5B17F /* App Delegate */,
+				6605490219A2976D00F5B17F /* Classes */,
+				6605490419A2978600F5B17F /* Supporting Files */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -174,7 +203,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				716E523E194ACC8E00E1477E /* Info.plist in Resources */,
 				711DE13A1952CD4000A8839D /* Michael.jpg in Resources */,
 				716E5240194ACC8E00E1477E /* MainStoryboard.storyboard in Resources */,
 				716E523D194ACC8E00E1477E /* Images.xcassets in Resources */,
