@@ -18,7 +18,7 @@ typedef NS_ENUM(NSUInteger, SPRSimpleCloudMessengerError) {
     SPRSimpleCloudMessengerErrorNetwork,
     SPRSimpleCloudMessengerErrorServiceUnavailable,
     SPRSimpleCloudMessengerErrorCancelled,
-    SPRSimpleCloudMessengerErroriCloudAcountChanged,
+    SPRSimpleCloudMessengerErroriCloudAccountChanged,
 };
 
 extern NSString *const SPRSimpleCloudKitMessengerErrorDomain;
@@ -48,7 +48,7 @@ extern NSString *const SPRSubscriptionIDIncomingMessages;
  * if they don't have a valid iCloud account, or if their discovery permissions are disabled.
  *
  * This method will also return an error if the user changed iCloud accounts since the last time they used your app.
- * You should check for error code == SPRSimpleCloudMessengerErroriCloudAcountChanged and clean up any private user data. You may or may
+ * You should check for error code == SPRSimpleCloudMessengerErroriCloudAccountChanged and clean up any private user data. You may or may
  * not want to display the error message from this error.
  * This would be a good hook for "logging out" if that applies to your app. Once you have cleaned up old user data, call this method 
  * again to prepare for the new iCloud user (or when they tap a "log in" button.

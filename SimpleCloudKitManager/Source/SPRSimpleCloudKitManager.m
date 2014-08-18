@@ -40,12 +40,21 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
         _container = [CKContainer defaultContainer];
         _publicDatabase = [_container publicCloudDatabase];
         
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cloudKitChanged) name:NSUbiquityIdentityDidChangeNotification object:nil];
+        
+        
         if(!_container.containerIdentifier){
             NSLog(@"no container");
             _container = nil;
         }
     }
     return self;
+}
+
+-(void) cloudKitChanged{
+    id currentiCloudToken = [[NSFileManager defaultManager] ubiquityIdentityToken];
+    NSLog(@"token changed to %@", currentiCloudToken);
 }
 
 + (SPRSimpleCloudKitManager *) sharedMessenger {
@@ -105,8 +114,8 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
                 // so the developer can clear sensitive data
                 if (previousiCloudToken && ![previousiCloudToken isEqual:currentiCloudToken]) {
                     theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
-                                                   code:SPRSimpleCloudMessengerErroriCloudAcountChanged
-                                               userInfo:@{NSLocalizedDescriptionKey:[self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAcountChanged]}];
+                                                   code:SPRSimpleCloudMessengerErroriCloudAccountChanged
+                                               userInfo:@{NSLocalizedDescriptionKey:[self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAccountChanged]}];
                     // also clear the stored ubiquityIdentityToken, the subscription ID and nil the active user record
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRActiveiCloudIdentity];
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRSubscriptionID];
@@ -115,6 +124,8 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
                     // else everything is good, store the ubiquityIdentityToken
                     [[NSUserDefaults standardUserDefaults] setObject:currentiCloudToken forKey:SPRActiveiCloudIdentity];
                 }else{
+                    // we're available, but we don't have a valid public container.
+                    // they need to re-login to icloud
                     NSString *errorString = [self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAccount];
                     theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
                                                    code:SPRSimpleCloudMessengerErroriCloudAccount
@@ -453,7 +464,7 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
             return NSLocalizedString(@"The server is currently unavailable. Please try again later.", nil);
         case SPRSimpleCloudMessengerErrorCancelled:
             return NSLocalizedString(@"The request was cancelled.", nil);
-        case SPRSimpleCloudMessengerErroriCloudAcountChanged:
+        case SPRSimpleCloudMessengerErroriCloudAccountChanged:
             return NSLocalizedString(@"The iCloud account in user has changed.", nil);
         case SPRSimpleCloudMessengerErrorUnexpected:
         default:
