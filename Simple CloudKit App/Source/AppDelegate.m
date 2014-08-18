@@ -9,21 +9,12 @@
 #import "AppDelegate.h"
 #import <SimpleCloudKitManager/SPRSimpleCloudKitManager.h>
 
-@interface AppDelegate ()
-            
-@property (nonatomic, strong) SPRSimpleCloudKitManager *simpleCloudKitMessenger;
-@end
-
 @implementation AppDelegate
             
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSLog(@"didFinishLaunchingWithOptions");
-    [application registerForRemoteNotifications];
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
-                          |UIUserNotificationTypeSound) categories:nil];
-    [application registerUserNotificationSettings:settings];
-    
+
     if (launchOptions != nil)
     {
         NSDictionary *dictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -32,6 +23,8 @@
             [self checkForNotificationToHandleWithUserInfo:dictionary];
         }
     }
+
+    [self verifyAndLogIntoCloudKit];
 
     return YES;
 }
@@ -42,11 +35,7 @@
 
 -(void) applicationWillEnterForeground:(UIApplication *)application{
     NSLog(@"applicationWillEnterForeground");
-    [[SPRSimpleCloudKitManager sharedMessenger] verifyAndFetchActiveiCloudUserWithCompletionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
-        if (error) {
-            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-        }
-    }];
+    [self verifyAndLogIntoCloudKit];
 }
 
 -(void) applicationDidEnterBackground:(UIApplication *)application{
@@ -82,6 +71,22 @@
             NSLog(@"%@", message);
         }];
     }
+    
+}
+
+
+-(void) verifyAndLogIntoCloudKit{
+    [[SPRSimpleCloudKitManager sharedMessenger] verifyAndFetchActiveiCloudUserWithCompletionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
+        if (error) {
+            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+        }else{
+            UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
+                                                                                                 |UIUserNotificationTypeSound)
+                                                                                     categories:nil];
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+        }
+    }];
 }
 
 @end
