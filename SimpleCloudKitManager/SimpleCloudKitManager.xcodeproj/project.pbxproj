@@ -44,7 +44,7 @@
 		6605498E19A29BF300F5B17F = {
 			isa = PBXGroup;
 			children = (
-				6623F66B19A2A1E100E21399 /* SimpleCloudKitManager */,
+				6623F66B19A2A1E100E21399 /* Source */,
 				6623F68E19A2A3C700E21399 /* SimpleCloudKitManager */,
 				6605499B19A29BF300F5B17F /* Frameworks */,
 				6605499A19A29BF300F5B17F /* Products */,
@@ -68,7 +68,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		6623F66B19A2A1E100E21399 /* SimpleCloudKitManager */ = {
+		6623F66B19A2A1E100E21399 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				6623F6A019A2A44C00E21399 /* SPRMessage.h */,
@@ -76,7 +76,7 @@
 				6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitMessenger.h */,
 				6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitMessenger.m */,
 			);
-			path = SimpleCloudKitManager;
+			path = Source;
 			sourceTree = "<group>";
 		};
 		6623F68E19A2A3C700E21399 /* SimpleCloudKitManager */ = {
@@ -86,7 +86,8 @@
 				6623F69319A2A3C700E21399 /* SimpleCloudKitManager-Info.plist */,
 				6623F68F19A2A3C700E21399 /* Supporting Files */,
 			);
-			path = SimpleCloudKitManager;
+			name = SimpleCloudKitManager;
+			path = Source;
 			sourceTree = "<group>";
 		};
 		6623F68F19A2A3C700E21399 /* Supporting Files */ = {
@@ -286,7 +287,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = SimpleCloudKitManager/Info.plist;
+				INFOPLIST_FILE = Source/Info.plist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
@@ -299,7 +300,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = SimpleCloudKitManager/Info.plist;
+				INFOPLIST_FILE = Source/Info.plist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
