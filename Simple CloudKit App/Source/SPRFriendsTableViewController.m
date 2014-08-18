@@ -9,7 +9,7 @@
 @import CloudKit;
 
 #import "SPRFriendsTableViewController.h"
-#import "SPRSimpleCloudKitMessenger.h"
+#import <SimpleCloudKitManager/SPRSimpleCloudKitMessenger.h>
 
 @interface SPRFriendsTableViewController ()
 @property (nonatomic, strong) NSArray *friends;

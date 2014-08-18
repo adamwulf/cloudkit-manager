@@ -7,8 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "SPRSimpleCloudKitMessenger.h"
-#import "SPRMessage.h"
+#import <SimpleCloudKitManager/SPRSimpleCloudKitMessenger.h>
+#import <SimpleCloudKitManager/SPRMessage.h>
 
 @interface AppDelegate ()
             

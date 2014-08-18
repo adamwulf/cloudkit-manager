@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SPRMessage.h"
+#import <SimpleCloudKitManager/SPRMessage.h>
 
 @interface SPRMessageViewController : UIViewController
 @property (nonatomic, strong) SPRMessage *message;

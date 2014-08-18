@@ -7,9 +7,9 @@
 //
 
 #import "SPRInboxTableViewController.h"
-#import "SPRSimpleCloudKitMessenger.h"
+#import <SimpleCloudKitManager/SPRSimpleCloudKitMessenger.h>
+#import <SimpleCloudKitManager/SPRMessage.h>
 #import "SPRMessageViewController.h"
-#import "SPRMessage.h"
 
 @interface SPRInboxTableViewController ()
 @property (nonatomic, strong) NSArray *messages;

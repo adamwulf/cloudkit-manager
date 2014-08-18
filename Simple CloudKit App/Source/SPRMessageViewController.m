@@ -7,7 +7,7 @@
 //
 
 #import "SPRMessageViewController.h"
-#import "SPRSimpleCloudKitMessenger.h"
+#import <SimpleCloudKitManager/SPRSimpleCloudKitMessenger.h>
 
 @interface SPRMessageViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;

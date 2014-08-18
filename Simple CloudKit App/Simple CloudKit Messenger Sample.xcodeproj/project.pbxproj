@@ -8,25 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		6605490119A2926900F5B17F /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6605490019A2926900F5B17F /* CloudKit.framework */; };
+		660549E619A29F8200F5B17F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660549E519A29F8200F5B17F /* Foundation.framework */; };
+		6623F6A919A2A4A600E21399 /* SimpleCloudKitManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6623F6A819A2A4A600E21399 /* SimpleCloudKitManager.framework */; };
 		711DE13A1952CD4000A8839D /* Michael.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 711DE1391952CD4000A8839D /* Michael.jpg */; };
-		716E5238194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */; };
 		716E523B194ACC8E00E1477E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5232194ACC8E00E1477E /* AppDelegate.m */; };
 		716E523D194ACC8E00E1477E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 716E5234194ACC8E00E1477E /* Images.xcassets */; };
 		716E523F194ACC8E00E1477E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5236194ACC8E00E1477E /* main.m */; };
 		716E5240194ACC8E00E1477E /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */; };
 		716E5249194ACE8200E1477E /* SPRFriendsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */; };
-		71E6163C1985FF9A00737883 /* SPRMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 71E6163B1985FF9A00737883 /* SPRMessage.m */; };
 		71F9209A1954343500FC7FA5 /* SPRInboxTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */; };
 		FA36F238195D292800E22F2D /* SPRMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA36F237195D292800E22F2D /* SPRMessageViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6605490019A2926900F5B17F /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		660549E519A29F8200F5B17F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		6623F6A819A2A4A600E21399 /* SimpleCloudKitManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SimpleCloudKitManager.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/SimpleCloudKit-dktcmuclsoqiexcnoxieqdyvlnsn/Build/Products/Debug-iphoneos/SimpleCloudKitManager.framework"; sourceTree = "<group>"; };
 		66A02F9D19A290790013EFAE /* Simple CloudKit Messenger Sample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Simple CloudKit Messenger Sample.entitlements"; path = "../Simple CloudKit Messenger Sample.entitlements"; sourceTree = "<group>"; };
 		711DE1391952CD4000A8839D /* Michael.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Michael.jpg; sourceTree = "<group>"; };
 		71430781194951F400375FFD /* Simple CloudKit Messenger Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple CloudKit Messenger Sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		716E522B194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRSimpleCloudKitMessenger.h; sourceTree = "<group>"; };
-		716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRSimpleCloudKitMessenger.m; sourceTree = "<group>"; };
 		716E5231194ACC8E00E1477E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		716E5232194ACC8E00E1477E /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		716E5234194ACC8E00E1477E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -35,8 +35,6 @@
 		716E5237194ACC8E00E1477E /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		716E5247194ACE8200E1477E /* SPRFriendsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRFriendsTableViewController.h; sourceTree = "<group>"; };
 		716E5248194ACE8200E1477E /* SPRFriendsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRFriendsTableViewController.m; sourceTree = "<group>"; };
-		71E6163A1985FF9A00737883 /* SPRMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRMessage.h; sourceTree = "<group>"; };
-		71E6163B1985FF9A00737883 /* SPRMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRMessage.m; sourceTree = "<group>"; };
 		71F920981954343500FC7FA5 /* SPRInboxTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRInboxTableViewController.h; sourceTree = "<group>"; };
 		71F920991954343500FC7FA5 /* SPRInboxTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRInboxTableViewController.m; sourceTree = "<group>"; };
 		FA36F236195D292800E22F2D /* SPRMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRMessageViewController.h; sourceTree = "<group>"; };
@@ -48,6 +46,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6623F6A919A2A4A600E21399 /* SimpleCloudKitManager.framework in Frameworks */,
+				660549E619A29F8200F5B17F /* Foundation.framework in Frameworks */,
 				6605490119A2926900F5B17F /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -93,6 +93,8 @@
 		6605490519A297B600F5B17F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6623F6A819A2A4A600E21399 /* SimpleCloudKitManager.framework */,
+				660549E519A29F8200F5B17F /* Foundation.framework */,
 				6605490019A2926900F5B17F /* CloudKit.framework */,
 			);
 			name = Frameworks;
@@ -101,7 +103,6 @@
 		71430778194951F400375FFD = {
 			isa = PBXGroup;
 			children = (
-				716E522A194ACC8E00E1477E /* Simple CloudKit Messenger */,
 				716E5230194ACC8E00E1477E /* Source */,
 				6605490519A297B600F5B17F /* Frameworks */,
 				71430782194951F400375FFD /* Products */,
@@ -114,17 +115,6 @@
 				71430781194951F400375FFD /* Simple CloudKit Messenger Sample.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		716E522A194ACC8E00E1477E /* Simple CloudKit Messenger */ = {
-			isa = PBXGroup;
-			children = (
-				716E522B194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.h */,
-				716E522C194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m */,
-				71E6163A1985FF9A00737883 /* SPRMessage.h */,
-				71E6163B1985FF9A00737883 /* SPRMessage.m */,
-			);
-			path = "Simple CloudKit Messenger";
 			sourceTree = "<group>";
 		};
 		716E5230194ACC8E00E1477E /* Source */ = {
@@ -217,12 +207,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA36F238195D292800E22F2D /* SPRMessageViewController.m in Sources */,
-				716E5238194ACC8E00E1477E /* SPRSimpleCloudKitMessenger.m in Sources */,
 				716E5249194ACE8200E1477E /* SPRFriendsTableViewController.m in Sources */,
 				716E523F194ACC8E00E1477E /* main.m in Sources */,
 				71F9209A1954343500FC7FA5 /* SPRInboxTableViewController.m in Sources */,
 				716E523B194ACC8E00E1477E /* AppDelegate.m in Sources */,
-				71E6163C1985FF9A00737883 /* SPRMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +301,11 @@
 				CODE_SIGN_ENTITLEMENTS = "Simple CloudKit Messenger Sample.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/SimpleCloudKit-dktcmuclsoqiexcnoxieqdyvlnsn/Build/Products/Debug-iphoneos",
+					"/Users/adam/Documents/Code/loose-leaf/cloudkit-manager/SimpleCloudKitManager/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -330,6 +323,11 @@
 				CODE_SIGN_ENTITLEMENTS = "Simple CloudKit Messenger Sample.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/SimpleCloudKit-dktcmuclsoqiexcnoxieqdyvlnsn/Build/Products/Debug-iphoneos",
+					"/Users/adam/Documents/Code/loose-leaf/cloudkit-manager/SimpleCloudKitManager/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

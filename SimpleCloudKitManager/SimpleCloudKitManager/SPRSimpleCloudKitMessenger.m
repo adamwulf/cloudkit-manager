@@ -316,7 +316,6 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
     CKReference *receiver = [[CKReference alloc] initWithRecordID:userRecordID action:CKReferenceActionNone];
     record[SPRMessageReceiverField] = receiver;
     
-#warning This probably wouldn't fly through review. Shouldn't store personal info with a record like this. Probably want to do a username instead.
     record[SPRMessageSenderFirstNameField] = self.activeUserInfo.firstName;
     
     // save the record
