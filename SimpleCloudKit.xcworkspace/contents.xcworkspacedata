@@ -5,6 +5,6 @@
       location = "group:SimpleCloudKitManager/SimpleCloudKitManager.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Simple CloudKit App/Source">
+      location = "group:Simple CloudKit App/Simple CloudKit Messenger Sample.xcodeproj">
    </FileRef>
 </Workspace>
