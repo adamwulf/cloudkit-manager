@@ -303,6 +303,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "Simple CloudKit Messenger Sample";
+				PROVISIONING_PROFILE = "8c0d7d65-69ea-48de-8a0f-6385a3562bfc";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -319,6 +320,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "Simple CloudKit Messenger Sample";
+				PROVISIONING_PROFILE = "8c0d7d65-69ea-48de-8a0f-6385a3562bfc";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
