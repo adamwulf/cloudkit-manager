@@ -31,14 +31,16 @@
     [super viewDidLoad];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     
-    [[SPRSimpleCloudKitMessenger sharedMessenger] discoverAllFriendsWithCompletionHandler:^(NSArray *friendRecords, NSError *error) {
-        if (error) {
-            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        } else {
-            self.friends = friendRecords;
-            [self.tableView reloadData];
-        }
-    }];
+    if([SPRSimpleCloudKitMessenger sharedMessenger].isActiveUserForCloudKit){
+        [[SPRSimpleCloudKitMessenger sharedMessenger] discoverAllFriendsWithCompletionHandler:^(NSArray *friendRecords, NSError *error) {
+            if (error) {
+                [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            } else {
+                self.friends = friendRecords;
+                [self.tableView reloadData];
+            }
+        }];
+    }
 }
 
 - (void)didReceiveMemoryWarning

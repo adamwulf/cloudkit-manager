@@ -19,6 +19,7 @@
             
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NSLog(@"didFinishLaunchingWithOptions");
     [application registerForRemoteNotifications];
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
                           |UIUserNotificationTypeSound) categories:nil];
@@ -37,11 +38,24 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+    NSLog(@"applicationDidBecomeActive");
+}
+
+-(void) applicationWillEnterForeground:(UIApplication *)application{
+    NSLog(@"applicationWillEnterForeground");
     [[SPRSimpleCloudKitMessenger sharedMessenger] verifyAndFetchActiveiCloudUserWithCompletionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
         if (error) {
             [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
         }
     }];
+}
+
+-(void) applicationDidEnterBackground:(UIApplication *)application{
+    NSLog(@"applicationDidEnterBackground");
+}
+
+-(void) applicationWillResignActive:(UIApplication *)application{
+    NSLog(@"applicationWillResignActive");
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {

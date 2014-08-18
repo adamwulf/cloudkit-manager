@@ -36,6 +36,8 @@ extern NSString *const SPRSubscriptionIDIncomingMessages;
  */
 @interface SPRSimpleCloudKitMessenger : NSObject
 
+@property (readonly) BOOL isActiveUserForCloudKit;
+
 /** @return The configured SPRSimpleCloudKitMessenger instance */
 + (SPRSimpleCloudKitMessenger *) sharedMessenger;
 

@@ -57,6 +57,10 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
     return messenger;
 }
 
+-(BOOL) isActiveUserForCloudKit{
+    return self.activeUserInfo != nil;
+}
+
 #pragma mark - Account status and discovery
 
 // Uses internal methods to do the majority of the setup for this class
@@ -107,9 +111,14 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRActiveiCloudIdentity];
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRSubscriptionID];
                     self.activeUserRecordID = nil;
-                } else {
+                } else if(currentiCloudToken){
                     // else everything is good, store the ubiquityIdentityToken
                     [[NSUserDefaults standardUserDefaults] setObject:currentiCloudToken forKey:SPRActiveiCloudIdentity];
+                }else{
+                    NSString *errorString = [self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAccount];
+                    theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
+                                                   code:SPRSimpleCloudMessengerErroriCloudAccount
+                                               userInfo:@{NSLocalizedDescriptionKey: errorString }];
                 }
             }
         }
@@ -195,9 +204,6 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
 
 // grabs all friends discoverable in the address book, fairly straightforward
 - (void) discoverAllFriendsWithCompletionHandler:(void (^)(NSArray *friendRecords, NSError *error)) completionHandler {
-    
-    NSLog(@"container: %@", self.container);
-    
     [self.container discoverAllContactUserInfosWithCompletionHandler:^(NSArray *userInfos, NSError *error) {
         NSError *theError = nil;
         if (error) {
