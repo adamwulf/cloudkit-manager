@@ -34,12 +34,12 @@ extern NSString *const SPRSubscriptionIDIncomingMessages;
  *
  * This class is a bare bones implementation of messaging built on top of CloudKit
  */
-@interface SPRSimpleCloudKitMessenger : NSObject
+@interface SPRSimpleCloudKitManager : NSObject
 
 @property (readonly) BOOL isActiveUserForCloudKit;
 
 /** @return The configured SPRSimpleCloudKitMessenger instance */
-+ (SPRSimpleCloudKitMessenger *) sharedMessenger;
++ (SPRSimpleCloudKitManager *) sharedMessenger;
 
 /** The main entry point for using this class
  * 

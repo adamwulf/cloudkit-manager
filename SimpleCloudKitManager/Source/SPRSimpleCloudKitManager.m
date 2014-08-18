@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 Sprynthesis. All rights reserved.
 //
 
-#import "SPRSimpleCloudKitMessenger.h"
+#import "SPRSimpleCloudKitManager.h"
 @import CloudKit;
 #import "SPRMessage.h"
 
-@interface SPRSimpleCloudKitMessenger ()
+@interface SPRSimpleCloudKitManager ()
 @property (readonly) CKContainer *container;
 @property (readonly) CKDatabase *publicDatabase;
 @property (nonatomic, getter=isSubscribed) BOOL subscribed;
@@ -33,7 +33,7 @@ static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
 NSString *const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
 static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
 
-@implementation SPRSimpleCloudKitMessenger
+@implementation SPRSimpleCloudKitManager
 - (id)init {
     self = [super init];
     if (self) {
@@ -48,11 +48,11 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
     return self;
 }
 
-+ (SPRSimpleCloudKitMessenger *) sharedMessenger {
++ (SPRSimpleCloudKitManager *) sharedMessenger {
     static dispatch_once_t onceToken;
-    static SPRSimpleCloudKitMessenger *messenger;
+    static SPRSimpleCloudKitManager *messenger;
     dispatch_once(&onceToken, ^{
-        messenger = [[SPRSimpleCloudKitMessenger alloc] init];
+        messenger = [[SPRSimpleCloudKitManager alloc] init];
     });
     return messenger;
 }

@@ -7,12 +7,11 @@
 //
 
 #import "AppDelegate.h"
-#import <SimpleCloudKitManager/SPRSimpleCloudKitMessenger.h>
-#import <SimpleCloudKitManager/SPRMessage.h>
+#import <SimpleCloudKitManager/SPRSimpleCloudKitManager.h>
 
 @interface AppDelegate ()
             
-@property (nonatomic, strong) SPRSimpleCloudKitMessenger *simpleCloudKitMessenger;
+@property (nonatomic, strong) SPRSimpleCloudKitManager *simpleCloudKitMessenger;
 @end
 
 @implementation AppDelegate
@@ -43,7 +42,7 @@
 
 -(void) applicationWillEnterForeground:(UIApplication *)application{
     NSLog(@"applicationWillEnterForeground");
-    [[SPRSimpleCloudKitMessenger sharedMessenger] verifyAndFetchActiveiCloudUserWithCompletionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
+    [[SPRSimpleCloudKitManager sharedMessenger] verifyAndFetchActiveiCloudUserWithCompletionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
         if (error) {
             [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
         }
@@ -78,7 +77,7 @@
     NSString *notificationKey = [userInfo valueForKeyPath:@"ck.qry.sid"];
     if ([notificationKey isEqualToString:SPRSubscriptionIDIncomingMessages]) {
         CKQueryNotification *notification = [CKQueryNotification notificationFromRemoteNotificationDictionary:userInfo];
-        [[SPRSimpleCloudKitMessenger sharedMessenger] messageForQueryNotification:notification withCompletionHandler:^(SPRMessage *message, NSError *error) {
+        [[SPRSimpleCloudKitManager sharedMessenger] messageForQueryNotification:notification withCompletionHandler:^(SPRMessage *message, NSError *error) {
             // Do something with the message, like pushing it onto the stack
             NSLog(@"%@", message);
         }];

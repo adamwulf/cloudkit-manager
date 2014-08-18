@@ -10,8 +10,8 @@
 		6623F68D19A2A3C700E21399 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660549E319A29F6D00F5B17F /* Foundation.framework */; };
 		6623F6A419A2A44C00E21399 /* SPRMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6623F6A019A2A44C00E21399 /* SPRMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6623F6A519A2A44C00E21399 /* SPRMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6623F6A119A2A44C00E21399 /* SPRMessage.m */; };
-		6623F6A619A2A44C00E21399 /* SPRSimpleCloudKitMessenger.h in Headers */ = {isa = PBXBuildFile; fileRef = 6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitMessenger.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6623F6A719A2A44C00E21399 /* SPRSimpleCloudKitMessenger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitMessenger.m */; };
+		6623F6A619A2A44C00E21399 /* SPRSimpleCloudKitManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6623F6A719A2A44C00E21399 /* SPRSimpleCloudKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,8 +20,8 @@
 		6623F68C19A2A3C700E21399 /* SimpleCloudKitManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = SimpleCloudKitManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6623F6A019A2A44C00E21399 /* SPRMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRMessage.h; sourceTree = "<group>"; };
 		6623F6A119A2A44C00E21399 /* SPRMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRMessage.m; sourceTree = "<group>"; };
-		6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitMessenger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRSimpleCloudKitMessenger.h; sourceTree = "<group>"; };
-		6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitMessenger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRSimpleCloudKitMessenger.m; sourceTree = "<group>"; };
+		6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRSimpleCloudKitManager.h; sourceTree = "<group>"; };
+		6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRSimpleCloudKitManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,8 +67,8 @@
 			children = (
 				6623F6A019A2A44C00E21399 /* SPRMessage.h */,
 				6623F6A119A2A44C00E21399 /* SPRMessage.m */,
-				6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitMessenger.h */,
-				6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitMessenger.m */,
+				6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitManager.h */,
+				6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitManager.m */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -81,7 +81,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6623F6A419A2A44C00E21399 /* SPRMessage.h in Headers */,
-				6623F6A619A2A44C00E21399 /* SPRSimpleCloudKitMessenger.h in Headers */,
+				6623F6A619A2A44C00E21399 /* SPRSimpleCloudKitManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,7 +170,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6623F6A719A2A44C00E21399 /* SPRSimpleCloudKitMessenger.m in Sources */,
+				6623F6A719A2A44C00E21399 /* SPRSimpleCloudKitManager.m in Sources */,
 				6623F6A519A2A44C00E21399 /* SPRMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

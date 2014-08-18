@@ -7,8 +7,7 @@
 //
 
 #import "SPRInboxTableViewController.h"
-#import <SimpleCloudKitManager/SPRSimpleCloudKitMessenger.h>
-#import <SimpleCloudKitManager/SPRMessage.h>
+#import <SimpleCloudKitManager/SPRSimpleCloudKitManager.h>
 #import "SPRMessageViewController.h"
 
 @interface SPRInboxTableViewController ()
@@ -27,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[SPRSimpleCloudKitMessenger sharedMessenger] fetchNewMessagesWithCompletionHandler:^(NSArray *messages, NSError *error) {
+    [[SPRSimpleCloudKitManager sharedMessenger] fetchNewMessagesWithCompletionHandler:^(NSArray *messages, NSError *error) {
         self.messages = [self.messages arrayByAddingObjectsFromArray:messages];
         [self.tableView reloadData];
     }];
@@ -37,7 +36,7 @@
 
 - (void)refreshView:(UIRefreshControl *)sender {
     // Do something...
-    [[SPRSimpleCloudKitMessenger sharedMessenger] fetchNewMessagesWithCompletionHandler:^(NSArray *messages, NSError *error) {
+    [[SPRSimpleCloudKitManager sharedMessenger] fetchNewMessagesWithCompletionHandler:^(NSArray *messages, NSError *error) {
         self.messages = [self.messages arrayByAddingObjectsFromArray:messages];
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];

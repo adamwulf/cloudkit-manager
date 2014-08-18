@@ -7,7 +7,7 @@
 //
 
 #import "SPRMessage.h"
-#import "SPRSimpleCloudKitMessenger.h"
+#import "SPRSimpleCloudKitManager.h"
 
 @interface SPRMessage ()
 @property (nonatomic, copy) NSString *senderFirstName;

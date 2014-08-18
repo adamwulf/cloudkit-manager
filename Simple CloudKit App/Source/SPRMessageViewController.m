@@ -7,7 +7,6 @@
 //
 
 #import "SPRMessageViewController.h"
-#import <SimpleCloudKitManager/SPRSimpleCloudKitMessenger.h>
 
 @interface SPRMessageViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -33,7 +32,7 @@
     if (self.message.messageImage) {
         self.imageView.image = self.message.messageImage;
     } else {
-        [[SPRSimpleCloudKitMessenger sharedMessenger] fetchDetailsForMessage:self.message withCompletionHandler:^(SPRMessage *message, NSError *error) {
+        [[SPRSimpleCloudKitManager sharedMessenger] fetchDetailsForMessage:self.message withCompletionHandler:^(SPRMessage *message, NSError *error) {
             self.messageLabel.text = message.messageText;
             self.imageView.image = message.messageImage;
         }];

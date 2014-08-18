@@ -9,7 +9,7 @@
 @import CloudKit;
 
 #import "SPRFriendsTableViewController.h"
-#import <SimpleCloudKitManager/SPRSimpleCloudKitMessenger.h>
+#import <SimpleCloudKitManager/SPRSimpleCloudKitManager.h>
 
 @interface SPRFriendsTableViewController ()
 @property (nonatomic, strong) NSArray *friends;
@@ -31,8 +31,8 @@
     [super viewDidLoad];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     
-    if([SPRSimpleCloudKitMessenger sharedMessenger].isActiveUserForCloudKit){
-        [[SPRSimpleCloudKitMessenger sharedMessenger] discoverAllFriendsWithCompletionHandler:^(NSArray *friendRecords, NSError *error) {
+    if([SPRSimpleCloudKitManager sharedMessenger].isActiveUserForCloudKit){
+        [[SPRSimpleCloudKitManager sharedMessenger] discoverAllFriendsWithCompletionHandler:^(NSArray *friendRecords, NSError *error) {
             if (error) {
                 [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
             } else {
@@ -67,7 +67,7 @@
     CKDiscoveredUserInfo *userInfo = self.friends[indexPath.row];
     NSString * bundleImagePath = [[NSBundle mainBundle] pathForResource:@"Michael" ofType:@"jpg"];
     NSURL *imageURL = [NSURL fileURLWithPath:bundleImagePath];
-    [[SPRSimpleCloudKitMessenger sharedMessenger] sendMessage:@"Holy Cow" withImageURL:imageURL toUserRecordID:userInfo.userRecordID withCompletionHandler:^(NSError *error) {
+    [[SPRSimpleCloudKitManager sharedMessenger] sendMessage:@"Holy Cow" withImageURL:imageURL toUserRecordID:userInfo.userRecordID withCompletionHandler:^(NSError *error) {
         if (error) {
             [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
         } else {
