@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Sprynthesis. All rights reserved.
 //
 
-@import UIKit;
-@import CloudKit;
+#import <UIKit/UIKit.h>
+#import <CloudKit/CloudKit.h>
 
 @interface SPRMessage : NSObject <NSCoding>
 
@@ -20,4 +20,5 @@
 
 - (id) initWithNotification:(CKQueryNotification *) notification senderInfo:(CKDiscoveredUserInfo *)sender;
 - (void) updateMessageWithMessageRecord:(CKRecord*) messageRecord;
+
 @end

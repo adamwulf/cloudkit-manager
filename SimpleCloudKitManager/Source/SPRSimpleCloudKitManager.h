@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-@import UIKit;
-@import CloudKit;
+#import <UIKit/UIKit.h>
+#import <CloudKit/CloudKit.h>
 #import "SPRMessage.h"
 
 typedef NS_ENUM(NSUInteger, SPRSimpleCloudMessengerError) {

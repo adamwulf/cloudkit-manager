@@ -40,9 +40,7 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
         _container = [CKContainer defaultContainer];
         _publicDatabase = [_container publicCloudDatabase];
         
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cloudKitChanged) name:NSUbiquityIdentityDidChangeNotification object:nil];
-        
         
         if(!_container.containerIdentifier){
             NSLog(@"no container");
@@ -55,6 +53,10 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
 }
 
 -(void) cloudKitChanged{
+    // according to:
+    // https://devforums.apple.com/message/1000306#1000306
+    // the ubiquityIdentityToken should only be used for iCloud documents, not for
+    // cloudkit, and i should remove it form the app
     id currentiCloudToken = [[NSFileManager defaultManager] ubiquityIdentityToken];
     NSLog(@"token changed to %@", currentiCloudToken);
 }
@@ -80,12 +82,16 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
 - (void) verifyAndFetchActiveiCloudUserWithCompletionHandler:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
     [self verifyiCloudAccountStatusWithCompletionHandler:^(NSError *error) {
         if (error) {
+            NSLog(@"iCloud Account Could Not Be Verified");
             completionHandler(nil, error);
         } else {
+            NSLog(@"iCloud Account Verified");
             [self promptToBeDiscoverableIfNeededWithCompletionHandler:^(NSError *error) {
                 if (error) {
+                    NSLog(@"Prompt Failed");
                     completionHandler(nil, error);
                 } else {
+                    NSLog(@"Prompted to be discoverable");
                     [self fetchActiveUserInfoWithCompletionHandler:completionHandler];
                 }
             }];
@@ -153,6 +159,14 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
                                                     userInfo:@{NSLocalizedDescriptionKey: errorString }];
             }
         }
+        if(!theError){
+            // if we don't have an error, then ask for remote notifications
+            UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
+                                                                                                 |UIUserNotificationTypeSound)
+                                                                                     categories:nil];
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+        }
         // theError will either be an error or nil, so we can always pass it in
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionHandler) {
@@ -166,14 +180,18 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
 - (void) fetchActiveUserInfoWithCompletionHandler:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
     [self fetchActiveUserRecordIDWithCompletionHandler:^(CKRecordID *recordID, NSError *error) {
         if (error) {
+            NSLog(@"Failed fetching Active User ID");
             // don't have to wrap this in GCD main because it's in our internal method on the main queue already
             completionHandler(nil, error);
         } else {
+            NSLog(@"Active User ID fetched");
             [self.container discoverUserInfoWithUserRecordID:recordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
                 NSError *theError = nil;
                 if (error) {
+                    NSLog(@"Failed Fetching Active User Info");
                     theError = [self simpleCloudMessengerErrorForError:error];
                 } else {
+                    NSLog(@"Active User Info fetched");
                     self.activeUserInfo = userInfo;
                 }
                 // theError will either be an error or nil, so we can always pass it in
@@ -346,11 +364,13 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
     CKFetchNotificationChangesOperation *operation = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:self.serverChangeToken];
     NSMutableArray *notifications = [@[] mutableCopy];
     operation.notificationChangedBlock = ^ (CKNotification *notification) {
+        NSLog(@"notification changed");
         [notifications addObject:notification];
     };
     operation.fetchNotificationChangesCompletionBlock = ^ (CKServerChangeToken *serverChangeToken, NSError *operationError) {
         NSError *theError = nil;
         if (operationError) {
+            NSLog(@"notification changed error");
             theError = [self simpleCloudMessengerErrorForError:operationError];
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (completionHandler) {
@@ -359,6 +379,7 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
                 }
             });
         } else {
+            NSLog(@"notification changed complete");
             
             NSData *data = [NSKeyedArchiver archivedDataWithRootObject:serverChangeToken];
             [[NSUserDefaults standardUserDefaults] setObject:data forKey:SPRServerChangeToken];
@@ -509,7 +530,7 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
 
 - (CKServerChangeToken *) serverChangeToken {
     NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:SPRServerChangeToken];
-    return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    return data ? [NSKeyedUnarchiver unarchiveObjectWithData:data] : nil;
 }
 
 @end

@@ -37,6 +37,7 @@
 - (void)refreshView:(UIRefreshControl *)sender {
     // Do something...
     [[SPRSimpleCloudKitManager sharedMessenger] fetchNewMessagesWithCompletionHandler:^(NSArray *messages, NSError *error) {
+        NSLog(@"finished fetching messages, in inbox controller");
         self.messages = [self.messages arrayByAddingObjectsFromArray:messages];
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];

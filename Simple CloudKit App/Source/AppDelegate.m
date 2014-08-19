@@ -15,12 +15,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSLog(@"didFinishLaunchingWithOptions");
 
-    UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
-                                                                                         |UIUserNotificationTypeSound)
-                                                                             categories:nil];
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-
     if (launchOptions != nil)
     {
         NSDictionary *dictionary = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];

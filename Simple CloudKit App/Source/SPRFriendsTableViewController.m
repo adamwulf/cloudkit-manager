@@ -28,7 +28,7 @@
 
 -(NSArray*) filteredArrayOfFriendRecords:(NSArray*)friendRecords{
     return [friendRecords filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-        return [evaluatedObject firstName];
+        return [evaluatedObject firstName] != nil;
     }]];
 }
 
