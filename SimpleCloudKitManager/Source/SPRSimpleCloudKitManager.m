@@ -47,6 +47,8 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
         if(!_container.containerIdentifier){
             NSLog(@"no container");
             _container = nil;
+        }else{
+            NSLog(@"has container");
         }
     }
     return self;

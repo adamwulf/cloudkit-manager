@@ -32,15 +32,18 @@
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     
     if([SPRSimpleCloudKitManager sharedMessenger].isActiveUserForCloudKit){
-        [[SPRSimpleCloudKitManager sharedMessenger] discoverAllFriendsWithCompletionHandler:^(NSArray *friendRecords, NSError *error) {
-            if (error) {
-                [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-            } else {
-                self.friends = friendRecords;
-                [self.tableView reloadData];
-            }
-        }];
+        NSLog(@"logged in as a real user");
+    }else{
+        NSLog(@"not logged in at all");
     }
+    [[SPRSimpleCloudKitManager sharedMessenger] discoverAllFriendsWithCompletionHandler:^(NSArray *friendRecords, NSError *error) {
+        if (error) {
+            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        } else {
+            self.friends = friendRecords;
+            [self.tableView reloadData];
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning
