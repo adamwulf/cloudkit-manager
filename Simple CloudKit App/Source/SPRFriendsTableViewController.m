@@ -26,6 +26,12 @@
     return self;
 }
 
+-(NSArray*) filteredArrayOfFriendRecords:(NSArray*)friendRecords{
+    return [friendRecords filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        return [evaluatedObject firstName];
+    }]];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -36,11 +42,16 @@
     }else{
         NSLog(@"not logged in at all");
     }
+    
     [[SPRSimpleCloudKitManager sharedMessenger] discoverAllFriendsWithCompletionHandler:^(NSArray *friendRecords, NSError *error) {
         if (error) {
             [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         } else {
-            self.friends = friendRecords;
+            self.friends = [self filteredArrayOfFriendRecords:friendRecords];
+            
+            for(CKDiscoveredUserInfo* obj in friendRecords){
+                CKRecordID* rec = obj.userRecordID;
+            }
             [self.tableView reloadData];
         }
     }];
