@@ -48,10 +48,6 @@
             [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
         } else {
             self.friends = [self filteredArrayOfFriendRecords:friendRecords];
-            
-            for(CKDiscoveredUserInfo* obj in friendRecords){
-                CKRecordID* rec = obj.userRecordID;
-            }
             [self.tableView reloadData];
         }
     }];

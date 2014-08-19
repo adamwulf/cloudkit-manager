@@ -220,19 +220,9 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
             if (completionHandler) {
                 // theError will either be an error or nil, so we can always pass it in
                 completionHandler(userInfos, theError);
-
-                CKDiscoveredUserInfo* userInfo = [userInfos firstObject];
-                NSLog(@"first: %@  last: %@", userInfo.firstName, userInfo.lastName);
-                [self.container discoverUserInfoWithUserRecordID:userInfo.userRecordID
-                                               completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
-                                                   NSLog(@"first: %@  last: %@", userInfo.firstName, userInfo.lastName);
-                                               }];
-            
-            
             }
         });
     }];
-    
 }
 
 #pragma mark - Subscription handling
