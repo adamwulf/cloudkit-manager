@@ -8,12 +8,19 @@
 
 #import "AppDelegate.h"
 #import <SimpleCloudKitManager/SPRSimpleCloudKitManager.h>
+#import "SPRTabViewController.h"
 
 @implementation AppDelegate
             
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSLog(@"didFinishLaunchingWithOptions");
+
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    // Override point for customization after application launch.
+    SPRTabViewController* viewController = [[SPRTabViewController alloc] init];
+    self.window.rootViewController = viewController;
+    [self.window makeKeyAndVisible];
 
     if (launchOptions != nil)
     {

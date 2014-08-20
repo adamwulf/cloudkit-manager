@@ -9,8 +9,8 @@
 #import "SPRMessageViewController.h"
 
 @interface SPRMessageViewController ()
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (weak, nonatomic) IBOutlet UILabel *messageLabel;
+@property (strong, nonatomic) UIImageView *imageView;
+@property (strong, nonatomic) UILabel *messageLabel;
 
 @end
 
@@ -28,6 +28,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    [self.view addSubview:self.imageView];
+    
+    CGRect labelRect = self.view.bounds;
+    labelRect.origin.y = 60;
+    labelRect.size.height = 40;
+    self.messageLabel = [[UILabel alloc] initWithFrame:labelRect];
+    [self.view addSubview:self.messageLabel];
+    
     self.messageLabel.text = self.message.messageText;
     if (self.message.messageImage) {
         self.imageView.image = self.message.messageImage;

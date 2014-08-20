@@ -16,8 +16,8 @@
 
 @implementation SPRInboxTableViewController
 
-- (instancetype) initWithCoder:(NSCoder *)aDecoder {
-    self = [super initWithCoder:aDecoder];
+-(instancetype) initWithStyle:(UITableViewStyle)style{
+    self = [super initWithStyle:style];
     if (!self) return nil;
     self.messages = @[];
     return self;
@@ -26,11 +26,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    UITableView* tv = (UITableView*) self.view;
+    tv.dataSource = self;
+    tv.delegate = self;
+    
+    [tv registerClass:[UITableViewCell class] forCellReuseIdentifier:@"SPRMessageCell"];
+
     [[SPRSimpleCloudKitManager sharedMessenger] fetchNewMessagesWithCompletionHandler:^(NSArray *messages, NSError *error) {
         self.messages = [self.messages arrayByAddingObjectsFromArray:messages];
         [self.tableView reloadData];
     }];
     
+    self.refreshControl = [[UIRefreshControl alloc]init];
+    [tv addSubview:self.refreshControl];
     [self.refreshControl addTarget:self action:@selector(refreshView:) forControlEvents:UIControlEventValueChanged];
 }
 
@@ -72,6 +81,12 @@
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     NSUInteger index = [self.tableView indexPathForCell:(UITableViewCell *) sender].row;
     ((SPRMessageViewController *)segue.destinationViewController).message = self.messages[index];
+}
+
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    SPRMessageViewController* messageVC =[[SPRMessageViewController alloc] init];
+    messageVC.message = self.messages[indexPath.row];
+    [self.navigationController pushViewController:messageVC animated:YES];
 }
 
 

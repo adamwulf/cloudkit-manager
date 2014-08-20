@@ -35,6 +35,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    UITableView* tv = (UITableView*) self.view;
+    tv.dataSource = self;
+    tv.delegate = self;
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     
     if([SPRSimpleCloudKitManager sharedMessenger].isActiveUserForCloudKit){
