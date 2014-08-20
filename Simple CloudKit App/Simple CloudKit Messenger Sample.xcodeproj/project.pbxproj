@@ -11,7 +11,6 @@
 		6623F6A919A2A4A600E21399 /* SimpleCloudKitManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6623F6A819A2A4A600E21399 /* SimpleCloudKitManager.framework */; };
 		6623F6AB19A2AFB500E21399 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6623F6AA19A2AFB500E21399 /* CloudKit.framework */; };
 		66A7AF1519A5252C00E0AA29 /* SPRTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A7AF1419A5252C00E0AA29 /* SPRTabViewController.m */; };
-		66A7AF1719A5299A00E0AA29 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66A7AF1619A5299A00E0AA29 /* MainStoryboard.storyboard */; };
 		711DE13A1952CD4000A8839D /* Michael.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 711DE1391952CD4000A8839D /* Michael.jpg */; };
 		716E523B194ACC8E00E1477E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5232194ACC8E00E1477E /* AppDelegate.m */; };
 		716E523D194ACC8E00E1477E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 716E5234194ACC8E00E1477E /* Images.xcassets */; };
@@ -28,7 +27,6 @@
 		66A02F9D19A290790013EFAE /* Simple CloudKit Messenger Sample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Simple CloudKit Messenger Sample.entitlements"; sourceTree = "<group>"; };
 		66A7AF1319A5252C00E0AA29 /* SPRTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRTabViewController.h; sourceTree = "<group>"; };
 		66A7AF1419A5252C00E0AA29 /* SPRTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRTabViewController.m; sourceTree = "<group>"; };
-		66A7AF1619A5299A00E0AA29 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		711DE1391952CD4000A8839D /* Michael.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Michael.jpg; sourceTree = "<group>"; };
 		71430781194951F400375FFD /* Simple CloudKit Messenger Sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simple CloudKit Messenger Sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		716E5231194ACC8E00E1477E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -85,7 +83,6 @@
 		6605490419A2978600F5B17F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				66A7AF1619A5299A00E0AA29 /* MainStoryboard.storyboard */,
 				66A02F9D19A290790013EFAE /* Simple CloudKit Messenger Sample.entitlements */,
 				711DE1391952CD4000A8839D /* Michael.jpg */,
 				716E5234194ACC8E00E1477E /* Images.xcassets */,
@@ -198,7 +195,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				66A7AF1719A5299A00E0AA29 /* MainStoryboard.storyboard in Resources */,
 				711DE13A1952CD4000A8839D /* Michael.jpg in Resources */,
 				716E523D194ACC8E00E1477E /* Images.xcassets in Resources */,
 			);
