@@ -59,6 +59,8 @@
     // Do something if the app was in background. Could handle foreground notifications differently
     if (application.applicationState != UIApplicationStateActive) {
         [self checkForNotificationToHandleWithUserInfo:info];
+    }else{
+        [self checkForNotificationToHandleWithUserInfo:info];
     }
 }
 
@@ -69,6 +71,11 @@
         [[SPRSimpleCloudKitManager sharedMessenger] messageForQueryNotification:notification withCompletionHandler:^(SPRMessage *message, NSError *error) {
             // Do something with the message, like pushing it onto the stack
             NSLog(@"%@", message);
+            if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Message!" message:message.messageText delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [alertView show];
+            }
+
         }];
     }
     
