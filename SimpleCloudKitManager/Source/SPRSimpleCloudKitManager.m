@@ -59,7 +59,7 @@
 
 -(void) cloudKitAccountChanged{
     // handle change in cloudkit
-    NSLog(@"Unknown CloudKitAccount");
+    NSLog(@"[Re]Initializing CloudKit");
     self.accountStatus = SCKMAccountStatusLoading;
     self.permissionStatus = SCKMApplicationPermissionStatusLoading;
     
