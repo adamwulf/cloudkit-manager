@@ -124,21 +124,21 @@
 // Uses internal methods to do the majority of the setup for this class
 // If everything is successful, it returns the active user CKDiscoveredUserInfo
 // All internal methods fire completionHandlers on the main thread, so no need to use GCD in this method
-- (void) promptAndFetchUserInfoOnComplete:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
+- (void) promptAndFetchUserInfoOnComplete:(void (^)(SCKMAccountStatus accountStatus, SCKMApplicationPermissionStatus permissionStatus, CKRecordID *recordID, CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
     [self silentlyVerifyiCloudAccountStatusOnComplete:^(SCKMAccountStatus accountStatus, SCKMApplicationPermissionStatus permissionStatus, NSError *error) {
         if (error) {
             NSLog(@"iCloud Account Could Not Be Verified");
-            if(completionHandler) completionHandler(nil, error);
+            if(completionHandler) completionHandler(SCKMAccountStatusCouldNotDetermine, SCKMApplicationPermissionStatusCouldNotComplete, nil, nil, error);
         } else {
             NSLog(@"iCloud Account Verified");
             [self promptToBeDiscoverableIfNeededOnComplete:^(NSError *error) {
                 if (error) {
                     NSLog(@"Prompt Failed");
-                    if(completionHandler) completionHandler(nil, error);
+                    if(completionHandler) completionHandler(accountStatus, permissionStatus, nil, nil, error);
                 } else {
                     NSLog(@"Prompted to be discoverable");
                     [self silentlyFetchUserInfoOnComplete:^(CKRecordID* recordID, CKDiscoveredUserInfo* userInfo, NSError* err){
-                        if(completionHandler) completionHandler(userInfo, err);
+                        if(completionHandler) completionHandler(accountStatus, permissionStatus, recordID, userInfo, error);
                     }];
                 }
             }];

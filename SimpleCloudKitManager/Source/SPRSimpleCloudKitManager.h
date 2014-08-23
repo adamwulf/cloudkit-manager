@@ -51,7 +51,11 @@
  * Once "logged in", you should call this method every time your app becomes active so it can perform it's checks.
  * @param completionHandler will either return a CKDiscoveredUserInfo or an NSError
  */
-- (void) promptAndFetchUserInfoOnComplete:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler;
+- (void) promptAndFetchUserInfoOnComplete:(void (^)(SCKMAccountStatus accountStatus,
+                                                    SCKMApplicationPermissionStatus permissionStatus,
+                                                    CKRecordID *recordID,
+                                                    CKDiscoveredUserInfo * userInfo,
+                                                    NSError *error)) completionHandler;
 
 /** Method for retrieving all discoverable friends from the user's address book.
  * @param completionHandler will either return an NSArray of CKDiscoveredUserInfo or an NSError
