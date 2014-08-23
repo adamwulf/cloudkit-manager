@@ -20,14 +20,16 @@
 @interface SPRSimpleCloudKitManager : NSObject
 
 // logged in user account, if any
-@property (readonly) SCKMAccountStatus accountStatus;
-@property (readonly) SCKMApplicationPermissionStatus permissionStatus;
-@property (readonly) CKRecordID *accountRecordID;
-@property (readonly) CKDiscoveredUserInfo *accountInfo;
+@property (nonatomic, readonly) SCKMAccountStatus accountStatus;
+@property (nonatomic, readonly) SCKMApplicationPermissionStatus permissionStatus;
+@property (nonatomic, readonly) CKRecordID *accountRecordID;
+@property (nonatomic, readonly) CKDiscoveredUserInfo *accountInfo;
 
 
 /** @return The configured SPRSimpleCloudKitMessenger instance */
 + (SPRSimpleCloudKitManager *) sharedManager;
+
+-(void) reset;
 
 - (void) silentlyVerifyiCloudAccountStatusOnComplete:(void (^)(SCKMAccountStatus accountStatus,  SCKMApplicationPermissionStatus permissionStatus, NSError *error)) completionHandler;
 

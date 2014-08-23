@@ -33,14 +33,10 @@
         _container = [CKContainer defaultContainer];
         _publicDatabase = [_container publicCloudDatabase];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cloudKitAccountChanged) name:NSUbiquityIdentityDidChangeNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cloudKitAccountChanged) name:UIApplicationDidBecomeActiveNotification object:nil];
-
         if(!_container.containerIdentifier){
             NSLog(@"no container");
             _container = nil;
-        }else{
-            NSLog(@"has container");
+            return nil;
         }
     }
     return self;
@@ -55,23 +51,18 @@
     return messenger;
 }
 
-#pragma mark - Notifications
-
--(void) cloudKitAccountChanged{
-    // handle change in cloudkit
-    NSLog(@"[Re]Initializing CloudKit");
-    self.accountStatus = SCKMAccountStatusLoading;
-    self.permissionStatus = SCKMApplicationPermissionStatusLoading;
-    
+-(void) reset{
+    self.accountStatus = SCKMAccountStatusCouldNotDetermine;
+    self.permissionStatus = SCKMApplicationPermissionStatusCouldNotComplete;
     self.accountInfo = nil;
     self.accountRecordID = nil;
-    [self silentlyVerifyiCloudAccountStatusOnComplete:nil];
 }
 
 #pragma mark - Account status and discovery
 
 // Verifies iCloud Account Status and that the iCloud ubiquityIdentityToken hasn't changed
 - (void) silentlyVerifyiCloudAccountStatusOnComplete:(void (^)(SCKMAccountStatus accountStatus, SCKMApplicationPermissionStatus permissionStatus, NSError *error)) completionHandler {
+    NSLog(@"silently asking");
     // first, see if we have an iCloud account at all
     [self.container accountStatusWithCompletionHandler:^(CKAccountStatus accountStatus, NSError *error) {
         _accountStatus = (SCKMAccountStatus) accountStatus;
@@ -106,8 +97,10 @@
                     // else everything is good, store the ubiquityIdentityToken
                     [[NSUserDefaults standardUserDefaults] setObject:currentiCloudToken forKey:SPRActiveiCloudIdentity];
                 }
+                NSLog(@"asking about permissions");
                 [self.container statusForApplicationPermission:CKApplicationPermissionUserDiscoverability
                                              completionHandler:^(CKApplicationPermissionStatus applicationPermissionStatus, NSError *error) {
+                                                 NSLog(@"got reply about permissions");
                                                  // ok, we've got our permission status now
                                                  self.permissionStatus = (SCKMApplicationPermissionStatus) applicationPermissionStatus;
                                                  dispatch_async(dispatch_get_main_queue(), ^{
