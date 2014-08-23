@@ -12,6 +12,7 @@
 		6623F6A519A2A44C00E21399 /* SPRMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6623F6A119A2A44C00E21399 /* SPRMessage.m */; };
 		6623F6A619A2A44C00E21399 /* SPRSimpleCloudKitManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6623F6A719A2A44C00E21399 /* SPRSimpleCloudKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitManager.m */; };
+		663523E919A7FB3F00A26B88 /* SPRConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 663523E819A7E8FB00A26B88 /* SPRConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		6623F6A119A2A44C00E21399 /* SPRMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRMessage.m; sourceTree = "<group>"; };
 		6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRSimpleCloudKitManager.h; sourceTree = "<group>"; };
 		6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRSimpleCloudKitManager.m; sourceTree = "<group>"; };
+		663523E819A7E8FB00A26B88 /* SPRConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPRConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 		6623F66B19A2A1E100E21399 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				663523E819A7E8FB00A26B88 /* SPRConstants.h */,
 				6623F6A019A2A44C00E21399 /* SPRMessage.h */,
 				6623F6A119A2A44C00E21399 /* SPRMessage.m */,
 				6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitManager.h */,
@@ -80,6 +83,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				663523E919A7FB3F00A26B88 /* SPRConstants.h in Headers */,
 				6623F6A419A2A44C00E21399 /* SPRMessage.h in Headers */,
 				6623F6A619A2A44C00E21399 /* SPRSimpleCloudKitManager.h in Headers */,
 			);

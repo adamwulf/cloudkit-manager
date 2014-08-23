@@ -11,37 +11,31 @@
 #import "SPRMessage.h"
 
 @interface SPRSimpleCloudKitManager ()
+
+// logged in user account, if any
+@property (nonatomic, assign) SCKMAccountStatus accountStatus;
+@property (nonatomic, assign) SCKMApplicationPermissionStatus permissionStatus;
+@property (nonatomic, strong) CKRecordID *accountRecordID;
+@property (nonatomic, strong) CKDiscoveredUserInfo *accountInfo;
+
 @property (readonly) CKContainer *container;
 @property (readonly) CKDatabase *publicDatabase;
 @property (nonatomic, getter=isSubscribed) BOOL subscribed;
-@property (nonatomic, strong) CKRecordID *activeUserRecordID;
-@property (nonatomic, strong) CKDiscoveredUserInfo *activeUserInfo;
-
 @property (nonatomic, strong) CKServerChangeToken *serverChangeToken;
+
 @end
 
-NSString *const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitMessenger.ErrorDomain";
-
-static NSString *const SPRMessageRecordType = @"Message";
-NSString *const SPRMessageTextField = @"text";
-NSString *const SPRMessageImageField = @"image";
-NSString *const SPRMessageSenderField = @"sender";
-NSString *const SPRMessageSenderFirstNameField = @"senderFirstName";
-static NSString *const SPRMessageReceiverField = @"receiver";
-static NSString *const SPRActiveiCloudIdentity = @"SPRActiveiCloudIdentity";
-static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
-NSString *const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
-static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
-
 @implementation SPRSimpleCloudKitManager
+
 - (id)init {
     self = [super init];
     if (self) {
         _container = [CKContainer defaultContainer];
         _publicDatabase = [_container publicCloudDatabase];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cloudKitChanged) name:NSUbiquityIdentityDidChangeNotification object:nil];
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cloudKitAccountChanged) name:NSUbiquityIdentityDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cloudKitAccountChanged) name:UIApplicationDidBecomeActiveNotification object:nil];
+
         if(!_container.containerIdentifier){
             NSLog(@"no container");
             _container = nil;
@@ -52,16 +46,7 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
     return self;
 }
 
--(void) cloudKitChanged{
-    // according to:
-    // https://devforums.apple.com/message/1000306#1000306
-    // the ubiquityIdentityToken should only be used for iCloud documents, not for
-    // cloudkit, and i should remove it form the app
-    id currentiCloudToken = [[NSFileManager defaultManager] ubiquityIdentityToken];
-    NSLog(@"token changed to %@", currentiCloudToken);
-}
-
-+ (SPRSimpleCloudKitManager *) sharedMessenger {
++ (SPRSimpleCloudKitManager *) sharedManager {
     static dispatch_once_t onceToken;
     static SPRSimpleCloudKitManager *messenger;
     dispatch_once(&onceToken, ^{
@@ -70,57 +55,45 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
     return messenger;
 }
 
--(BOOL) isActiveUserForCloudKit{
-    return self.activeUserInfo != nil;
+#pragma mark - Notifications
+
+-(void) cloudKitAccountChanged{
+    // handle change in cloudkit
+    NSLog(@"Unknown CloudKitAccount");
+    self.accountStatus = SCKMAccountStatusLoading;
+    self.permissionStatus = SCKMApplicationPermissionStatusLoading;
+    
+    self.accountInfo = nil;
+    self.accountRecordID = nil;
+    [self silentlyVerifyiCloudAccountStatusOnComplete:nil];
 }
 
 #pragma mark - Account status and discovery
 
-// Uses internal methods to do the majority of the setup for this class
-// If everything is successful, it returns the active user CKDiscoveredUserInfo
-// All internal methods fire completionHandlers on the main thread, so no need to use GCD in this method
-- (void) verifyAndFetchActiveiCloudUserWithCompletionHandler:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
-    [self verifyiCloudAccountStatusWithCompletionHandler:^(NSError *error) {
-        if (error) {
-            NSLog(@"iCloud Account Could Not Be Verified");
-            completionHandler(nil, error);
-        } else {
-            NSLog(@"iCloud Account Verified");
-            [self promptToBeDiscoverableIfNeededWithCompletionHandler:^(NSError *error) {
-                if (error) {
-                    NSLog(@"Prompt Failed");
-                    completionHandler(nil, error);
-                } else {
-                    NSLog(@"Prompted to be discoverable");
-                    [self fetchActiveUserInfoWithCompletionHandler:completionHandler];
-                }
-            }];
-        }
-    }];
-}
-
 // Verifies iCloud Account Status and that the iCloud ubiquityIdentityToken hasn't changed
-- (void) verifyiCloudAccountStatusWithCompletionHandler:(void (^)(NSError *error)) completionHandler {
-    NSLog(@"container: %@", self.container);
-    NSLog(@"database: %@", self.publicDatabase);
+- (void) silentlyVerifyiCloudAccountStatusOnComplete:(void (^)(SCKMAccountStatus accountStatus, SCKMApplicationPermissionStatus permissionStatus, NSError *error)) completionHandler {
+    // first, see if we have an iCloud account at all
     [self.container accountStatusWithCompletionHandler:^(CKAccountStatus accountStatus, NSError *error) {
+        _accountStatus = (SCKMAccountStatus) accountStatus;
+        
         __block NSError *theError = nil;
         if (error) {
             theError = [self simpleCloudMessengerErrorForError:error];
+            self.permissionStatus = SCKMApplicationPermissionStatusCouldNotComplete;
         } else {
             // if it's not a valid account raise an error
             if (accountStatus != CKAccountStatusAvailable) {
                 NSString *errorString = [self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAccount];
                 theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
-                                                        code:SPRSimpleCloudMessengerErroriCloudAccount
-                                                    userInfo:@{NSLocalizedDescriptionKey: errorString }];
+                                               code:SPRSimpleCloudMessengerErroriCloudAccount
+                                           userInfo:@{NSLocalizedDescriptionKey: errorString }];
+                self.permissionStatus = SCKMApplicationPermissionStatusCouldNotComplete;
             } else {
                 // grab the ubiquityIdentityToken
-                id currentiCloudToken = [[NSFileManager defaultManager] ubiquityIdentityToken];
-                NSLog(@"current token: %@", currentiCloudToken);
-                id previousiCloudToken = [[NSUserDefaults standardUserDefaults] objectForKey:SPRActiveiCloudIdentity];
                 // if it's a different ubiquityIdentityToken than previously stored, raise an error
                 // so the developer can clear sensitive data
+                id currentiCloudToken = [[NSFileManager defaultManager] ubiquityIdentityToken];
+                id previousiCloudToken = [[NSUserDefaults standardUserDefaults] objectForKey:SPRActiveiCloudIdentity];
                 if (previousiCloudToken && ![previousiCloudToken isEqual:currentiCloudToken]) {
                     theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
                                                    code:SPRSimpleCloudMessengerErroriCloudAccountChanged
@@ -128,25 +101,55 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
                     // also clear the stored ubiquityIdentityToken, the subscription ID and nil the active user record
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRActiveiCloudIdentity];
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRSubscriptionID];
-                    self.activeUserRecordID = nil;
+                    self.accountRecordID = nil;
                 } else{
                     // else everything is good, store the ubiquityIdentityToken
                     [[NSUserDefaults standardUserDefaults] setObject:currentiCloudToken forKey:SPRActiveiCloudIdentity];
                 }
+                [self.container statusForApplicationPermission:CKApplicationPermissionUserDiscoverability
+                                             completionHandler:^(CKApplicationPermissionStatus applicationPermissionStatus, NSError *error) {
+                                                 // ok, we've got our permission status now
+                                                 self.permissionStatus = (SCKMApplicationPermissionStatus) applicationPermissionStatus;
+                                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                                     // theError will either be an error or nil, so we can always pass it in
+                                                     if(completionHandler) completionHandler(self.accountStatus, self.permissionStatus, theError);
+                                                 });
+                }];
             }
         }
-        // theError will either be an error or nil, so we can always pass it in
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionHandler) {
-                completionHandler(theError);
-            }
-        });
     }];
 }
 
+
+// Uses internal methods to do the majority of the setup for this class
+// If everything is successful, it returns the active user CKDiscoveredUserInfo
+// All internal methods fire completionHandlers on the main thread, so no need to use GCD in this method
+- (void) promptAndFetchUserInfoOnComplete:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
+    [self silentlyVerifyiCloudAccountStatusOnComplete:^(SCKMAccountStatus accountStatus, SCKMApplicationPermissionStatus permissionStatus, NSError *error) {
+        if (error) {
+            NSLog(@"iCloud Account Could Not Be Verified");
+            if(completionHandler) completionHandler(nil, error);
+        } else {
+            NSLog(@"iCloud Account Verified");
+            [self promptToBeDiscoverableIfNeededOnComplete:^(NSError *error) {
+                if (error) {
+                    NSLog(@"Prompt Failed");
+                    if(completionHandler) completionHandler(nil, error);
+                } else {
+                    NSLog(@"Prompted to be discoverable");
+                    [self silentlyFetchUserInfoOnComplete:^(CKRecordID* recordID, CKDiscoveredUserInfo* userInfo, NSError* err){
+                        if(completionHandler) completionHandler(userInfo, err);
+                    }];
+                }
+            }];
+        }
+    }];
+}
 // Checks the discoverability of the active user. Prompts if possible, errors if they are in a bad state
-- (void) promptToBeDiscoverableIfNeededWithCompletionHandler:(void (^)(NSError *error)) completionHandler {
+- (void) promptToBeDiscoverableIfNeededOnComplete:(void (^)(NSError *error)) completionHandler {
     [self.container requestApplicationPermission:CKApplicationPermissionUserDiscoverability completionHandler:^(CKApplicationPermissionStatus applicationPermissionStatus, NSError *error) {
+        self.permissionStatus = (SCKMApplicationPermissionStatus) applicationPermissionStatus;
+        
         __block NSError *theError = nil;
         if (error) {
             theError = [self simpleCloudMessengerErrorForError:error];
@@ -169,58 +172,59 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
         }
         // theError will either be an error or nil, so we can always pass it in
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionHandler) {
-                completionHandler(theError);
-            }
+            if (completionHandler) completionHandler(theError);
         });
     }];
 }
 
 // Fetches the active user CKDiscoveredUserInfo, fairly straightforward
-- (void) fetchActiveUserInfoWithCompletionHandler:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
-    [self fetchActiveUserRecordIDWithCompletionHandler:^(CKRecordID *recordID, NSError *error) {
+- (void) silentlyFetchUserInfoOnComplete:(void (^)(CKRecordID *recordID, CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
+    [self silentlyFetchUserRecordIDOnComplete:^(CKRecordID *recordID, NSError *error) {
         if (error) {
             NSLog(@"Failed fetching Active User ID");
             // don't have to wrap this in GCD main because it's in our internal method on the main queue already
-            completionHandler(nil, error);
+            if(completionHandler) completionHandler(nil, nil, error);
         } else {
             NSLog(@"Active User ID fetched");
-            [self.container discoverUserInfoWithUserRecordID:recordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
-                NSError *theError = nil;
-                if (error) {
-                    NSLog(@"Failed Fetching Active User Info");
-                    theError = [self simpleCloudMessengerErrorForError:error];
-                } else {
-                    NSLog(@"Active User Info fetched");
-                    self.activeUserInfo = userInfo;
-                }
-                // theError will either be an error or nil, so we can always pass it in
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (completionHandler) {
-                        completionHandler(userInfo, theError);
+            self.accountRecordID = recordID;
+            if(self.permissionStatus == SCKMApplicationPermissionStatusGranted){
+                [self.container discoverUserInfoWithUserRecordID:recordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
+                    NSError *theError = nil;
+                    if (error) {
+                        NSLog(@"Failed Fetching Active User Info");
+                        theError = [self simpleCloudMessengerErrorForError:error];
+                    } else {
+                        NSLog(@"Active User Info fetched");
+                        self.accountInfo = userInfo;
                     }
+                    // theError will either be an error or nil, so we can always pass it in
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(completionHandler) completionHandler(recordID, userInfo, theError);
+                    });
+                }];
+            }else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(completionHandler) completionHandler(recordID, nil, nil);
                 });
-            }];
+            }
         }
     }];
 }
 
 // fetches the active user record ID and stores it in a property
 // also kicks off subscription for messages
-- (void) fetchActiveUserRecordIDWithCompletionHandler:(void (^)(CKRecordID *recordID, NSError *error))completionHandler {
+- (void) silentlyFetchUserRecordIDOnComplete:(void (^)(CKRecordID *recordID, NSError *error))completionHandler {
     [self.container fetchUserRecordIDWithCompletionHandler:^(CKRecordID *recordID, NSError *error) {
         NSError *theError = nil;
         if (error) {
             theError = [self simpleCloudMessengerErrorForError:error];
         } else {
-            self.activeUserRecordID = recordID;
+            self.accountRecordID = recordID;
             [self subscribe];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionHandler) {
-                // theError will either be an error or nil, so we can always pass it in
-                completionHandler(recordID, theError);
-            }
+            // theError will either be an error or nil, so we can always pass it in
+            if(completionHandler) completionHandler(recordID, theError);
         });
     }];
 }
@@ -235,10 +239,8 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
             theError = [self simpleCloudMessengerErrorForError:error];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionHandler) {
-                // theError will either be an error or nil, so we can always pass it in
-                completionHandler(userInfos, theError);
-            }
+            // theError will either be an error or nil, so we can always pass it in
+            if(completionHandler) completionHandler(userInfos, theError);
         });
     }];
 }
@@ -253,33 +255,15 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
             if (subscription) {
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 [defaults setBool:YES forKey:SPRSubscriptionID];
-                // else if there are no subscriptions, just setup a new one
             } else {
+                // else if there are no subscriptions, just setup a new one
                 [self setupSubscription];
             }
-
         }];
     }
 }
 
-- (CKSubscription *) incomingMessageSubscription {
-    // setup a subscription watching for new messages with the active user as the receiver
-    CKReference *receiver = [[CKReference alloc] initWithRecordID:self.activeUserRecordID action:CKReferenceActionNone];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", SPRMessageReceiverField, receiver];
-    CKSubscription *itemSubscription = [[CKSubscription alloc] initWithRecordType:SPRMessageRecordType
-                                                                        predicate:predicate
-                                                                   subscriptionID:SPRSubscriptionIDIncomingMessages
-                                                                          options:CKSubscriptionOptionsFiresOnRecordCreation];
-    CKNotificationInfo *notification = [[CKNotificationInfo alloc] init];
-    notification.alertLocalizationKey = @"Message from %@: %@.";
-    notification.alertLocalizationArgs = @[SPRMessageSenderFirstNameField, SPRMessageTextField];
-    notification.desiredKeys = @[SPRMessageSenderFirstNameField, SPRMessageTextField, SPRMessageSenderField];
-    itemSubscription.notificationInfo = notification;
-    return itemSubscription;
-}
-
 - (void) setupSubscription {
-    
     // create the subscription
     [self.publicDatabase saveSubscription:[self incomingMessageSubscription] completionHandler:^(CKSubscription *subscription, NSError *error) {
         // right now subscription errors fail silently.
@@ -313,19 +297,34 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
     return [[NSUserDefaults standardUserDefaults] boolForKey:SPRSubscriptionID];
 }
 
+- (CKSubscription *) incomingMessageSubscription {
+    // setup a subscription watching for new messages with the active user as the receiver
+    CKReference *receiver = [[CKReference alloc] initWithRecordID:self.accountRecordID action:CKReferenceActionNone];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", SPRMessageReceiverField, receiver];
+    CKSubscription *itemSubscription = [[CKSubscription alloc] initWithRecordType:SPRMessageRecordType
+                                                                        predicate:predicate
+                                                                   subscriptionID:SPRSubscriptionIDIncomingMessages
+                                                                          options:CKSubscriptionOptionsFiresOnRecordCreation];
+    CKNotificationInfo *notification = [[CKNotificationInfo alloc] init];
+    notification.alertLocalizationKey = @"Message from %@: %@.";
+    notification.alertLocalizationArgs = @[SPRMessageSenderFirstNameField, SPRMessageTextField];
+    notification.desiredKeys = @[SPRMessageSenderFirstNameField, SPRMessageTextField, SPRMessageSenderField];
+    itemSubscription.notificationInfo = notification;
+    return itemSubscription;
+}
+
+
 #pragma mark - Messaging
 
 // Does the work of "sending the message" e.g. Creating the message record.
 - (void) sendMessage:(NSString *)message withImageURL:(NSURL *)imageURL toUserRecordID:(CKRecordID*)userRecordID withCompletionHandler:(void (^)(NSError *error)) completionHandler {
     // if we somehow don't have an active user record ID, raise an error about the iCloud account
-    if (!self.activeUserRecordID) {
+    if (!self.accountRecordID) {
         NSError *error = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
                                              code:SPRSimpleCloudMessengerErroriCloudAccount
                                          userInfo:@{NSLocalizedDescriptionKey: [self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAccount]}];
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionHandler) {
-                completionHandler(error);
-            }
+            if(completionHandler) completionHandler(error);
         });
         return;
     }
@@ -336,12 +335,12 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
         CKAsset *asset = [[CKAsset alloc] initWithFileURL:imageURL];
         record[SPRMessageImageField] = asset;
     }
-    CKReference *sender = [[CKReference alloc] initWithRecordID:self.activeUserRecordID action:CKReferenceActionNone];
+    CKReference *sender = [[CKReference alloc] initWithRecordID:self.accountRecordID action:CKReferenceActionNone];
     record[SPRMessageSenderField] = sender;
     CKReference *receiver = [[CKReference alloc] initWithRecordID:userRecordID action:CKReferenceActionNone];
     record[SPRMessageReceiverField] = receiver;
     
-    record[SPRMessageSenderFirstNameField] = self.activeUserInfo.firstName;
+    record[SPRMessageSenderFirstNameField] = self.accountInfo.firstName;
     
     // save the record
     [self.publicDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
@@ -351,10 +350,8 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionHandler) {
-                // theError will either be an error or nil, so we can always pass it in
-                completionHandler(theError);
-            }
+            // theError will either be an error or nil, so we can always pass it in
+            if(completionHandler) completionHandler(theError);
         });
     }];
 }
@@ -373,10 +370,8 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
             NSLog(@"notification changed error");
             theError = [self simpleCloudMessengerErrorForError:operationError];
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (completionHandler) {
-                    // theError will either be an error or nil, so we can always pass it in
-                    completionHandler(nil, theError);
-                }
+                // theError will either be an error or nil, so we can always pass it in
+                if(completionHandler) completionHandler(nil, theError);
             });
         } else {
             NSLog(@"notification changed complete");
@@ -406,10 +401,8 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if (completionHandler) {
-                        // error will either be an error or nil, so we can always pass it in
-                        completionHandler([objects copy], operationalError);
-                    }
+                    // error will either be an error or nil, so we can always pass it in
+                    if(completionHandler) completionHandler([objects copy], operationalError);
                 });
             };
 
@@ -425,10 +418,8 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
             [message updateMessageWithMessageRecord:record];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionHandler) {
-                // error will either be an error or nil, so we can always pass it in
-                completionHandler(message, error);
-            }
+            // error will either be an error or nil, so we can always pass it in
+            if(completionHandler) completionHandler(message, error);
         });
     }];
 }
@@ -443,10 +434,8 @@ static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
             message = [[SPRMessage alloc] initWithNotification:notification senderInfo:userInfo];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionHandler) {
-                // error will either be an error or nil, so we can always pass it in
-                completionHandler(message, error);
-            }
+            // error will either be an error or nil, so we can always pass it in
+            if(completionHandler) completionHandler(message, error);
         });
     }];
 }

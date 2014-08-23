@@ -9,15 +9,6 @@
 #import "SPRMessage.h"
 #import "SPRSimpleCloudKitManager.h"
 
-@interface SPRMessage ()
-@property (nonatomic, copy) NSString *senderFirstName;
-@property (nonatomic, copy) NSString *senderLastName;
-@property (nonatomic, copy) NSString *messageText;
-@property (nonatomic, strong) UIImage *messageImage;
-@property (nonatomic, strong) CKRecordID *senderRecordID;
-@property (nonatomic, strong) CKRecordID *messageRecordID;
-@end
-
 @implementation SPRMessage
 
 - (id) initWithNotification:(CKQueryNotification *) notification senderInfo:(CKDiscoveredUserInfo *)sender {
@@ -33,11 +24,11 @@
 }
 
 - (void) updateMessageWithMessageRecord:(CKRecord*) messageRecord {
-    self.messageText = messageRecord[SPRMessageTextField];
+    _messageText = messageRecord[SPRMessageTextField];
     CKAsset *imageAsset = messageRecord[SPRMessageImageField];
     NSData *imageData = [NSData dataWithContentsOfURL:imageAsset.fileURL];
     UIImage *image = [UIImage imageWithData:imageData];
-    self.messageImage = image;
+    _messageImage = image;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {

@@ -10,24 +10,7 @@
 #import <UIKit/UIKit.h>
 #import <CloudKit/CloudKit.h>
 #import "SPRMessage.h"
-
-typedef NS_ENUM(NSUInteger, SPRSimpleCloudMessengerError) {
-    SPRSimpleCloudMessengerErrorUnexpected,
-    SPRSimpleCloudMessengerErroriCloudAccount,
-    SPRSimpleCloudMessengerErrorMissingDiscoveryPermissions,
-    SPRSimpleCloudMessengerErrorNetwork,
-    SPRSimpleCloudMessengerErrorServiceUnavailable,
-    SPRSimpleCloudMessengerErrorCancelled,
-    SPRSimpleCloudMessengerErroriCloudAccountChanged,
-};
-
-extern NSString *const SPRSimpleCloudKitMessengerErrorDomain;
-
-extern NSString *const SPRMessageTextField;
-extern NSString *const SPRMessageImageField;
-extern NSString *const SPRMessageSenderField;
-extern NSString *const SPRMessageSenderFirstNameField;
-extern NSString *const SPRSubscriptionIDIncomingMessages;
+#import "SPRConstants.h"
 
 /**
  * Provides a messaging service using CloudKit
@@ -36,10 +19,19 @@ extern NSString *const SPRSubscriptionIDIncomingMessages;
  */
 @interface SPRSimpleCloudKitManager : NSObject
 
-@property (readonly) BOOL isActiveUserForCloudKit;
+// logged in user account, if any
+@property (readonly) SCKMAccountStatus accountStatus;
+@property (readonly) SCKMApplicationPermissionStatus permissionStatus;
+@property (readonly) CKRecordID *accountRecordID;
+@property (readonly) CKDiscoveredUserInfo *accountInfo;
+
 
 /** @return The configured SPRSimpleCloudKitMessenger instance */
-+ (SPRSimpleCloudKitManager *) sharedMessenger;
++ (SPRSimpleCloudKitManager *) sharedManager;
+
+- (void) silentlyVerifyiCloudAccountStatusOnComplete:(void (^)(SCKMAccountStatus accountStatus,  SCKMApplicationPermissionStatus permissionStatus, NSError *error)) completionHandler;
+
+- (void) silentlyFetchUserInfoOnComplete:(void (^)(CKRecordID *recordID, CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler;
 
 /** The main entry point for using this class
  * 
@@ -59,7 +51,7 @@ extern NSString *const SPRSubscriptionIDIncomingMessages;
  * Once "logged in", you should call this method every time your app becomes active so it can perform it's checks.
  * @param completionHandler will either return a CKDiscoveredUserInfo or an NSError
  */
-- (void) verifyAndFetchActiveiCloudUserWithCompletionHandler:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler;
+- (void) promptAndFetchUserInfoOnComplete:(void (^)(CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler;
 
 /** Method for retrieving all discoverable friends from the user's address book.
  * @param completionHandler will either return an NSArray of CKDiscoveredUserInfo or an NSError
@@ -93,4 +85,5 @@ extern NSString *const SPRSubscriptionIDIncomingMessages;
 * @param completionHandler will be called after the fetching is complete with either the full message object or an NSError
 */
 - (void) messageForQueryNotification:(CKQueryNotification *) notification withCompletionHandler:(void (^)(SPRMessage *message, NSError *error)) completionHandler;
+
 @end
