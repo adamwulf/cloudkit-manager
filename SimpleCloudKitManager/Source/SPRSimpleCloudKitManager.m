@@ -71,6 +71,10 @@
         if (error) {
             theError = [self simpleCloudMessengerErrorForError:error];
             self.permissionStatus = SCKMApplicationPermissionStatusCouldNotComplete;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // theError will either be an error or nil, so we can always pass it in
+                if(completionHandler) completionHandler(self.accountStatus, self.permissionStatus, theError);
+            });
         } else {
             // if it's not a valid account raise an error
             if (accountStatus != CKAccountStatusAvailable) {
@@ -79,6 +83,10 @@
                                                code:SPRSimpleCloudMessengerErroriCloudAccount
                                            userInfo:@{NSLocalizedDescriptionKey: errorString }];
                 self.permissionStatus = SCKMApplicationPermissionStatusCouldNotComplete;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    // theError will either be an error or nil, so we can always pass it in
+                    if(completionHandler) completionHandler(self.accountStatus, self.permissionStatus, theError);
+                });
             } else {
                 // grab the ubiquityIdentityToken
                 // if it's a different ubiquityIdentityToken than previously stored, raise an error
