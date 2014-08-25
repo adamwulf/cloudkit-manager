@@ -21,8 +21,7 @@ typedef NS_ENUM(NSInteger, SCKMAccountStatus) {
     /* Parental Controls / Device Management has denied access to iCloud account credentials */
     SCKMAccountStatusRestricted                          = 2,
     /* No iCloud account is logged in on this device */
-    SCKMAccountStatusNoAccount                           = 3,
-    SCKMAccountStatusLoading
+    SCKMAccountStatusNoAccount                           = 3
 };
 
 typedef NS_ENUM(NSInteger, SCKMApplicationPermissionStatus) {
@@ -33,8 +32,7 @@ typedef NS_ENUM(NSInteger, SCKMApplicationPermissionStatus) {
     /* The user has denied this application permission */
     SCKMApplicationPermissionStatusDenied                = 2,
     /* The user has granted this application permission */
-    SCKMApplicationPermissionStatusGranted               = 3,
-    SCKMApplicationPermissionStatusLoading
+    SCKMApplicationPermissionStatusGranted               = 3
 };
 
 
