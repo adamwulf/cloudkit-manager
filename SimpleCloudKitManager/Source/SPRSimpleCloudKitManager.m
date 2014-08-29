@@ -318,7 +318,7 @@
 #pragma mark - Messaging
 
 // Does the work of "sending the message" e.g. Creating the message record.
-- (void) sendMessage:(NSString *)message withImageURL:(NSURL *)imageURL toUserRecordID:(CKRecordID*)userRecordID withCompletionHandler:(void (^)(NSError *error)) completionHandler {
+- (void) sendMessage:(NSString *)message withImageURL:(NSURL *)imageURL toUserRecordID:(CKRecordID*)userRecordID withProgressHandler:(void (^)(CGFloat progress))progressHandler  withCompletionHandler:(void (^)(NSError *error)) completionHandler {
     // if we somehow don't have an active user record ID, raise an error about the iCloud account
     if (!self.accountRecordID) {
         NSError *error = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
@@ -329,6 +329,9 @@
         });
         return;
     }
+    
+    
+    
     // assemble the new record
     CKRecord *record = [[CKRecord alloc] initWithRecordType:SPRMessageRecordType];
     record[SPRMessageTextField] = message;
@@ -342,9 +345,14 @@
     record[SPRMessageReceiverField] = receiver;
     
     record[SPRMessageSenderFirstNameField] = self.accountInfo.firstName;
-    
-    // save the record
-    [self.publicDatabase saveRecord:record completionHandler:^(CKRecord *record, NSError *error) {
+
+    // save the record, and notify of progress + completion
+    CKModifyRecordsOperation* saveOp = [[CKModifyRecordsOperation alloc] initWithRecordsToSave:@[record] recordIDsToDelete:@[]];
+    saveOp.perRecordProgressBlock = ^(CKRecord *record, double progress){
+        progressHandler(progress);
+    };
+    saveOp.perRecordCompletionBlock = ^(CKRecord *record, NSError *error){
+        NSLog(@"cloudkit save complete");
         NSError *theError = nil;
         if (error) {
             theError = [self simpleCloudMessengerErrorForError:error];
@@ -354,7 +362,8 @@
             // theError will either be an error or nil, so we can always pass it in
             if(completionHandler) completionHandler(theError);
         });
-    }];
+    };
+    [self.publicDatabase addOperation:saveOp];
 }
 
 // Method for fetching all new messages
