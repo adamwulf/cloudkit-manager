@@ -13,8 +13,10 @@
 
 @property (nonatomic, copy, readonly) NSString *senderFirstName;
 @property (nonatomic, copy, readonly) NSString *senderLastName;
+// arbitrary text data of the message
 @property (nonatomic, copy, readonly) NSString *messageText;
-@property (nonatomic, strong, readonly) UIImage *messageImage;
+// URL to local file of opaque binary blob data of the message
+@property (nonatomic, strong, readonly) NSURL *messageData;
 @property (nonatomic, strong, readonly) CKRecordID *senderRecordID;
 @property (nonatomic, strong, readonly) CKRecordID *messageRecordID;
 

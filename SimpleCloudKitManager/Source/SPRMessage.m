@@ -26,15 +26,13 @@
 - (void) updateMessageWithMessageRecord:(CKRecord*) messageRecord {
     _messageText = messageRecord[SPRMessageTextField];
     CKAsset *imageAsset = messageRecord[SPRMessageImageField];
-    NSData *imageData = [NSData dataWithContentsOfURL:imageAsset.fileURL];
-    UIImage *image = [UIImage imageWithData:imageData];
-    _messageImage = image;
+    _messageData = imageAsset.fileURL;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
         _messageText = [decoder decodeObjectForKey:SPRMessageTextField];
-        _messageImage = [decoder decodeObjectForKey:SPRMessageImageField];
+        _messageData = [decoder decodeObjectForKey:SPRMessageImageField];
         _senderFirstName = [decoder decodeObjectForKey:SPRMessageSenderFirstNameField];
         _senderLastName = [decoder decodeObjectForKey:@"lastName"];
         
@@ -49,7 +47,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:_messageText forKey:SPRMessageTextField];
-    [encoder encodeObject:_messageImage forKey:SPRMessageImageField];
+    [encoder encodeObject:_messageData forKey:SPRMessageImageField];
     [encoder encodeObject:_senderFirstName forKey:SPRMessageSenderFirstNameField];
     [encoder encodeObject:_senderLastName forKey:@"lastName"];
     
