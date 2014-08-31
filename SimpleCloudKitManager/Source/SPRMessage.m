@@ -15,6 +15,7 @@
     self = [super init];
     if (!self) return nil;
     _messageText = notification.recordFields[SPRMessageTextField];
+    _sender = sender;
     _senderFirstName = sender.firstName;
     _senderLastName = sender.lastName;
     _senderRecordID = sender.userRecordID;
