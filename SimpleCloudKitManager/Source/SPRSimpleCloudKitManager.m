@@ -381,7 +381,6 @@
     CKFetchNotificationChangesOperation *operation = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:self.serverChangeToken];
     NSMutableArray *notifications = [@[] mutableCopy];
     operation.notificationChangedBlock = ^ (CKNotification *notification) {
-        NSLog(@"notification changed");
         [notifications addObject:notification];
     };
     operation.fetchNotificationChangesCompletionBlock = ^ (CKServerChangeToken *serverChangeToken, NSError *operationError) {
@@ -412,8 +411,8 @@
                     NSString *recordIDString = notification.recordFields[SPRMessageSenderField];
                     if (recordIDString) {
                         CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:notification.recordFields[SPRMessageSenderField]];
-                        SPRMessage *message = [[SPRMessage alloc] initWithNotification:notification
-                                                                          senderInfo:userRecordIDsToUserInfos[recordID]];
+                        SPRMessage *message = [[SPRMessage alloc] initWithNotification:notification];
+                        [message updateMessageWithSenderInfo:userRecordIDsToUserInfos[recordID]];
                         [objects addObject:message];
                     }
                 }
@@ -431,31 +430,36 @@
 }
 
 - (void) fetchDetailsForMessage:(SPRMessage *)message withCompletionHandler:(void (^)(SPRMessage *message, NSError *error)) completionHandler {
-    [self.publicDatabase fetchRecordWithID:message.messageRecordID completionHandler:^(CKRecord *record, NSError *error) {
-        if (!error) {
-            [message updateMessageWithMessageRecord:record];
+    // first fetch the sender information
+    [self.container discoverUserInfoWithUserRecordID:message.senderRecordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
+        NSError *theError = nil;
+        if (error) {
+            theError = [self simpleCloudMessengerErrorForError:error];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // error will either be an error or nil, so we can always pass it in
+                if(completionHandler) completionHandler(message, theError);
+            });
+        } else {
+            // next fetch the binary data
+            [message updateMessageWithSenderInfo:userInfo];
+            [self.publicDatabase fetchRecordWithID:message.messageRecordID completionHandler:^(CKRecord *record, NSError *error) {
+                NSError *theError = nil;
+                if (!error) {
+                    [message updateMessageWithMessageRecord:record];
+                }else{
+                    theError = [self simpleCloudMessengerErrorForError:error];
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    // error will either be an error or nil, so we can always pass it in
+                    if(completionHandler) completionHandler(message, theError);
+                });
+            }];
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // error will either be an error or nil, so we can always pass it in
-            if(completionHandler) completionHandler(message, error);
-        });
     }];
 }
 
 - (void) messageForQueryNotification:(CKQueryNotification *) notification withCompletionHandler:(void (^)(SPRMessage *message, NSError *error)) completionHandler {
-    [self.container discoverUserInfoWithUserRecordID:[[CKRecordID alloc] initWithRecordName:notification.recordFields[SPRMessageSenderField]] completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
-        NSError *theError = nil;
-        SPRMessage *message = nil;
-        if (error) {
-            theError = [self simpleCloudMessengerErrorForError:error];
-        } else {
-            message = [[SPRMessage alloc] initWithNotification:notification senderInfo:userInfo];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // error will either be an error or nil, so we can always pass it in
-            if(completionHandler) completionHandler(message, error);
-        });
-    }];
+    completionHandler([[SPRMessage alloc] initWithNotification:notification], nil);
 }
 
 #pragma mark - Error handling utility methods
