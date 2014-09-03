@@ -59,6 +59,8 @@
                                                     CKDiscoveredUserInfo * userInfo,
                                                     NSError *error)) completionHandler;
 
+-(void) promptForRemoteNotificationsIfNecessary;
+
 /** Method for retrieving all discoverable friends from the user's address book.
  * @param completionHandler will either return an NSArray of CKDiscoveredUserInfo or an NSError
  */

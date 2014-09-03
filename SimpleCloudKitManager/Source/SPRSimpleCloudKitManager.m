@@ -164,18 +164,28 @@
             }
         }
         if(!theError){
-            // if we don't have an error, then ask for remote notifications
-            UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
-                                                                                                 |UIUserNotificationTypeSound)
-                                                                                     categories:nil];
-            [[UIApplication sharedApplication] registerForRemoteNotifications];
-            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+            [self promptForRemoteNotificationsIfNecessary];
         }
         // theError will either be an error or nil, so we can always pass it in
         dispatch_async(dispatch_get_main_queue(), ^{
             if (completionHandler) completionHandler(theError);
         });
     }];
+}
+
+-(void) promptForRemoteNotificationsIfNecessary{
+    UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
+                                                                                         |UIUserNotificationTypeSound)
+                                                                             categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    
+    if(!self.isSubscribed){
+        NSLog(@"not subscribed!");
+        [self subscribe];
+    }else{
+        NSLog(@"subscribed.");
+    }
 }
 
 // Fetches the active user CKDiscoveredUserInfo, fairly straightforward
@@ -384,8 +394,6 @@
                 if(completionHandler) completionHandler(nil, theError);
             });
         } else {
-            NSLog(@"notification changed complete");
-            
             NSData *data = [NSKeyedArchiver archivedDataWithRootObject:serverChangeToken];
             [[NSUserDefaults standardUserDefaults] setObject:data forKey:SPRServerChangeToken];
             
