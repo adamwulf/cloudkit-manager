@@ -24,6 +24,7 @@
 @property (nonatomic, readonly) SCKMApplicationPermissionStatus permissionStatus;
 @property (nonatomic, readonly) CKRecordID *accountRecordID;
 @property (nonatomic, readonly) CKDiscoveredUserInfo *accountInfo;
+@property (nonatomic, getter=isSubscribed) BOOL subscribed;
 
 
 /** @return The configured SPRSimpleCloudKitMessenger instance */

@@ -20,12 +20,12 @@
 
 @property (readonly) CKContainer *container;
 @property (readonly) CKDatabase *publicDatabase;
-@property (nonatomic, getter=isSubscribed) BOOL subscribed;
 @property (nonatomic, strong) CKServerChangeToken *serverChangeToken;
 
 @end
 
 @implementation SPRSimpleCloudKitManager{
+    BOOL subscribeIsInFlight;
     CKFetchNotificationChangesOperation *mostRecentFetchNotification;
 }
 
@@ -234,6 +234,13 @@
 // handles clearing old subscriptions, and setting up the new one
 - (void)subscribe {
     if (self.subscribed == NO) {
+        @synchronized(self){
+            if(subscribeIsInFlight){
+                return;
+            }
+            subscribeIsInFlight = YES;
+        }
+        NSLog(@"not subscribed");
         // find existing subscriptions and deletes them
         [self.publicDatabase fetchSubscriptionWithID:SPRSubscriptionIDIncomingMessages completionHandler:^(CKSubscription *subscription, NSError *error) {
             // this operation silently fails, which is probably the right way to go
@@ -241,11 +248,18 @@
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 [defaults setBool:YES forKey:SPRSubscriptionID];
                 _subscribed = YES;
+                NSLog(@"actually, am subscribed");
+                @synchronized(self){
+                    subscribeIsInFlight = NO;
+                }
             } else {
                 // else if there are no subscriptions, just setup a new one
+                NSLog(@"setting up subscription");
                 [self setupSubscription];
             }
         }];
+    }else{
+        NSLog(@"subscribed");
     }
 }
 
@@ -253,11 +267,21 @@
     // create the subscription
     [self.publicDatabase saveSubscription:[self incomingMessageSubscription] completionHandler:^(CKSubscription *subscription, NSError *error) {
         // right now subscription errors fail silently.
+        @synchronized(self){
+            subscribeIsInFlight = NO;
+        }
         if (!error) {
             // save the subscription ID so we aren't constantly trying to create a new one
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             [defaults setBool:YES forKey:SPRSubscriptionID];
             _subscribed = YES;
+            NSLog(@"subscribe success");
+        }else{
+            NSLog(@"subscribe fail");
+            // can't subscribe, so try again in a bit...
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self performSelector:@selector(subscribe) withObject:nil afterDelay:20];
+            });
         }
     }];
 }
@@ -296,6 +320,9 @@
     notification.alertLocalizationKey = @"%@ sent you a page in Loose Leaf!";
     notification.alertLocalizationArgs = @[SPRMessageSenderFirstNameField];
     notification.desiredKeys = @[SPRMessageSenderFirstNameField, SPRMessageSenderField];
+//    notification.shouldBadge = YES;
+    // currently not well documented, and doesn't seem to actually startup the app in the background as promised.
+//    notification.shouldSendContentAvailable = YES;
     itemSubscription.notificationInfo = notification;
     return itemSubscription;
 }
