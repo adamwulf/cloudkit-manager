@@ -25,7 +25,9 @@
 
 @end
 
-@implementation SPRSimpleCloudKitManager
+@implementation SPRSimpleCloudKitManager{
+    CKFetchNotificationChangesOperation *mostRecentFetchNotification;
+}
 
 - (id)init {
     self = [super init];
@@ -266,6 +268,7 @@
             if (subscription) {
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 [defaults setBool:YES forKey:SPRSubscriptionID];
+                _subscribed = YES;
             } else {
                 // else if there are no subscriptions, just setup a new one
                 [self setupSubscription];
@@ -282,6 +285,7 @@
             // save the subscription ID so we aren't constantly trying to create a new one
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             [defaults setBool:YES forKey:SPRSubscriptionID];
+            _subscribed = YES;
         }
     }];
 }
@@ -304,9 +308,9 @@
     }
 }
 
-- (BOOL)isSubscribed {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:SPRSubscriptionID];
-}
+//- (BOOL)isSubscribed {
+//    return [[NSUserDefaults standardUserDefaults] boolForKey:SPRSubscriptionID];
+//}
 
 - (CKSubscription *) incomingMessageSubscription {
     // setup a subscription watching for new messages with the active user as the receiver
@@ -362,7 +366,7 @@
         progressHandler(progress);
     };
     saveOp.perRecordCompletionBlock = ^(CKRecord *record, NSError *error){
-        NSLog(@"cloudkit save complete");
+        NSLog(@"cloudkit save complete %@", record.recordID);
         NSError *theError = nil;
         if (error) {
             theError = [self simpleCloudMessengerErrorForError:error];
@@ -378,55 +382,46 @@
 
 // Method for fetching all new messages
 - (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler {
-    CKFetchNotificationChangesOperation *operation = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:self.serverChangeToken];
-    NSMutableArray *notifications = [@[] mutableCopy];
-    operation.notificationChangedBlock = ^ (CKNotification *notification) {
-        [notifications addObject:notification];
-    };
-    operation.fetchNotificationChangesCompletionBlock = ^ (CKServerChangeToken *serverChangeToken, NSError *operationError) {
-        NSError *theError = nil;
-        if (operationError) {
-            NSLog(@"notification changed error");
-            theError = [self simpleCloudMessengerErrorForError:operationError];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                // theError will either be an error or nil, so we can always pass it in
-                if(completionHandler) completionHandler(nil, theError);
-            });
-        } else {
-            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:serverChangeToken];
-            [[NSUserDefaults standardUserDefaults] setObject:data forKey:SPRServerChangeToken];
-            
-            NSMutableArray *recordIDStrings = [[notifications valueForKeyPath:@"recordFields.sender"] mutableCopy];
-            
-            [recordIDStrings removeObjectIdenticalTo:[NSNull null]];
-            NSMutableArray *recordIDs = [@[] mutableCopy];
-            for (NSString *recordIDString in recordIDStrings) {
-                [recordIDs addObject:[[CKRecordID alloc]initWithRecordName:recordIDString]];
+    @synchronized(self){
+        if(mostRecentFetchNotification){
+            return;
+        }
+        NSLog(@"fetching with token: %@", self.serverChangeToken);
+        CKFetchNotificationChangesOperation *operation = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:self.serverChangeToken];
+        NSMutableArray *incomingMessages = [@[] mutableCopy];
+        operation.notificationChangedBlock = ^ (CKNotification *notification) {
+            if([notification isKindOfClass:[CKQueryNotification class]]){
+                SPRMessage* potentiallyMissedMessage = [[SPRMessage alloc] initWithNotification:(CKQueryNotification*)notification];
+                NSLog(@"new record: %@", potentiallyMissedMessage.messageRecordID);
+                [incomingMessages addObject:potentiallyMissedMessage];
             }
-            CKDiscoverUserInfosOperation *fetchSendersOperation = [[CKDiscoverUserInfosOperation alloc] initWithEmailAddresses:nil userRecordIDs:[recordIDs copy]];
-            fetchSendersOperation.discoverUserInfosCompletionBlock = ^ (NSDictionary *emailsToUserInfos, NSDictionary *userRecordIDsToUserInfos, NSError *operationalError) {
-                
-                NSMutableArray *objects = [@[] mutableCopy];
-                for (CKQueryNotification *notification in notifications) {
-                    NSString *recordIDString = notification.recordFields[SPRMessageSenderField];
-                    if (recordIDString) {
-                        CKRecordID *recordID = [[CKRecordID alloc] initWithRecordName:notification.recordFields[SPRMessageSenderField]];
-                        SPRMessage *message = [[SPRMessage alloc] initWithNotification:notification];
-                        [message updateMessageWithSenderInfo:userRecordIDsToUserInfos[recordID]];
-                        [objects addObject:message];
-                    }
+        };
+        operation.fetchNotificationChangesCompletionBlock = ^ (CKServerChangeToken *serverChangeToken, NSError *operationError) {
+            NSError *theError = nil;
+            if (operationError) {
+                theError = [self simpleCloudMessengerErrorForError:operationError];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    // theError will either be an error or nil, so we can always pass it in
+                    if(completionHandler) completionHandler(nil, theError);
+                });
+            } else {
+                self.serverChangeToken = serverChangeToken;
+                NSData *data = [NSKeyedArchiver archivedDataWithRootObject:serverChangeToken];
+                [[NSUserDefaults standardUserDefaults] setObject:data forKey:SPRServerChangeToken];
+                @synchronized(self){
+                    NSLog(@"fetched %d records. told of new token: %@", (int)[incomingMessages count], self.serverChangeToken);
+                    mostRecentFetchNotification = nil;
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    // error will either be an error or nil, so we can always pass it in
-                    if(completionHandler) completionHandler([objects copy], operationalError);
+                    // theError will either be an error or nil, so we can always pass it in
+                    completionHandler(incomingMessages, theError);
                 });
-            };
-
-            [self.container addOperation:fetchSendersOperation];
-        }
-    };
-    [self.container addOperation:operation];
+            }
+        };
+        mostRecentFetchNotification = operation;
+        [self.container addOperation:operation];
+    }
 }
 
 - (void) fetchDetailsForMessage:(SPRMessage *)message withCompletionHandler:(void (^)(SPRMessage *message, NSError *error)) completionHandler {
@@ -458,8 +453,10 @@
     }];
 }
 
-- (void) messageForQueryNotification:(CKQueryNotification *) notification withCompletionHandler:(void (^)(SPRMessage *message, NSError *error)) completionHandler {
-    completionHandler([[SPRMessage alloc] initWithNotification:notification], nil);
+- (void) messageForQueryNotification:(CKQueryNotification *)notification withCompletionHandler:(void (^)(SPRMessage *message, NSError *error)) completionHandler {
+    SPRMessage* message = [[SPRMessage alloc] initWithNotification:notification];
+    NSLog(@"was pushed %@", message.messageRecordID);
+    completionHandler(message, nil);
 }
 
 #pragma mark - Error handling utility methods
