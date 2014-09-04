@@ -11,6 +11,20 @@
 
 @implementation SPRMessage
 
++(BOOL) isKeyValid:(NSString*)key{
+    return [key compare:SPRMessageImageField options:NSCaseInsensitiveSearch] != NSOrderedSame &&
+    [key compare:SPRMessageSenderField options:NSCaseInsensitiveSearch] != NSOrderedSame &&
+    [key compare:SPRMessageSenderFirstNameField options:NSCaseInsensitiveSearch] != NSOrderedSame &&
+    [key compare:SPRMessageReceiverField options:NSCaseInsensitiveSearch] != NSOrderedSame;
+}
+
++(BOOL) isScalar:(id)obj{
+    return [obj isKindOfClass:[NSString class]] ||
+    [obj isKindOfClass:[NSNumber class]] ||
+    [obj isKindOfClass:[NSDate class]];
+}
+
+
 - (id) initWithNotification:(CKQueryNotification *) notification{
     self = [super init];
     if (!self) return nil;
@@ -30,6 +44,18 @@
 - (void) updateMessageWithMessageRecord:(CKRecord*) messageRecord {
     CKAsset *imageAsset = messageRecord[SPRMessageImageField];
     _messageData = imageAsset.fileURL;
+
+    NSMutableDictionary* additionalAttributes = [NSMutableDictionary dictionary];
+    
+    for(NSString* key in [messageRecord allKeys]){
+        if([SPRMessage isKeyValid:key]){
+            id obj = [messageRecord objectForKey:key];
+            if([SPRMessage isScalar:obj]){
+                [additionalAttributes setValue:obj forKey:key];
+            }
+        }
+    }
+    _attributes = [NSDictionary dictionaryWithDictionary:additionalAttributes];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {

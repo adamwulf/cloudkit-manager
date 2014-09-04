@@ -320,19 +320,6 @@
 
 #pragma mark - Messaging
 
--(BOOL) isKeyValid:(NSString*)key{
-    return [key compare:SPRMessageImageField options:NSCaseInsensitiveSearch] != NSOrderedSame &&
-    [key compare:SPRMessageSenderField options:NSCaseInsensitiveSearch] != NSOrderedSame &&
-    [key compare:SPRMessageSenderFirstNameField options:NSCaseInsensitiveSearch] != NSOrderedSame &&
-    [key compare:SPRMessageReceiverField options:NSCaseInsensitiveSearch] != NSOrderedSame;
-}
-
--(BOOL) isScalar:(id)obj{
-    return [obj isKindOfClass:[NSString class]] ||
-    [obj isKindOfClass:[NSNumber class]] ||
-    [obj isKindOfClass:[NSDate class]];
-}
-
 // Does the work of "sending the message" e.g. Creating the message record.
 // the attributes is a dictionary, and all of the values must be:
 // strings, numbers, booleans, dates. no dictionary/array values are allowed.
@@ -348,8 +335,6 @@
         return;
     }
     
-    
-    
     // assemble the new record
     CKRecord *record = [[CKRecord alloc] initWithRecordType:SPRMessageRecordType];
     if (imageURL) {
@@ -363,15 +348,11 @@
     record[SPRMessageSenderFirstNameField] = self.accountInfo.firstName;
     
     for(NSString* key in [attributes allKeys]){
-        if([self isKeyValid:key]){
+        if([SPRMessage isKeyValid:key]){
             id obj = [attributes objectForKey:key];
-            if([self isScalar:obj]){
+            if([SPRMessage isScalar:obj]){
                 [record setValue:obj forKey:key];
-            }else{
-                NSLog(@"%@ isn't a scalar", NSStringFromClass([obj class]));
             }
-        }else{
-            NSLog(@"%@ isn't a valid key", key);
         }
     }
 
