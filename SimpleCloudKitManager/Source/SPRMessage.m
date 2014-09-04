@@ -15,7 +15,6 @@
     self = [super init];
     if (!self) return nil;
     
-    _messageText = notification.recordFields[SPRMessageTextField];
     _senderFirstName = nil;
     _senderLastName = nil;
     _senderRecordID = [[CKRecordID alloc] initWithRecordName:notification.recordFields[SPRMessageSenderField]];
@@ -29,14 +28,12 @@
 }
 
 - (void) updateMessageWithMessageRecord:(CKRecord*) messageRecord {
-    _messageText = messageRecord[SPRMessageTextField];
     CKAsset *imageAsset = messageRecord[SPRMessageImageField];
     _messageData = imageAsset.fileURL;
 }
 
 - (id)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
-        _messageText = [decoder decodeObjectForKey:SPRMessageTextField];
         _messageData = [decoder decodeObjectForKey:SPRMessageImageField];
         _senderFirstName = [decoder decodeObjectForKey:SPRMessageSenderFirstNameField];
         _senderLastName = [decoder decodeObjectForKey:@"lastName"];
@@ -51,7 +48,6 @@
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
-    [encoder encodeObject:_messageText forKey:SPRMessageTextField];
     [encoder encodeObject:_messageData forKey:SPRMessageImageField];
     [encoder encodeObject:_senderFirstName forKey:SPRMessageSenderFirstNameField];
     [encoder encodeObject:_senderLastName forKey:@"lastName"];

@@ -321,9 +321,9 @@
                                                                    subscriptionID:SPRSubscriptionIDIncomingMessages
                                                                           options:CKSubscriptionOptionsFiresOnRecordCreation];
     CKNotificationInfo *notification = [[CKNotificationInfo alloc] init];
-    notification.alertLocalizationKey = @"Message from %@: %@.";
-    notification.alertLocalizationArgs = @[SPRMessageSenderFirstNameField, SPRMessageTextField];
-    notification.desiredKeys = @[SPRMessageSenderFirstNameField, SPRMessageTextField, SPRMessageSenderField];
+    notification.alertLocalizationKey = @"%@ sent you a page in Loose Leaf!";
+    notification.alertLocalizationArgs = @[SPRMessageSenderFirstNameField];
+    notification.desiredKeys = @[SPRMessageSenderFirstNameField, SPRMessageSenderField];
     itemSubscription.notificationInfo = notification;
     return itemSubscription;
 }
@@ -332,7 +332,9 @@
 #pragma mark - Messaging
 
 // Does the work of "sending the message" e.g. Creating the message record.
-- (void) sendMessage:(NSString *)message withImageURL:(NSURL *)imageURL toUserRecordID:(CKRecordID*)userRecordID withProgressHandler:(void (^)(CGFloat progress))progressHandler  withCompletionHandler:(void (^)(NSError *error)) completionHandler {
+// the attributes is a dictionary, and all of the values must be:
+// strings, numbers, booleans, dates. no dictionary/array values are allowed.
+- (void) sendFile:(NSURL *)imageURL withAttributes:(NSDictionary*)attributes toUserRecordID:(CKRecordID*)userRecordID withProgressHandler:(void (^)(CGFloat progress))progressHandler  withCompletionHandler:(void (^)(NSError *error)) completionHandler {
     // if we somehow don't have an active user record ID, raise an error about the iCloud account
     if (!self.accountRecordID) {
         NSError *error = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
@@ -348,7 +350,6 @@
     
     // assemble the new record
     CKRecord *record = [[CKRecord alloc] initWithRecordType:SPRMessageRecordType];
-    record[SPRMessageTextField] = message;
     if (imageURL) {
         CKAsset *asset = [[CKAsset alloc] initWithFileURL:imageURL];
         record[SPRMessageImageField] = asset;

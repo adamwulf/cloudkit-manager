@@ -48,7 +48,6 @@ typedef NS_ENUM(NSUInteger, SPRSimpleCloudMessengerError) {
 
 static NSString *const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitMessenger.ErrorDomain";
 static NSString *const SPRMessageRecordType = @"Message";
-static NSString *const SPRMessageTextField = @"text";
 static NSString *const SPRMessageImageField = @"image";
 static NSString *const SPRMessageSenderField = @"sender";
 static NSString *const SPRMessageSenderFirstNameField = @"senderFirstName";

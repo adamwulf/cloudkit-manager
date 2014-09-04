@@ -84,7 +84,7 @@
  * @param userRecordID a valid CKRecordID for the user the message is destined for
  * @param completionHandler will return an NSError if the send failed
  */
-- (void) sendMessage:(NSString *)message withImageURL:(NSURL *)imageURL toUserRecordID:(CKRecordID*)userRecordID withProgressHandler:(void (^)(CGFloat progress))progressHandler withCompletionHandler:(void (^)(NSError *error)) completionHandler;
+- (void) sendFile:(NSURL *)imageURL withAttributes:(NSDictionary*)attributes toUserRecordID:(CKRecordID*)userRecordID withProgressHandler:(void (^)(CGFloat progress))progressHandler  withCompletionHandler:(void (^)(NSError *error)) completionHandler;
 
 /** Method for turning a CKQueryNotification into a SPRMessage object
 *
