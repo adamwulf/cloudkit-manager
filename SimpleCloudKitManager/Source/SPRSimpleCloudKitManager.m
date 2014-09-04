@@ -90,23 +90,6 @@
                     if(completionHandler) completionHandler(self.accountStatus, self.permissionStatus, theError);
                 });
             } else {
-                // grab the ubiquityIdentityToken
-                // if it's a different ubiquityIdentityToken than previously stored, raise an error
-                // so the developer can clear sensitive data
-                id currentiCloudToken = [[NSFileManager defaultManager] ubiquityIdentityToken];
-                id previousiCloudToken = [[NSUserDefaults standardUserDefaults] objectForKey:SPRActiveiCloudIdentity];
-                if (previousiCloudToken && ![previousiCloudToken isEqual:currentiCloudToken]) {
-                    theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
-                                                   code:SPRSimpleCloudMessengerErroriCloudAccountChanged
-                                               userInfo:@{NSLocalizedDescriptionKey:[self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAccountChanged]}];
-                    // also clear the stored ubiquityIdentityToken, the subscription ID and nil the active user record
-                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRActiveiCloudIdentity];
-                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRSubscriptionID];
-                    self.accountRecordID = nil;
-                } else{
-                    // else everything is good, store the ubiquityIdentityToken
-                    [[NSUserDefaults standardUserDefaults] setObject:currentiCloudToken forKey:SPRActiveiCloudIdentity];
-                }
                 NSLog(@"asking about permissions");
                 [self.container statusForApplicationPermission:CKApplicationPermissionUserDiscoverability
                                              completionHandler:^(CKApplicationPermissionStatus applicationPermissionStatus, NSError *error) {
