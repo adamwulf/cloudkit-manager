@@ -69,6 +69,7 @@
 
         data = [decoder decodeObjectForKey:@"recordID"];
         _messageRecordID = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        _attributes = [decoder decodeObjectForKey:@"attributes"];
     }
     return self;
 }
@@ -77,6 +78,11 @@
     [encoder encodeObject:_messageData forKey:SPRMessageImageField];
     [encoder encodeObject:_senderFirstName forKey:SPRMessageSenderFirstNameField];
     [encoder encodeObject:_senderLastName forKey:@"lastName"];
+    if(_attributes){
+        [encoder encodeObject:_attributes forKey:@"attributes"];
+    }else{
+        [encoder encodeObject:@{} forKey:@"attributes"];
+    }
     
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:_senderRecordID];
     [encoder encodeObject:data forKey:@"senderID"];
