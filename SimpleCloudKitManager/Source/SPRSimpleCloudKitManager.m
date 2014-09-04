@@ -127,29 +127,21 @@
 // Uses internal methods to do the majority of the setup for this class
 // If everything is successful, it returns the active user CKDiscoveredUserInfo
 // All internal methods fire completionHandlers on the main thread, so no need to use GCD in this method
-- (void) promptAndFetchUserInfoOnComplete:(void (^)(SCKMAccountStatus accountStatus, SCKMApplicationPermissionStatus permissionStatus, CKRecordID *recordID, CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
-    [self silentlyVerifyiCloudAccountStatusOnComplete:^(SCKMAccountStatus accountStatus, SCKMApplicationPermissionStatus permissionStatus, NSError *error) {
-        if (error) {
-            NSLog(@"iCloud Account Could Not Be Verified");
-            if(completionHandler) completionHandler(SCKMAccountStatusCouldNotDetermine, SCKMApplicationPermissionStatusCouldNotComplete, nil, nil, error);
-        } else {
-            NSLog(@"iCloud Account Verified");
-            [self promptToBeDiscoverableIfNeededOnComplete:^(NSError *error) {
-                if (error) {
-                    NSLog(@"Prompt Failed");
-                    if(completionHandler) completionHandler(accountStatus, permissionStatus, nil, nil, error);
-                } else {
-                    NSLog(@"Prompted to be discoverable");
-                    [self silentlyFetchUserInfoOnComplete:^(CKRecordID* recordID, CKDiscoveredUserInfo* userInfo, NSError* err){
-                        if(completionHandler) completionHandler(accountStatus, permissionStatus, recordID, userInfo, error);
-                    }];
-                }
-            }];
-        }
-    }];
+- (void) promptAndFetchUserInfoOnComplete:(void (^)(SCKMApplicationPermissionStatus permissionStatus, CKRecordID *recordID, CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
+        [self promptToBeDiscoverableIfNeededOnComplete:^(SCKMApplicationPermissionStatus applicationPermissionStatus, NSError *error) {
+            if (error) {
+                NSLog(@"Prompt Failed");
+                if(completionHandler) completionHandler(applicationPermissionStatus, nil, nil, error);
+            } else {
+                NSLog(@"Prompted to be discoverable");
+                [self silentlyFetchUserInfoOnComplete:^(CKRecordID* recordID, CKDiscoveredUserInfo* userInfo, NSError* err){
+                    if(completionHandler) completionHandler(applicationPermissionStatus, recordID, userInfo, error);
+                }];
+            }
+        }];
 }
 // Checks the discoverability of the active user. Prompts if possible, errors if they are in a bad state
-- (void) promptToBeDiscoverableIfNeededOnComplete:(void (^)(NSError *error)) completionHandler {
+- (void) promptToBeDiscoverableIfNeededOnComplete:(void (^)(SCKMApplicationPermissionStatus applicationPermissionStatus, NSError *error)) completionHandler {
     [self.container requestApplicationPermission:CKApplicationPermissionUserDiscoverability completionHandler:^(CKApplicationPermissionStatus applicationPermissionStatus, NSError *error) {
         self.permissionStatus = (SCKMApplicationPermissionStatus) applicationPermissionStatus;
         
@@ -165,12 +157,9 @@
                                                     userInfo:@{NSLocalizedDescriptionKey: errorString }];
             }
         }
-        if(!theError){
-            [self promptForRemoteNotificationsIfNecessary];
-        }
         // theError will either be an error or nil, so we can always pass it in
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionHandler) completionHandler(theError);
+            if (completionHandler) completionHandler((SCKMApplicationPermissionStatus)applicationPermissionStatus, theError);
         });
     }];
 }

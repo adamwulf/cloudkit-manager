@@ -53,8 +53,7 @@
  * Once "logged in", you should call this method every time your app becomes active so it can perform it's checks.
  * @param completionHandler will either return a CKDiscoveredUserInfo or an NSError
  */
-- (void) promptAndFetchUserInfoOnComplete:(void (^)(SCKMAccountStatus accountStatus,
-                                                    SCKMApplicationPermissionStatus permissionStatus,
+- (void) promptAndFetchUserInfoOnComplete:(void (^)(SCKMApplicationPermissionStatus permissionStatus,
                                                     CKRecordID *recordID,
                                                     CKDiscoveredUserInfo * userInfo,
                                                     NSError *error)) completionHandler;
