@@ -153,13 +153,6 @@
                                                                              categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     [[UIApplication sharedApplication] registerForRemoteNotifications];
-    
-    if(!self.isSubscribed){
-        NSLog(@"not subscribed!");
-        [self subscribe];
-    }else{
-        NSLog(@"subscribed.");
-    }
 }
 
 // Fetches the active user CKDiscoveredUserInfo, fairly straightforward
@@ -205,7 +198,7 @@
             theError = [self simpleCloudMessengerErrorForError:error];
         } else {
             self.accountRecordID = recordID;
-            [self subscribe];
+            [self subscribeFor:recordID];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             // theError will either be an error or nil, so we can always pass it in
@@ -232,7 +225,7 @@
 
 #pragma mark - Subscription handling
 // handles clearing old subscriptions, and setting up the new one
-- (void)subscribe {
+- (void)subscribeFor:(CKRecordID*)recordId {
     if (self.subscribed == NO) {
         @synchronized(self){
             if(subscribeIsInFlight){
@@ -255,7 +248,7 @@
             } else {
                 // else if there are no subscriptions, just setup a new one
                 NSLog(@"setting up subscription");
-                [self setupSubscription];
+                [self setupSubscriptionFor:recordId];
             }
         }];
     }else{
@@ -263,14 +256,20 @@
     }
 }
 
-- (void) setupSubscription {
+- (void) setupSubscriptionFor:(CKRecordID*)recordId {
     // create the subscription
-    [self.publicDatabase saveSubscription:[self incomingMessageSubscription] completionHandler:^(CKSubscription *subscription, NSError *error) {
+    [self.publicDatabase saveSubscription:[self incomingMessageSubscriptionFor:recordId] completionHandler:^(CKSubscription *subscription, NSError *error) {
         // right now subscription errors fail silently.
         @synchronized(self){
             subscribeIsInFlight = NO;
         }
         if (!error) {
+            // when i first create a new subscription, it's because
+            // i'm on a brand new database. so clear out any previous
+            // server change token, and only use new stuff going forward
+            NSLog(@"resetting server changed token from: %@", self.serverChangeToken);
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:SPRServerChangeToken];
+            NSLog(@"resetting server changed token to  : %@", self.serverChangeToken);
             // save the subscription ID so we aren't constantly trying to create a new one
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             [defaults setBool:YES forKey:SPRSubscriptionID];
@@ -280,7 +279,7 @@
             NSLog(@"subscribe fail");
             // can't subscribe, so try again in a bit...
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self performSelector:@selector(subscribe) withObject:nil afterDelay:20];
+                [self performSelector:@selector(subscribeFor:) withObject:recordId afterDelay:20];
             });
         }
     }];
@@ -308,7 +307,7 @@
 //    return [[NSUserDefaults standardUserDefaults] boolForKey:SPRSubscriptionID];
 //}
 
-- (CKSubscription *) incomingMessageSubscription {
+- (CKSubscription *) incomingMessageSubscriptionFor:(CKRecordID*)recordId {
     // setup a subscription watching for new messages with the active user as the receiver
     CKReference *receiver = [[CKReference alloc] initWithRecordID:self.accountRecordID action:CKReferenceActionNone];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", SPRMessageReceiverField, receiver];
@@ -320,7 +319,7 @@
     notification.alertLocalizationKey = @"%@ sent you a page in Loose Leaf!";
     notification.alertLocalizationArgs = @[SPRMessageSenderFirstNameField];
     notification.desiredKeys = @[SPRMessageSenderFirstNameField, SPRMessageSenderField];
-//    notification.shouldBadge = YES;
+    notification.shouldBadge = YES;
     // currently not well documented, and doesn't seem to actually startup the app in the background as promised.
 //    notification.shouldSendContentAvailable = YES;
     itemSubscription.notificationInfo = notification;
@@ -392,14 +391,27 @@
         if(mostRecentFetchNotification){
             return;
         }
-        NSLog(@"fetching with token: %@", self.serverChangeToken);
+        if(!self.isSubscribed){
+            NSError* err = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
+                                       code:SPRSimpleCloudMessengerErrorUnexpected
+                                   userInfo:@{NSLocalizedDescriptionKey: @"Can't fetch new messages without subscription"}];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completionHandler(@[], err);
+            });
+            return;
+        }
+        
         CKFetchNotificationChangesOperation *operation = [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:self.serverChangeToken];
         NSMutableArray *incomingMessages = [@[] mutableCopy];
+        NSMutableArray* notificationIds = [[NSMutableArray alloc] init];
         operation.notificationChangedBlock = ^ (CKNotification *notification) {
             if([notification isKindOfClass:[CKQueryNotification class]]){
-                SPRMessage* potentiallyMissedMessage = [[SPRMessage alloc] initWithNotification:(CKQueryNotification*)notification];
-                NSLog(@"new record: %@", potentiallyMissedMessage.messageRecordID);
-                [incomingMessages addObject:potentiallyMissedMessage];
+                if(notification.notificationType == CKNotificationTypeQuery){
+                    SPRMessage* potentiallyMissedMessage = [[SPRMessage alloc] initWithNotification:(CKQueryNotification*)notification];
+                    NSLog(@"new record: %@", potentiallyMissedMessage.messageRecordID);
+                    [incomingMessages addObject:potentiallyMissedMessage];
+                    [notificationIds addObject:notification.notificationID];
+                }
             }
         };
         operation.fetchNotificationChangesCompletionBlock = ^ (CKServerChangeToken *serverChangeToken, NSError *operationError) {
@@ -423,6 +435,20 @@
                     // theError will either be an error or nil, so we can always pass it in
                     completionHandler(incomingMessages, theError);
                 });
+            }
+            
+            if([notificationIds count]){
+                NSLog(@"askign to set read: %@", notificationIds);
+                CKMarkNotificationsReadOperation* markAsRead = [[CKMarkNotificationsReadOperation alloc] initWithNotificationIDsToMarkRead:notificationIds];
+                markAsRead.markNotificationsReadCompletionBlock = ^(NSArray *notificationIDsMarkedRead, NSError *operationError){
+                    if(operationError){
+                        NSLog(@"couldn't mark %d as read", (int)[notificationIDsMarkedRead count]);
+                    }else{
+                        NSLog(@"marked %d notifiactions as read", (int)[notificationIDsMarkedRead count]);
+                    }
+                    NSLog(@"result set read: %@", notificationIds);
+                };
+                [self.container addOperation:markAsRead];
             }
         };
         mostRecentFetchNotification = operation;
