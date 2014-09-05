@@ -42,6 +42,7 @@ typedef NS_ENUM(NSUInteger, SPRSimpleCloudMessengerError) {
     SPRSimpleCloudMessengerErrorMissingDiscoveryPermissions,
     SPRSimpleCloudMessengerErrorNetwork,
     SPRSimpleCloudMessengerErrorServiceUnavailable,
+    SPRSimpleCloudMessengerErrorRateLimit,
     SPRSimpleCloudMessengerErrorCancelled,
     SPRSimpleCloudMessengerErroriCloudAccountChanged,
 };

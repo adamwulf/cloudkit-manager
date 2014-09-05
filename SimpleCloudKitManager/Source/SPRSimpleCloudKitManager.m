@@ -545,6 +545,8 @@
             return SPRSimpleCloudMessengerErrorMissingDiscoveryPermissions;
         case CKErrorOperationCancelled:
             return SPRSimpleCloudMessengerErrorCancelled;
+        case CKErrorRequestRateLimited:
+            return SPRSimpleCloudMessengerErrorRateLimit;
         case CKErrorBadDatabase:
         case CKErrorQuotaExceeded:
         case CKErrorZoneNotFound:
