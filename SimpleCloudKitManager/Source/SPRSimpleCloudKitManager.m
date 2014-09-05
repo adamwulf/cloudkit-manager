@@ -148,11 +148,11 @@
 }
 
 -(void) promptForRemoteNotificationsIfNecessary{
-    UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert
-                                                                                         |UIUserNotificationTypeSound)
+    UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge)
                                                                              categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     [[UIApplication sharedApplication] registerForRemoteNotifications];
+    NSLog(@"did ask to registerForRemoteNotifications");
 }
 
 // Fetches the active user CKDiscoveredUserInfo, fairly straightforward
