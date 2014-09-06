@@ -199,6 +199,9 @@
                 theError = [self simpleCloudMessengerErrorForError:error];
             } else {
                 NSLog(@"Active User Info fetched");
+                if([self.accountRecordID isEqual:userRecordID]){
+                    self.accountInfo = userInfo;
+                }
             }
             // theError will either be an error or nil, so we can always pass it in
             dispatch_async(dispatch_get_main_queue(), ^{
