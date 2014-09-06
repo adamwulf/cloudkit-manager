@@ -181,13 +181,38 @@
                     });
                 }];
             }else{
+                NSError* theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain code:SPRSimpleCloudMessengerErrorMissingDiscoveryPermissions userInfo:nil];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if(completionHandler) completionHandler(recordID, nil, nil);
+                    if(completionHandler) completionHandler(recordID, nil, theError);
                 });
             }
         }
     }];
 }
+
+-(void) silentlyFetchUserInfoForUserId:(CKRecordID*)userRecordID onComplete:(void (^)(CKDiscoveredUserInfo *, NSError *))completionHandler{
+    if(self.permissionStatus == SCKMApplicationPermissionStatusGranted){
+        [self.container discoverUserInfoWithUserRecordID:userRecordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
+            NSError *theError = nil;
+            if (error) {
+                NSLog(@"Failed Fetching Active User Info");
+                theError = [self simpleCloudMessengerErrorForError:error];
+            } else {
+                NSLog(@"Active User Info fetched");
+            }
+            // theError will either be an error or nil, so we can always pass it in
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(completionHandler) completionHandler(userInfo, theError);
+            });
+        }];
+    }else{
+        NSError* theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain code:SPRSimpleCloudMessengerErrorMissingDiscoveryPermissions userInfo:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(completionHandler) completionHandler(nil, theError);
+        });
+    }
+}
+
 
 // fetches the active user record ID and stores it in a property
 // also kicks off subscription for messages
@@ -214,6 +239,7 @@
     [self.container discoverAllContactUserInfosWithCompletionHandler:^(NSArray *userInfos, NSError *error) {
         NSError *theError = nil;
         if (error) {
+            NSLog(@"fetch friends error: %@", error);
             theError = [self simpleCloudMessengerErrorForError:error];
         }
         dispatch_async(dispatch_get_main_queue(), ^{

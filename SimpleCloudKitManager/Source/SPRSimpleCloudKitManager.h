@@ -36,6 +36,10 @@
 
 - (void) silentlyFetchUserInfoOnComplete:(void (^)(CKRecordID *recordID, CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler;
 
+- (void) silentlyFetchUserRecordIDOnComplete:(void (^)(CKRecordID *recordID, NSError *error))completionHandler;
+
+-(void) silentlyFetchUserInfoForUserId:(CKRecordID*)userRecordID onComplete:(void (^)(CKDiscoveredUserInfo *, NSError *))completionHandler;
+
 /** The main entry point for using this class
  * 
  * This method does the majority of the heavy lifting for setting up for the active iCloud user.
