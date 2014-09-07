@@ -11,6 +11,7 @@
 #import <CloudKit/CloudKit.h>
 #import "SPRMessage.h"
 #import "SPRConstants.h"
+#import "CKDiscoveredUserInfo+Extras.h"
 
 /**
  * Provides a messaging service using CloudKit

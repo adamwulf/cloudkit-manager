@@ -24,21 +24,26 @@
     [obj isKindOfClass:[NSDate class]];
 }
 
-
 - (id) initWithNotification:(CKQueryNotification *) notification{
     self = [super init];
     if (!self) return nil;
-    
-    _senderFirstName = nil;
-    _senderLastName = nil;
+
+    _senderInfo = nil;
     _senderRecordID = [[CKRecordID alloc] initWithRecordName:notification.recordFields[SPRMessageSenderField]];
     _messageRecordID = notification.recordID;
     return self;
 }
 
 -(void) updateMessageWithSenderInfo:(CKDiscoveredUserInfo*)sender{
-    _senderFirstName = sender.firstName;
-    _senderLastName = sender.lastName;
+    _senderInfo = [sender asDictionary];
+}
+
+-(NSString*) senderFirstName{
+    return [_senderInfo objectForKey:@"firstName"];
+}
+
+-(NSString*) senderLastName{
+    return [_senderInfo objectForKey:@"lastName"];
 }
 
 - (void) updateMessageWithMessageRecord:(CKRecord*) messageRecord {
@@ -61,8 +66,7 @@
 - (id)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {
         _messageData = [decoder decodeObjectForKey:SPRMessageImageField];
-        _senderFirstName = [decoder decodeObjectForKey:SPRMessageSenderFirstNameField];
-        _senderLastName = [decoder decodeObjectForKey:@"lastName"];
+        _senderInfo = [decoder decodeObjectForKey:SPRMessageSenderField];
         
         NSData *data = [decoder decodeObjectForKey:@"senderID"];
         _senderRecordID = [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -76,8 +80,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:_messageData forKey:SPRMessageImageField];
-    [encoder encodeObject:_senderFirstName forKey:SPRMessageSenderFirstNameField];
-    [encoder encodeObject:_senderLastName forKey:@"lastName"];
+    [encoder encodeObject:_senderInfo forKey:SPRMessageSenderField];
     if(_attributes){
         [encoder encodeObject:_attributes forKey:@"attributes"];
     }else{

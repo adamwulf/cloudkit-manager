@@ -13,6 +13,8 @@
 		6623F6A619A2A44C00E21399 /* SPRSimpleCloudKitManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6623F6A719A2A44C00E21399 /* SPRSimpleCloudKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitManager.m */; };
 		663523E919A7FB3F00A26B88 /* SPRConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 663523E819A7E8FB00A26B88 /* SPRConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66BEBFF019BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 66BEBFEE19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66BEBFF119BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 66BEBFEF19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRSimpleCloudKitManager.h; sourceTree = "<group>"; };
 		6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRSimpleCloudKitManager.m; sourceTree = "<group>"; };
 		663523E819A7E8FB00A26B88 /* SPRConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPRConstants.h; sourceTree = "<group>"; };
+		66BEBFEE19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKDiscoveredUserInfo+Extras.h"; sourceTree = "<group>"; };
+		66BEBFEF19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKDiscoveredUserInfo+Extras.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +71,8 @@
 		6623F66B19A2A1E100E21399 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				66BEBFEE19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.h */,
+				66BEBFEF19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.m */,
 				663523E819A7E8FB00A26B88 /* SPRConstants.h */,
 				6623F6A019A2A44C00E21399 /* SPRMessage.h */,
 				6623F6A119A2A44C00E21399 /* SPRMessage.m */,
@@ -85,6 +91,7 @@
 			files = (
 				663523E919A7FB3F00A26B88 /* SPRConstants.h in Headers */,
 				6623F6A419A2A44C00E21399 /* SPRMessage.h in Headers */,
+				66BEBFF019BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.h in Headers */,
 				6623F6A619A2A44C00E21399 /* SPRSimpleCloudKitManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -176,6 +183,7 @@
 			files = (
 				6623F6A719A2A44C00E21399 /* SPRSimpleCloudKitManager.m in Sources */,
 				6623F6A519A2A44C00E21399 /* SPRMessage.m in Sources */,
+				66BEBFF119BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
