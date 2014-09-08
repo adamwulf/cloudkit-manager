@@ -345,7 +345,7 @@
                                                                    subscriptionID:SPRSubscriptionIDIncomingMessages
                                                                           options:CKSubscriptionOptionsFiresOnRecordCreation];
     CKNotificationInfo *notification = [[CKNotificationInfo alloc] init];
-    notification.alertLocalizationKey = @"%@ sent you a page in Loose Leaf!";
+    notification.alertLocalizationKey = @"%@ just sent you a page!";
     notification.alertLocalizationArgs = @[SPRMessageSenderFirstNameField];
     notification.desiredKeys = @[SPRMessageSenderFirstNameField, SPRMessageSenderField];
     notification.shouldBadge = YES;
