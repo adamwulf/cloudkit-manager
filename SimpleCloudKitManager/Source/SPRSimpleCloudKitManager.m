@@ -152,7 +152,6 @@
                                                                              categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     [[UIApplication sharedApplication] registerForRemoteNotifications];
-    NSLog(@"did ask to registerForRemoteNotifications");
 }
 
 // Fetches the active user CKDiscoveredUserInfo, fairly straightforward
@@ -242,7 +241,9 @@
     [self.container discoverAllContactUserInfosWithCompletionHandler:^(NSArray *userInfos, NSError *error) {
         NSError *theError = nil;
         if (error) {
-            NSLog(@"fetch friends error: %@", error);
+            if (error.code != CKErrorRequestRateLimited) {
+                NSLog(@"fetch friends error: %@", error);
+            }
             theError = [self simpleCloudMessengerErrorForError:error];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
