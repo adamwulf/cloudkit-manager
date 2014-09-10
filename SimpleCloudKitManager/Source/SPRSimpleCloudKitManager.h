@@ -74,7 +74,7 @@
 /** Method for retrieving all new messages
  * @param completionHandler that will be called after fetching new notifications. Will include an NSArray of SPRMessage objects, or an NSError param.
  */
-- (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler;
+- (void) fetchNewMessagesAndMarkAsReadWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler;
 /** Method for retrieving the details about a certain messge
  * 
  * Use this when trying to display the detail view of a message including the image. You can check for the image on the message 

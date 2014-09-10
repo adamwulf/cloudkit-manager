@@ -416,7 +416,7 @@
 }
 
 // Method for fetching all new messages
-- (void) fetchNewMessagesWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler {
+- (void) fetchNewMessagesAndMarkAsReadWithCompletionHandler:(void (^)(NSArray *messages, NSError *error)) completionHandler {
     @synchronized(self){
         if(mostRecentFetchNotification){
             return;
