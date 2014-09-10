@@ -34,10 +34,6 @@
     return self;
 }
 
--(void) updateMessageWithSenderInfo:(CKDiscoveredUserInfo*)sender{
-    _senderInfo = [sender asDictionary];
-}
-
 -(NSString*) senderFirstName{
     return [_senderInfo objectForKey:@"firstName"];
 }
@@ -46,10 +42,30 @@
     return [_senderInfo objectForKey:@"lastName"];
 }
 
+-(void) fetchDetailsWithCompletionHandler:(void (^)(NSError *error))completionHandler{
+    if(_senderInfo && _messageData){
+        // we already have details
+        completionHandler(nil);
+        return;
+    }
+    // Do something with the message, like pushing it onto the stack
+    [[SPRSimpleCloudKitManager sharedManager] fetchDetailsForMessage:self withCompletionHandler:^(SPRMessage *message, NSError *error) {
+        if(completionHandler)completionHandler(error);
+    }];
+}
+
+#pragma mark - Protected
+
+// these methods are only called by the SPRSimpleCloudKitManager
+
+-(void) updateMessageWithSenderInfo:(CKDiscoveredUserInfo*)sender{
+    _senderInfo = [sender asDictionary];
+}
+
 - (void) updateMessageWithMessageRecord:(CKRecord*) messageRecord {
     CKAsset *imageAsset = messageRecord[SPRMessageImageField];
     _messageData = imageAsset.fileURL;
-
+    
     NSMutableDictionary* additionalAttributes = [NSMutableDictionary dictionary];
     
     for(NSString* key in [messageRecord allKeys]){
@@ -62,6 +78,9 @@
     }
     _attributes = [NSDictionary dictionaryWithDictionary:additionalAttributes];
 }
+
+
+#pragma mark - NSCoding
 
 - (id)initWithCoder:(NSCoder *)decoder {
     if (self = [super init]) {

@@ -23,10 +23,6 @@
 
 - (id) initWithNotification:(CKQueryNotification *) notification;
 
--(void) updateMessageWithSenderInfo:(CKDiscoveredUserInfo*)sender;
-- (void) updateMessageWithMessageRecord:(CKRecord*) messageRecord;
-
-+(BOOL) isKeyValid:(NSString*)key;
-+(BOOL) isScalar:(id)obj;
+-(void) fetchDetailsWithCompletionHandler:(void (^)(NSError *error))completionHandler;
 
 @end

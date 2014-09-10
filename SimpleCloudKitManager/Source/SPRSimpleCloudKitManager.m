@@ -9,6 +9,7 @@
 #import "SPRSimpleCloudKitManager.h"
 #import <CloudKit/CloudKit.h>
 #import "SPRMessage.h"
+#import "SPRMessage+Protected.h"
 
 @interface SPRSimpleCloudKitManager ()
 
