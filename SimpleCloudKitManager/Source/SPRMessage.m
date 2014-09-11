@@ -48,6 +48,7 @@
         completionHandler(nil);
         return;
     }
+    
     // Do something with the message, like pushing it onto the stack
     [[SPRSimpleCloudKitManager sharedManager] fetchDetailsForMessage:self withCompletionHandler:^(SPRMessage *message, NSError *error) {
         if(completionHandler)completionHandler(error);

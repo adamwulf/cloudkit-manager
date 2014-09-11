@@ -454,11 +454,15 @@
                     if(completionHandler) completionHandler(nil, theError);
                 });
             } else {
-                self.serverChangeToken = serverChangeToken;
-                NSData *data = [NSKeyedArchiver archivedDataWithRootObject:serverChangeToken];
-                [[NSUserDefaults standardUserDefaults] setObject:data forKey:SPRServerChangeToken];
-                @synchronized(self){
+                if([serverChangeToken isEqual:self.serverChangeToken]){
+                    NSLog(@"same server token, no updates");
+                }else{
+                    self.serverChangeToken = serverChangeToken;
+                    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:serverChangeToken];
+                    [[NSUserDefaults standardUserDefaults] setObject:data forKey:SPRServerChangeToken];
                     NSLog(@"fetched %d records. told of new token: %@", (int)[incomingMessages count], self.serverChangeToken);
+                }
+                @synchronized(self){
                     mostRecentFetchNotification = nil;
                 }
                 
