@@ -504,18 +504,42 @@
         } else {
             // next fetch the binary data
             [message updateMessageWithSenderInfo:userInfo];
-            [self.publicDatabase fetchRecordWithID:message.messageRecordID completionHandler:^(CKRecord *record, NSError *error) {
-                NSError *theError = nil;
-                if (!error) {
-                    [message updateMessageWithMessageRecord:record];
-                }else{
-                    theError = [self simpleCloudMessengerErrorForError:error];
-                }
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    // error will either be an error or nil, so we can always pass it in
-                    if(completionHandler) completionHandler(message, theError);
-                });
-            }];
+            
+            NSLog(@"fetching message: %@", message.messageRecordID);
+            if(message.messageRecordID){
+                CKFetchRecordsOperation* fetchOperation = [[CKFetchRecordsOperation alloc] initWithRecordIDs:@[message.messageRecordID]];
+                __weak CKFetchRecordsOperation* weakFetchOp = fetchOperation;
+                fetchOperation.perRecordProgressBlock = ^(CKRecordID *record, double progress){
+                    NSLog(@"per record progress %f", progress);
+                    
+#ifdef DEBUG
+                    if(progress > .5 && !weakFetchOp.isCancelled){
+                        if(rand() % 100 < 5){
+                            [weakFetchOp cancel];
+                        }
+                    }
+#endif
+                };
+                fetchOperation.perRecordCompletionBlock = ^(CKRecord *record, CKRecordID *recordID, NSError *error){
+                    NSLog(@"per record completion");
+                };
+                fetchOperation.fetchRecordsCompletionBlock = ^(NSDictionary* records, NSError* error){
+                    CKRecord* record = [records objectForKey:message.messageRecordID];
+                    NSError *theError = nil;
+                    if (!error) {
+                        [message updateMessageWithMessageRecord:record];
+                    }else{
+                        theError = [self simpleCloudMessengerErrorForError:error];
+                    }
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        // error will either be an error or nil, so we can always pass it in
+                        if(completionHandler) completionHandler(message, theError);
+                    });
+                };
+                [self.publicDatabase addOperation:fetchOperation];
+            }else{
+                if(completionHandler) completionHandler(nil, [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain code:SPRSimpleCloudMessengerErrorUnexpected userInfo:nil]);
+            }
         }
     }];
 }
