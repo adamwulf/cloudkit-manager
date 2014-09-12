@@ -69,7 +69,7 @@
     // first, see if we have an iCloud account at all
     [self.container accountStatusWithCompletionHandler:^(CKAccountStatus accountStatus, NSError *error) {
 #ifdef DEBUG
-        [NSThread sleepForTimeInterval:30];
+        [NSThread sleepForTimeInterval:3];
 #endif
         _accountStatus = (SCKMAccountStatus) accountStatus;
         
