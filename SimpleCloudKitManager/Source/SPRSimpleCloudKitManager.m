@@ -514,7 +514,7 @@
                     
 #ifdef DEBUG
                     if(progress > .5 && !weakFetchOp.isCancelled){
-                        if(rand() % 100 < 5){
+                        if(rand() % 100 < 15){
                             [weakFetchOp cancel];
                         }
                     }
