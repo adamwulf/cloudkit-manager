@@ -511,7 +511,9 @@
             NSLog(@"fetching message: %@", message.messageRecordID);
             if(message.messageRecordID){
                 CKFetchRecordsOperation* fetchOperation = [[CKFetchRecordsOperation alloc] initWithRecordIDs:@[message.messageRecordID]];
+#ifdef DEBUG
                 __weak CKFetchRecordsOperation* weakFetchOp = fetchOperation;
+#endif
                 fetchOperation.perRecordProgressBlock = ^(CKRecordID *record, double progress){
                     NSLog(@"per record progress %f", progress);
                     
