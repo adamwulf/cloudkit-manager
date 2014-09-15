@@ -511,19 +511,19 @@
             NSLog(@"fetching message: %@", message.messageRecordID);
             if(message.messageRecordID){
                 CKFetchRecordsOperation* fetchOperation = [[CKFetchRecordsOperation alloc] initWithRecordIDs:@[message.messageRecordID]];
-#ifdef DEBUG
-                __weak CKFetchRecordsOperation* weakFetchOp = fetchOperation;
-#endif
+//#ifdef DEBUG
+//                __weak CKFetchRecordsOperation* weakFetchOp = fetchOperation;
+//#endif
                 fetchOperation.perRecordProgressBlock = ^(CKRecordID *record, double progress){
                     NSLog(@"per record progress %f", progress);
                     
-#ifdef DEBUG
-                    if(progress > .5 && !weakFetchOp.isCancelled){
-                        if(rand() % 100 < 15){
-                            [weakFetchOp cancel];
-                        }
-                    }
-#endif
+//#ifdef DEBUG
+//                    if(progress > .5 && !weakFetchOp.isCancelled){
+//                        if(rand() % 100 < 15){
+//                            [weakFetchOp cancel];
+//                        }
+//                    }
+//#endif
                 };
                 fetchOperation.perRecordCompletionBlock = ^(CKRecord *record, CKRecordID *recordID, NSError *error){
                     NSLog(@"per record completion");
