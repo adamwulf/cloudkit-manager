@@ -65,7 +65,6 @@
 
 // Verifies iCloud Account Status and that the iCloud ubiquityIdentityToken hasn't changed
 - (void) silentlyVerifyiCloudAccountStatusOnComplete:(void (^)(SCKMAccountStatus accountStatus, SCKMApplicationPermissionStatus permissionStatus, NSError *error)) completionHandler {
-    NSLog(@"silently asking");
     // first, see if we have an iCloud account at all
     [self.container accountStatusWithCompletionHandler:^(CKAccountStatus accountStatus, NSError *error) {
 //#ifdef DEBUG
@@ -94,10 +93,8 @@
                     if(completionHandler) completionHandler(self.accountStatus, self.permissionStatus, theError);
                 });
             } else {
-                NSLog(@"asking about permissions");
                 [self.container statusForApplicationPermission:CKApplicationPermissionUserDiscoverability
                                              completionHandler:^(CKApplicationPermissionStatus applicationPermissionStatus, NSError *error) {
-                                                 NSLog(@"got reply about permissions");
                                                  // ok, we've got our permission status now
                                                  self.permissionStatus = (SCKMApplicationPermissionStatus) applicationPermissionStatus;
                                                  dispatch_async(dispatch_get_main_queue(), ^{
@@ -162,20 +159,16 @@
 - (void) silentlyFetchUserInfoOnComplete:(void (^)(CKRecordID *recordID, CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
     [self silentlyFetchUserRecordIDOnComplete:^(CKRecordID *recordID, NSError *error) {
         if (error) {
-            NSLog(@"Failed fetching Active User ID");
             // don't have to wrap this in GCD main because it's in our internal method on the main queue already
             if(completionHandler) completionHandler(nil, nil, error);
         } else {
-            NSLog(@"Active User ID fetched");
             self.accountRecordID = recordID;
             if(self.permissionStatus == SCKMApplicationPermissionStatusGranted){
                 [self.container discoverUserInfoWithUserRecordID:recordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
                     NSError *theError = nil;
                     if (error) {
-                        NSLog(@"Failed Fetching Active User Info");
                         theError = [self simpleCloudMessengerErrorForError:error];
                     } else {
-                        NSLog(@"Active User Info fetched");
                         self.accountInfo = userInfo;
                     }
                     // theError will either be an error or nil, so we can always pass it in
@@ -458,12 +451,11 @@
                 });
             } else {
                 if([serverChangeToken isEqual:self.serverChangeToken]){
-                    NSLog(@"same server token, no updates");
+//                    NSLog(@"same server token, no updates");
                 }else{
                     self.serverChangeToken = serverChangeToken;
                     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:serverChangeToken];
                     [[NSUserDefaults standardUserDefaults] setObject:data forKey:SPRServerChangeToken];
-                    NSLog(@"fetched %d records. told of new token: %@", (int)[incomingMessages count], self.serverChangeToken);
                 }
                 @synchronized(self){
                     mostRecentFetchNotification = nil;
@@ -476,15 +468,15 @@
             }
             
             if([notificationIds count]){
-                NSLog(@"askign to set read: %@", notificationIds);
+//                NSLog(@"askign to set read: %@", notificationIds);
                 CKMarkNotificationsReadOperation* markAsRead = [[CKMarkNotificationsReadOperation alloc] initWithNotificationIDsToMarkRead:notificationIds];
                 markAsRead.markNotificationsReadCompletionBlock = ^(NSArray *notificationIDsMarkedRead, NSError *operationError){
-                    if(operationError){
-                        NSLog(@"couldn't mark %d as read", (int)[notificationIDsMarkedRead count]);
-                    }else{
-                        NSLog(@"marked %d notifiactions as read", (int)[notificationIDsMarkedRead count]);
-                    }
-                    NSLog(@"result set read: %@", notificationIds);
+//                    if(operationError){
+//                        NSLog(@"couldn't mark %d as read", (int)[notificationIDsMarkedRead count]);
+//                    }else{
+//                        NSLog(@"marked %d notifiactions as read", (int)[notificationIDsMarkedRead count]);
+//                    }
+//                    NSLog(@"result set read: %@", notificationIds);
                 };
                 [self.container addOperation:markAsRead];
             }
