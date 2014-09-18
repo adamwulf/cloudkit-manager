@@ -191,10 +191,10 @@
         [self.container discoverUserInfoWithUserRecordID:userRecordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
             NSError *theError = nil;
             if (error) {
-                NSLog(@"Failed Fetching Active User Info");
+//                NSLog(@"Failed Fetching Active User Info");
                 theError = [self simpleCloudMessengerErrorForError:error];
             } else {
-                NSLog(@"Active User Info fetched");
+//                NSLog(@"Active User Info fetched");
                 if([self.accountRecordID isEqual:userRecordID]){
                     self.accountInfo = userInfo;
                 }
@@ -260,7 +260,6 @@
             }
             subscribeIsInFlight = YES;
         }
-        NSLog(@"not subscribed");
         // find existing subscriptions and deletes them
         [self.publicDatabase fetchSubscriptionWithID:SPRSubscriptionIDIncomingMessages completionHandler:^(CKSubscription *subscription, NSError *error) {
             // this operation silently fails, which is probably the right way to go
@@ -268,7 +267,6 @@
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 [defaults setBool:YES forKey:SPRSubscriptionID];
                 _subscribed = YES;
-                NSLog(@"actually, am subscribed");
                 @synchronized(self){
                     subscribeIsInFlight = NO;
                 }
@@ -279,7 +277,7 @@
             }
         }];
     }else{
-        NSLog(@"subscribed");
+//        NSLog(@"subscribed");
     }
 }
 
