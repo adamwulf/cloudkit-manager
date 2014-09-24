@@ -11,6 +11,27 @@
 #import "SPRMessage.h"
 #import "SPRMessage+Protected.h"
 
+@interface MockDiscoveredUser : CKDiscoveredUserInfo
+    -(id) initWithRecord:(CKRecordID*)recId andFirstName:(NSString*)first andLastName:(NSString*)last;
+@end
+
+@implementation MockDiscoveredUser{
+    CKRecordID* recordId;
+    NSString* firstName;
+    NSString* lastName;
+}
+
+-(id) initWithRecord:(CKRecordID*)recId andFirstName:(NSString*)first andLastName:(NSString*)last{
+    if(self = [[NSObject class] init]){
+        recordId = recId;
+        firstName = first;
+        lastName = last;
+    }
+    return self;
+}
+
+@end
+
 @interface SPRSimpleCloudKitManager ()
 
 // logged in user account, if any
@@ -38,8 +59,8 @@
         
         if(!_container.containerIdentifier){
             NSLog(@"no container");
-            _container = nil;
-            return nil;
+//            _container = nil;
+//            return nil;
         }
     }
     return self;
@@ -149,10 +170,7 @@
 }
 
 -(void) promptForRemoteNotificationsIfNecessary{
-    UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge)
-                                                                             categories:nil];
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    // noop
 }
 
 // Fetches the active user CKDiscoveredUserInfo, fairly straightforward
@@ -187,48 +205,26 @@
 }
 
 -(void) silentlyFetchUserInfoForUserId:(CKRecordID*)userRecordID onComplete:(void (^)(CKDiscoveredUserInfo *, NSError *))completionHandler{
-    if(self.permissionStatus == SCKMApplicationPermissionStatusGranted){
-        [self.container discoverUserInfoWithUserRecordID:userRecordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
-            NSError *theError = nil;
-            if (error) {
-//                NSLog(@"Failed Fetching Active User Info");
-                theError = [self simpleCloudMessengerErrorForError:error];
-            } else {
-//                NSLog(@"Active User Info fetched");
-                if([self.accountRecordID isEqual:userRecordID]){
-                    self.accountInfo = userInfo;
-                }
-            }
-            // theError will either be an error or nil, so we can always pass it in
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if(completionHandler) completionHandler(userInfo, theError);
-            });
-        }];
-    }else{
-        NSError* theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain code:SPRSimpleCloudMessengerErrorMissingDiscoveryPermissions userInfo:nil];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        self.accountInfo = [[MockDiscoveredUser alloc] initWithRecord:self.accountRecordID andFirstName:@"Mock" andLastName:@"User"];
         dispatch_async(dispatch_get_main_queue(), ^{
-            if(completionHandler) completionHandler(nil, theError);
+            // theError will either be an error or nil, so we can always pass it in
+            if(completionHandler) completionHandler(self.accountInfo, nil);
         });
-    }
+    });
 }
 
 
 // fetches the active user record ID and stores it in a property
 // also kicks off subscription for messages
 - (void) silentlyFetchUserRecordIDOnComplete:(void (^)(CKRecordID *recordID, NSError *error))completionHandler {
-    [self.container fetchUserRecordIDWithCompletionHandler:^(CKRecordID *recordID, NSError *error) {
-        NSError *theError = nil;
-        if (error) {
-            theError = [self simpleCloudMessengerErrorForError:error];
-        } else {
-            self.accountRecordID = recordID;
-            [self subscribeFor:recordID];
-        }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        self.accountRecordID = [[CKRecordID alloc] initWithRecordName:@"usr-123"];
         dispatch_async(dispatch_get_main_queue(), ^{
             // theError will either be an error or nil, so we can always pass it in
-            if(completionHandler) completionHandler(recordID, theError);
+            if(completionHandler) completionHandler(self.accountRecordID, nil);
         });
-    }];
+    });
 }
 
 #pragma mark - friends
