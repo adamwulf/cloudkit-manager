@@ -10,27 +10,7 @@
 #import <CloudKit/CloudKit.h>
 #import "SPRMessage.h"
 #import "SPRMessage+Protected.h"
-
-@interface MockDiscoveredUser : CKDiscoveredUserInfo
-    -(id) initWithRecord:(CKRecordID*)recId andFirstName:(NSString*)first andLastName:(NSString*)last;
-@end
-
-@implementation MockDiscoveredUser{
-    CKRecordID* recordId;
-    NSString* firstName;
-    NSString* lastName;
-}
-
--(id) initWithRecord:(CKRecordID*)recId andFirstName:(NSString*)first andLastName:(NSString*)last{
-    if(self = [[NSObject class] init]){
-        recordId = recId;
-        firstName = first;
-        lastName = last;
-    }
-    return self;
-}
-
-@end
+#import "SPRMockDiscoveredUser.h"
 
 @interface SPRSimpleCloudKitManager ()
 
@@ -206,7 +186,7 @@
 
 -(void) silentlyFetchUserInfoForUserId:(CKRecordID*)userRecordID onComplete:(void (^)(CKDiscoveredUserInfo *, NSError *))completionHandler{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        self.accountInfo = [[MockDiscoveredUser alloc] initWithRecord:self.accountRecordID andFirstName:@"Mock" andLastName:@"User"];
+        self.accountInfo = (CKDiscoveredUserInfo*) [[SPRMockDiscoveredUser alloc] initWithRecord:self.accountRecordID andFirstName:@"Mock" andLastName:@"User"];
         dispatch_async(dispatch_get_main_queue(), ^{
             // theError will either be an error or nil, so we can always pass it in
             if(completionHandler) completionHandler(self.accountInfo, nil);
