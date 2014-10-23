@@ -77,8 +77,10 @@
             theError = [self simpleCloudMessengerErrorForError:error];
             self.permissionStatus = SCKMApplicationPermissionStatusCouldNotComplete;
             dispatch_async(dispatch_get_main_queue(), ^{
-                // theError will either be an error or nil, so we can always pass it in
-                if(completionHandler) completionHandler(self.accountStatus, self.permissionStatus, theError);
+                @autoreleasepool {
+                    // theError will either be an error or nil, so we can always pass it in
+                    if(completionHandler) completionHandler(self.accountStatus, self.permissionStatus, theError);
+                }
             });
         } else {
             // if it's not a valid account raise an error
@@ -89,8 +91,10 @@
                                            userInfo:@{NSLocalizedDescriptionKey: errorString }];
                 self.permissionStatus = SCKMApplicationPermissionStatusCouldNotComplete;
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    // theError will either be an error or nil, so we can always pass it in
-                    if(completionHandler) completionHandler(self.accountStatus, self.permissionStatus, theError);
+                    @autoreleasepool {
+                        // theError will either be an error or nil, so we can always pass it in
+                        if(completionHandler) completionHandler(self.accountStatus, self.permissionStatus, theError);
+                    }
                 });
             } else {
                 [self.container statusForApplicationPermission:CKApplicationPermissionUserDiscoverability
@@ -98,8 +102,10 @@
                                                  // ok, we've got our permission status now
                                                  self.permissionStatus = (SCKMApplicationPermissionStatus) applicationPermissionStatus;
                                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                                     // theError will either be an error or nil, so we can always pass it in
-                                                     if(completionHandler) completionHandler(self.accountStatus, self.permissionStatus, theError);
+                                                     @autoreleasepool {
+                                                         // theError will either be an error or nil, so we can always pass it in
+                                                         if(completionHandler) completionHandler(self.accountStatus, self.permissionStatus, theError);
+                                                     }
                                                  });
                 }];
             }
@@ -143,7 +149,9 @@
         }
         // theError will either be an error or nil, so we can always pass it in
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionHandler) completionHandler((SCKMApplicationPermissionStatus)applicationPermissionStatus, theError);
+            @autoreleasepool {
+                if (completionHandler) completionHandler((SCKMApplicationPermissionStatus)applicationPermissionStatus, theError);
+            }
         });
     }];
 }
@@ -173,13 +181,17 @@
                     }
                     // theError will either be an error or nil, so we can always pass it in
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if(completionHandler) completionHandler(recordID, userInfo, theError);
+                        @autoreleasepool {
+                            if(completionHandler) completionHandler(recordID, userInfo, theError);
+                        }
                     });
                 }];
             }else{
                 NSError* theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain code:SPRSimpleCloudMessengerErrorMissingDiscoveryPermissions userInfo:nil];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if(completionHandler) completionHandler(recordID, nil, theError);
+                    @autoreleasepool {
+                        if(completionHandler) completionHandler(recordID, nil, theError);
+                    }
                 });
             }
         }
@@ -201,13 +213,17 @@
             }
             // theError will either be an error or nil, so we can always pass it in
             dispatch_async(dispatch_get_main_queue(), ^{
-                if(completionHandler) completionHandler(userInfo, theError);
+                @autoreleasepool {
+                    if(completionHandler) completionHandler(userInfo, theError);
+                }
             });
         }];
     }else{
         NSError* theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain code:SPRSimpleCloudMessengerErrorMissingDiscoveryPermissions userInfo:nil];
         dispatch_async(dispatch_get_main_queue(), ^{
-            if(completionHandler) completionHandler(nil, theError);
+            @autoreleasepool {
+                if(completionHandler) completionHandler(nil, theError);
+            }
         });
     }
 }
@@ -225,8 +241,10 @@
             [self subscribeFor:recordID];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            // theError will either be an error or nil, so we can always pass it in
-            if(completionHandler) completionHandler(recordID, theError);
+            @autoreleasepool {
+                // theError will either be an error or nil, so we can always pass it in
+                if(completionHandler) completionHandler(recordID, theError);
+            }
         });
     }];
 }
@@ -244,8 +262,10 @@
             theError = [self simpleCloudMessengerErrorForError:error];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            // theError will either be an error or nil, so we can always pass it in
-            if(completionHandler) completionHandler(userInfos, theError);
+            @autoreleasepool {
+                // theError will either be an error or nil, so we can always pass it in
+                if(completionHandler) completionHandler(userInfos, theError);
+            }
         });
     }];
 }
@@ -304,7 +324,9 @@
             NSLog(@"subscribe fail");
             // can't subscribe, so try again in a bit...
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self performSelector:@selector(subscribeFor:) withObject:recordId afterDelay:20];
+                @autoreleasepool {
+                    [self performSelector:@selector(subscribeFor:) withObject:recordId afterDelay:20];
+                }
             });
         }
     }];
@@ -364,7 +386,9 @@
                                              code:SPRSimpleCloudMessengerErroriCloudAccount
                                          userInfo:@{NSLocalizedDescriptionKey: [self simpleCloudMessengerErrorStringForErrorCode:SPRSimpleCloudMessengerErroriCloudAccount]}];
         dispatch_async(dispatch_get_main_queue(), ^{
-            if(completionHandler) completionHandler(error);
+            @autoreleasepool {
+                if(completionHandler) completionHandler(error);
+            }
         });
         return;
     }
@@ -403,8 +427,10 @@
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            // theError will either be an error or nil, so we can always pass it in
-            if(completionHandler) completionHandler(theError);
+            @autoreleasepool {
+                // theError will either be an error or nil, so we can always pass it in
+                if(completionHandler) completionHandler(theError);
+            }
         });
     };
     [self.publicDatabase addOperation:saveOp];
@@ -421,7 +447,9 @@
                                        code:SPRSimpleCloudMessengerErrorUnexpected
                                    userInfo:@{NSLocalizedDescriptionKey: @"Can't fetch new messages without subscription"}];
             dispatch_async(dispatch_get_main_queue(), ^{
-                completionHandler(@[], err);
+                @autoreleasepool {
+                    completionHandler(@[], err);
+                }
             });
             return;
         }
@@ -444,8 +472,10 @@
             if (operationError) {
                 theError = [self simpleCloudMessengerErrorForError:operationError];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    // theError will either be an error or nil, so we can always pass it in
-                    if(completionHandler) completionHandler(nil, theError);
+                    @autoreleasepool {
+                        // theError will either be an error or nil, so we can always pass it in
+                        if(completionHandler) completionHandler(nil, theError);
+                    }
                 });
             } else {
                 if([serverChangeToken isEqual:self.serverChangeToken]){
@@ -460,8 +490,10 @@
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    // theError will either be an error or nil, so we can always pass it in
-                    completionHandler(incomingMessages, theError);
+                    @autoreleasepool {
+                        // theError will either be an error or nil, so we can always pass it in
+                        completionHandler(incomingMessages, theError);
+                    }
                 });
             }
             
@@ -491,8 +523,10 @@
         if (error) {
             theError = [self simpleCloudMessengerErrorForError:error];
             dispatch_async(dispatch_get_main_queue(), ^{
-                // error will either be an error or nil, so we can always pass it in
-                if(completionHandler) completionHandler(message, theError);
+                @autoreleasepool {
+                    // error will either be an error or nil, so we can always pass it in
+                    if(completionHandler) completionHandler(message, theError);
+                }
             });
         } else {
             // next fetch the binary data
@@ -527,8 +561,10 @@
                         theError = [self simpleCloudMessengerErrorForError:error];
                     }
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        // error will either be an error or nil, so we can always pass it in
-                        if(completionHandler) completionHandler(message, theError);
+                        @autoreleasepool {
+                            // error will either be an error or nil, so we can always pass it in
+                            if(completionHandler) completionHandler(message, theError);
+                        }
                     });
                 };
                 [self.publicDatabase addOperation:fetchOperation];
