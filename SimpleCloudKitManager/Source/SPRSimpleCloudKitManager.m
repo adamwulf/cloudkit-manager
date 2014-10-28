@@ -157,6 +157,7 @@
 }
 
 -(void) promptForRemoteNotificationsIfNecessary{
+    NSLog(@"promptForRemoteNotificationsIfNecessary");
     UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge)
                                                                              categories:nil];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
