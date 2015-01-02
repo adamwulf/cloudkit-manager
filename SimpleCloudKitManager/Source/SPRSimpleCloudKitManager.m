@@ -393,6 +393,12 @@
         });
         return;
     }
+    if(!userRecordID){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionHandler(nil);
+        });
+        return;
+    }
     
     // assemble the new record
     CKRecord *record = [[CKRecord alloc] initWithRecordType:SPRMessageRecordType];
