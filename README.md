@@ -4,6 +4,10 @@ A simple, functioning example of building messaging for your app on top of Cloud
 
 This messenger allows your users to send text and an image to their friends who are also using your app. It only has a few methods, and drastically shrinks the amount of error cases you will have to deal with.
 
+## Building
+
+Install the 'Real Framework' Xcode tool from https://github.com/kstenerud/iOS-Universal-Framework. This lets the cloudkit-manager Xcode project build a proper static .framework that can be imported and linked to any other project.
+
 ##Installation
 
 Download or clone the repository, and copy these files to your project:
