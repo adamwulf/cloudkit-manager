@@ -3,7 +3,7 @@
 //  SimpleCloudKitManager
 //
 //  Created by Adam Wulf on 8/22/14.
-//  Copyright (c) 2014 Adam Wulf. All rights reserved.
+//  Copyright (c) 2014 Milestone Made, LLC. All rights reserved.
 //
 
 typedef NS_ENUM(NSInteger, SCKMAccountStatus);
