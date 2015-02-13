@@ -27,7 +27,6 @@
 		6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRSimpleCloudKitManager.h; sourceTree = "<group>"; };
 		6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRSimpleCloudKitManager.m; sourceTree = "<group>"; };
 		663523E819A7E8FB00A26B88 /* SPRConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPRConstants.h; sourceTree = "<group>"; };
-		6682FEF71A8DB4D100187325 /* SimpleCloudKitManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SimpleCloudKitManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66AFAD2D1A8DE02F00FD0263 /* SimpleCloudKitManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = SimpleCloudKitManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66AFAD311A8DE02F00FD0263 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66AFAD341A8DE02F00FD0263 /* SimpleCloudKitManager-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SimpleCloudKitManager-Info.plist"; sourceTree = "<group>"; };
@@ -57,7 +56,6 @@
 				66AFAD301A8DE02F00FD0263 /* Supporting Files */,
 				6605499B19A29BF300F5B17F /* Frameworks */,
 				6605499A19A29BF300F5B17F /* Products */,
-				6682FEF11A8DB39600187325 /* Framework Product */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,14 +89,6 @@
 				6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitManager.m */,
 			);
 			path = Source;
-			sourceTree = "<group>";
-		};
-		6682FEF11A8DB39600187325 /* Framework Product */ = {
-			isa = PBXGroup;
-			children = (
-				6682FEF71A8DB4D100187325 /* SimpleCloudKitManager.framework */,
-			);
-			name = "Framework Product";
 			sourceTree = "<group>";
 		};
 		66AFAD301A8DE02F00FD0263 /* Supporting Files */ = {
