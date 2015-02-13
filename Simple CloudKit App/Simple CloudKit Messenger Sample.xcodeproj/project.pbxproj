@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		660549E619A29F8200F5B17F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660549E519A29F8200F5B17F /* Foundation.framework */; };
-		6623F6A919A2A4A600E21399 /* SimpleCloudKitManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6623F6A819A2A4A600E21399 /* SimpleCloudKitManager.framework */; };
 		6623F6AB19A2AFB500E21399 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6623F6AA19A2AFB500E21399 /* CloudKit.framework */; };
+		6682FEF91A8DB50200187325 /* SimpleCloudKitManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6682FEF81A8DB50200187325 /* SimpleCloudKitManager.framework */; };
 		66A7AF1519A5252C00E0AA29 /* SPRTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66A7AF1419A5252C00E0AA29 /* SPRTabViewController.m */; };
 		711DE13A1952CD4000A8839D /* Michael.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 711DE1391952CD4000A8839D /* Michael.jpg */; };
 		716E523B194ACC8E00E1477E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 716E5232194ACC8E00E1477E /* AppDelegate.m */; };
@@ -22,8 +22,8 @@
 
 /* Begin PBXFileReference section */
 		660549E519A29F8200F5B17F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		6623F6A819A2A4A600E21399 /* SimpleCloudKitManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SimpleCloudKitManager.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/SimpleCloudKit-dktcmuclsoqiexcnoxieqdyvlnsn/Build/Products/Debug-iphoneos/SimpleCloudKitManager.framework"; sourceTree = "<group>"; };
 		6623F6AA19A2AFB500E21399 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		6682FEF81A8DB50200187325 /* SimpleCloudKitManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SimpleCloudKitManager.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/SimpleCloudKit-deowvdkbqsbkvkenrwkpmzgumemk/Build/Products/Debug-iphoneos/SimpleCloudKitManager.framework"; sourceTree = "<group>"; };
 		66A02F9D19A290790013EFAE /* Simple CloudKit Messenger Sample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Simple CloudKit Messenger Sample.entitlements"; sourceTree = "<group>"; };
 		66A7AF1319A5252C00E0AA29 /* SPRTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRTabViewController.h; sourceTree = "<group>"; };
 		66A7AF1419A5252C00E0AA29 /* SPRTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRTabViewController.m; sourceTree = "<group>"; };
@@ -48,7 +48,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6623F6AB19A2AFB500E21399 /* CloudKit.framework in Frameworks */,
-				6623F6A919A2A4A600E21399 /* SimpleCloudKitManager.framework in Frameworks */,
+				6682FEF91A8DB50200187325 /* SimpleCloudKitManager.framework in Frameworks */,
 				660549E619A29F8200F5B17F /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -95,8 +95,8 @@
 		6605490519A297B600F5B17F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6682FEF81A8DB50200187325 /* SimpleCloudKitManager.framework */,
 				6623F6AA19A2AFB500E21399 /* CloudKit.framework */,
-				6623F6A819A2A4A600E21399 /* SimpleCloudKitManager.framework */,
 				660549E519A29F8200F5B17F /* Foundation.framework */,
 			);
 			name = Frameworks;
@@ -300,7 +300,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "Source/Simple CloudKit Messenger Sample.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/LooseLeaf-hhwdxgyoymgwhwezrbyabmvqherf/Build/Products/Debug-iphoneos",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/SimpleCloudKit-deowvdkbqsbkvkenrwkpmzgumemk/Build/Products/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -317,7 +321,11 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "Source/Simple CloudKit Messenger Sample.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/LooseLeaf-hhwdxgyoymgwhwezrbyabmvqherf/Build/Products/Debug-iphoneos",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/SimpleCloudKit-deowvdkbqsbkvkenrwkpmzgumemk/Build/Products/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = Source/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

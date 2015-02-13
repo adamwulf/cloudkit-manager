@@ -6,55 +6,18 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		6682FEEA1A8DB33700187325 /* Framework */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 6682FEEB1A8DB33700187325 /* Build configuration list for PBXAggregateTarget "Framework" */;
-			buildPhases = (
-				6682FEEE1A8DB34000187325 /* Build Framework */,
-			);
-			dependencies = (
-				6682FEF01A8DB38C00187325 /* PBXTargetDependency */,
-			);
-			name = Framework;
-			productName = Framework;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
-		6682FEDE1A8DB2D500187325 /* SPRSimpleCloudKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitManager.m */; };
-		6682FEDF1A8DB2D600187325 /* SPRMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6623F6A119A2A44C00E21399 /* SPRMessage.m */; };
-		6682FEE01A8DB2D800187325 /* CKDiscoveredUserInfo+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 66BEBFEF19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.m */; };
-		6682FEE11A8DB2E500187325 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660549E319A29F6D00F5B17F /* Foundation.framework */; };
-		6682FEE21A8DB2E900187325 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660549DD19A29E0F00F5B17F /* CloudKit.framework */; };
-		6682FEE51A8DB30A00187325 /* CKDiscoveredUserInfo+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 66BEBFEE19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6682FEE61A8DB30D00187325 /* SPRConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 663523E819A7E8FB00A26B88 /* SPRConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6682FEE71A8DB31000187325 /* SPRMessage+Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 66F968A919C10BA700C1F696 /* SPRMessage+Protected.h */; };
-		6682FEE81A8DB31200187325 /* SPRMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6623F6A019A2A44C00E21399 /* SPRMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6682FEE91A8DB31400187325 /* SPRSimpleCloudKitManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66AFAD2E1A8DE02F00FD0263 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660549E319A29F6D00F5B17F /* Foundation.framework */; };
+		66AFAD351A8DE02F00FD0263 /* SimpleCloudKitManager-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 66AFAD341A8DE02F00FD0263 /* SimpleCloudKitManager-Info.plist */; };
+		66AFAD401A8DE0AC00FD0263 /* CKDiscoveredUserInfo+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 66BEBFEF19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.m */; };
+		66AFAD411A8DE0AE00FD0263 /* SPRMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 6623F6A119A2A44C00E21399 /* SPRMessage.m */; };
+		66AFAD421A8DE0B000FD0263 /* SPRSimpleCloudKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitManager.m */; };
+		66AFAD431A8DE0B300FD0263 /* SPRSimpleCloudKitManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66AFAD441A8DE0B900FD0263 /* SPRMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 6623F6A019A2A44C00E21399 /* SPRMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66AFAD451A8DE0BA00FD0263 /* SPRMessage+Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 66F968A919C10BA700C1F696 /* SPRMessage+Protected.h */; };
+		66AFAD461A8DE0BD00FD0263 /* SPRConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 663523E819A7E8FB00A26B88 /* SPRConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		66AFAD471A8DE0BE00FD0263 /* CKDiscoveredUserInfo+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 66BEBFEE19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		6682FEEF1A8DB38C00187325 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6605498F19A29BF300F5B17F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6682FEC61A8DB28600187325;
-			remoteInfo = SimpleCloudKitManager;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		6682FEC51A8DB28600187325 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		660549DD19A29E0F00F5B17F /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -64,20 +27,21 @@
 		6623F6A219A2A44C00E21399 /* SPRSimpleCloudKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPRSimpleCloudKitManager.h; sourceTree = "<group>"; };
 		6623F6A319A2A44C00E21399 /* SPRSimpleCloudKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPRSimpleCloudKitManager.m; sourceTree = "<group>"; };
 		663523E819A7E8FB00A26B88 /* SPRConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SPRConstants.h; sourceTree = "<group>"; };
-		6682FEC71A8DB28600187325 /* libSimpleCloudKitManager.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSimpleCloudKitManager.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		6682FEF21A8DB3A600187325 /* SimpleCloudKitManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SimpleCloudKitManager.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/LooseLeaf-hhwdxgyoymgwhwezrbyabmvqherf/Build/Products/Debug-iphoneos/SimpleCloudKitManager.framework"; sourceTree = "<group>"; };
+		6682FEF71A8DB4D100187325 /* SimpleCloudKitManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SimpleCloudKitManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		66AFAD2D1A8DE02F00FD0263 /* SimpleCloudKitManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = SimpleCloudKitManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		66AFAD311A8DE02F00FD0263 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66AFAD341A8DE02F00FD0263 /* SimpleCloudKitManager-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SimpleCloudKitManager-Info.plist"; sourceTree = "<group>"; };
 		66BEBFEE19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKDiscoveredUserInfo+Extras.h"; sourceTree = "<group>"; };
 		66BEBFEF19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKDiscoveredUserInfo+Extras.m"; sourceTree = "<group>"; };
 		66F968A919C10BA700C1F696 /* SPRMessage+Protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SPRMessage+Protected.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		6682FEC41A8DB28600187325 /* Frameworks */ = {
+		66AFAD281A8DE02F00FD0263 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6682FEE21A8DB2E900187325 /* CloudKit.framework in Frameworks */,
-				6682FEE11A8DB2E500187325 /* Foundation.framework in Frameworks */,
+				66AFAD2E1A8DE02F00FD0263 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +52,7 @@
 			isa = PBXGroup;
 			children = (
 				6623F66B19A2A1E100E21399 /* Source */,
+				66AFAD301A8DE02F00FD0263 /* Supporting Files */,
 				6605499B19A29BF300F5B17F /* Frameworks */,
 				6605499A19A29BF300F5B17F /* Products */,
 				6682FEF11A8DB39600187325 /* Framework Product */,
@@ -97,7 +62,7 @@
 		6605499A19A29BF300F5B17F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6682FEC71A8DB28600187325 /* libSimpleCloudKitManager.a */,
+				66AFAD2D1A8DE02F00FD0263 /* SimpleCloudKitManager.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -129,38 +94,50 @@
 		6682FEF11A8DB39600187325 /* Framework Product */ = {
 			isa = PBXGroup;
 			children = (
-				6682FEF21A8DB3A600187325 /* SimpleCloudKitManager.framework */,
+				6682FEF71A8DB4D100187325 /* SimpleCloudKitManager.framework */,
 			);
 			name = "Framework Product";
+			sourceTree = "<group>";
+		};
+		66AFAD301A8DE02F00FD0263 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				66AFAD341A8DE02F00FD0263 /* SimpleCloudKitManager-Info.plist */,
+				66AFAD311A8DE02F00FD0263 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			path = SimpleCloudKitManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		6682FEE41A8DB30400187325 /* Headers */ = {
+		66AFAD291A8DE02F00FD0263 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6682FEE51A8DB30A00187325 /* CKDiscoveredUserInfo+Extras.h in Headers */,
-				6682FEE91A8DB31400187325 /* SPRSimpleCloudKitManager.h in Headers */,
-				6682FEE81A8DB31200187325 /* SPRMessage.h in Headers */,
-				6682FEE61A8DB30D00187325 /* SPRConstants.h in Headers */,
-				6682FEE71A8DB31000187325 /* SPRMessage+Protected.h in Headers */,
+				66AFAD431A8DE0B300FD0263 /* SPRSimpleCloudKitManager.h in Headers */,
+				66AFAD471A8DE0BE00FD0263 /* CKDiscoveredUserInfo+Extras.h in Headers */,
+				66AFAD441A8DE0B900FD0263 /* SPRMessage.h in Headers */,
+				66AFAD461A8DE0BD00FD0263 /* SPRConstants.h in Headers */,
+				66AFAD451A8DE0BA00FD0263 /* SPRMessage+Protected.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		6682FEC61A8DB28600187325 /* SimpleCloudKitManager */ = {
+		66AFAD2C1A8DE02F00FD0263 /* SimpleCloudKitManager */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6682FED81A8DB28600187325 /* Build configuration list for PBXNativeTarget "SimpleCloudKitManager" */;
+			buildConfigurationList = 66AFAD3A1A8DE02F00FD0263 /* Build configuration list for PBXNativeTarget "SimpleCloudKitManager" */;
 			buildPhases = (
-				6682FEC31A8DB28600187325 /* Sources */,
-				6682FEC41A8DB28600187325 /* Frameworks */,
-				6682FEC51A8DB28600187325 /* CopyFiles */,
-				6682FEE41A8DB30400187325 /* Headers */,
-				6682FEE31A8DB2EE00187325 /* Prepare Framework */,
+				66AFAD3D1A8DE06400FD0263 /* Prepare Build Script */,
+				66AFAD271A8DE02F00FD0263 /* Sources */,
+				66AFAD281A8DE02F00FD0263 /* Frameworks */,
+				66AFAD291A8DE02F00FD0263 /* Headers */,
+				66AFAD2A1A8DE02F00FD0263 /* Resources */,
+				66AFAD3E1A8DE07600FD0263 /* Process Headers Script */,
+				66AFAD3F1A8DE08600FD0263 /* Build Framework Script */,
 			);
 			buildRules = (
 			);
@@ -168,8 +145,8 @@
 			);
 			name = SimpleCloudKitManager;
 			productName = SimpleCloudKitManager;
-			productReference = 6682FEC71A8DB28600187325 /* libSimpleCloudKitManager.a */;
-			productType = "com.apple.product-type.library.static";
+			productReference = 66AFAD2D1A8DE02F00FD0263 /* SimpleCloudKitManager.framework */;
+			productType = "com.apple.product-type.framework.static";
 		};
 /* End PBXNativeTarget section */
 
@@ -180,11 +157,8 @@
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Adam Wulf";
 				TargetAttributes = {
-					6682FEC61A8DB28600187325 = {
-						CreatedOnToolsVersion = 6.3;
-					};
-					6682FEEA1A8DB33700187325 = {
-						CreatedOnToolsVersion = 6.3;
+					66AFAD2C1A8DE02F00FD0263 = {
+						CreatedOnToolsVersion = 6.1.1;
 					};
 				};
 			};
@@ -200,63 +174,79 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6682FEC61A8DB28600187325 /* SimpleCloudKitManager */,
-				6682FEEA1A8DB33700187325 /* Framework */,
+				66AFAD2C1A8DE02F00FD0263 /* SimpleCloudKitManager */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		6682FEE31A8DB2EE00187325 /* Prepare Framework */ = {
-			isa = PBXShellScriptBuildPhase;
+/* Begin PBXResourcesBuildPhase section */
+		66AFAD2A1A8DE02F00FD0263 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			inputPaths = (
-			);
-			name = "Prepare Framework";
-			outputPaths = (
+				66AFAD351A8DE02F00FD0263 /* SimpleCloudKitManager-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "set -e\n\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"\n\n# Link the \"Current\" version to \"A\"\n/bin/ln -sfh A \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Headers\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# The -a ensures that the headers maintain the source modification date so that we don't constantly\n# cause propagating rebuilds of files that import these headers.\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/Versions/A/Headers\"";
 		};
-		6682FEEE1A8DB34000187325 /* Build Framework */ = {
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		66AFAD3D1A8DE06400FD0263 /* Prepare Build Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Build Framework";
+			name = "Prepare Build Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nset +u\n# Avoid recursively calling this script.\nif [[ $SF_MASTER_SCRIPT_RUNNING ]]\nthen\nexit 0\nfi\nset -u\nexport SF_MASTER_SCRIPT_RUNNING=1\n\nSF_TARGET_NAME=${PROJECT_NAME}\nSF_EXECUTABLE_PATH=\"lib${SF_TARGET_NAME}.a\"\nSF_WRAPPER_NAME=\"${SF_TARGET_NAME}.framework\"\n\n# The following conditionals come from\n# https://github.com/kstenerud/iOS-Universal-Framework\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nSF_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nSF_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SF_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nSF_OTHER_PLATFORM=iphonesimulator\nelse\nSF_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$SF_SDK_PLATFORM$ ]]\nthen\nSF_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${SF_OTHER_PLATFORM}\"\nelse\necho \"Could not find platform name from build products directory: $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\n# Build the other platform.\nxcrun xcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${SF_OTHER_PLATFORM}${SF_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" OBJROOT=\"${OBJROOT}\" BUILD_ROOT=\"${BUILD_ROOT}\" SYMROOT=\"${SYMROOT}\" $ACTION\n\n# Smash the two static libraries into one fat binary and store it in the .framework\nxcrun lipo -create \"${BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_EXECUTABLE_PATH}\" -output \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"\n\n# Copy the binary to the other architecture folder to have a complete framework in both.\ncp -a \"${BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\" \"${SF_OTHER_BUILT_PRODUCTS_DIR}/${SF_WRAPPER_NAME}/Versions/A/${SF_TARGET_NAME}\"";
+			shellScript = "set -e\n\nset +u\nif [[ $UFW_MASTER_SCRIPT_RUNNING ]]\nthen\n# Nothing for the slave script to do\nexit 0\nfi\nset -u\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nUFW_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nUFW_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version  from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$UFW_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nUFW_OTHER_PLATFORM=iphonesimulator\nelse\nUFW_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$UFW_SDK_PLATFORM$ ]]\nthen\nUFW_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${UFW_OTHER_PLATFORM}\"\nelse\necho \"Could not find $UFW_SDK_PLATFORM in $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\nONLY_ACTIVE_PLATFORM=${ONLY_ACTIVE_PLATFORM:-$ONLY_ACTIVE_ARCH}\n\n# Short-circuit if all binaries are up to date\n\nif [[ -f \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" ]] && \\\n[[ -f \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/${EXECUTABLE_PATH}\" ]] && \\\n[[ ! \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" -nt \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/${EXECUTABLE_PATH}\" ]] && \\\n([[ \"${ONLY_ACTIVE_PLATFORM}\" == \"YES\" ]] || \\\n([[ -f \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" ]] && \\\n[[ -f \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/${EXECUTABLE_PATH}\" ]] && \\\n[[ ! \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" -nt \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/${EXECUTABLE_PATH}\" ]]\n)\n)\nthen\nexit 0\nfi\n\n\n# Clean other platform if needed\n\nif [[ ! -f \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" ]] && [[ \"${ONLY_ACTIVE_PLATFORM}\" != \"YES\" ]]\nthen\necho \"Platform \\\"$UFW_SDK_PLATFORM\\\" was cleaned recently. Cleaning \\\"$UFW_OTHER_PLATFORM\\\" as well\"\necho xcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${UFW_OTHER_PLATFORM}${UFW_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" CONFIGURATION_TEMP_DIR=\"${PROJECT_TEMP_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\" clean\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${UFW_OTHER_PLATFORM}${UFW_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" CONFIGURATION_TEMP_DIR=\"${PROJECT_TEMP_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\" clean\nfi\n\n\n# Make sure we are building from fresh binaries\n\nrm -rf \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\"\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework\"\n\nif [[ \"${ONLY_ACTIVE_PLATFORM}\" != \"YES\" ]]\nthen\nrm -rf \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\"\nrm -rf \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework\"\nfi\n";
+		};
+		66AFAD3E1A8DE07600FD0263 /* Process Headers Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Process Headers Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nHEADERS_ROOT=$SRCROOT/$PRODUCT_NAME\nFRAMEWORK_HEADERS_DIR=\"$BUILT_PRODUCTS_DIR/$WRAPPER_NAME/Versions/$FRAMEWORK_VERSION/Headers\"\n\n## only header files expected at this point\nPUBLIC_HEADERS=$(find $FRAMEWORK_HEADERS_DIR/. -not -type d 2> /dev/null | sed -e \"s@.*/@@g\")\n\nFIND_OPTS=\"\"\nfor PUBLIC_HEADER in $PUBLIC_HEADERS; do\nif [ -n \"$FIND_OPTS\" ]; then\nFIND_OPTS=\"$FIND_OPTS -o\"\nfi\nFIND_OPTS=\"$FIND_OPTS -name '$PUBLIC_HEADER'\"\ndone\n\nif [ -n \"$FIND_OPTS\" ]; then\nfor ORIG_HEADER in $(eval \"find $HEADERS_ROOT/. $FIND_OPTS\" 2> /dev/null | sed -e \"s@^$HEADERS_ROOT/./@@g\"); do\nPUBLIC_HEADER=$(basename $ORIG_HEADER)\nRELATIVE_PATH=$(dirname $ORIG_HEADER)\nif [ -e $FRAMEWORK_HEADERS_DIR/$PUBLIC_HEADER ]; then\nmkdir -p \"$FRAMEWORK_HEADERS_DIR/$RELATIVE_PATH\"\nmv \"$FRAMEWORK_HEADERS_DIR/$PUBLIC_HEADER\" \"$FRAMEWORK_HEADERS_DIR/$RELATIVE_PATH/$PUBLIC_HEADER\"\nfi\ndone\nfi\n";
+		};
+		66AFAD3F1A8DE08600FD0263 /* Build Framework Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Framework Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\nset -e\n\nset +u\nif [[ $UFW_MASTER_SCRIPT_RUNNING ]]\nthen\n# Nothing for the slave script to do\nexit 0\nfi\nset -u\nexport UFW_MASTER_SCRIPT_RUNNING=1\n\n\n# Functions\n\n## List files in the specified directory, storing to the specified array.\n#\n# @param $1 The path to list\n# @param $2 The name of the array to fill\n#\n##\nlist_files ()\n{\n    filelist=$(ls \"$1\")\n    while read line\n    do\n    eval \"$2[\\${#$2[*]}]=\\\"\\$line\\\"\"\n    done <<< \"$filelist\"\n}\n\n\n# Sanity check\n\nif [[ ! -f \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" ]]\nthen\necho \"Framework target \\\"${TARGET_NAME}\\\" had no source files to build from. Make sure your source files have the correct target membership\"\nexit 1\nfi\n\necho \"Target Executable: ${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\"\n\n\n# Gather information\n\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]\nthen\nUFW_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]\nthen\nUFW_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\nif [[ \"$UFW_SDK_PLATFORM\" = \"iphoneos\" ]]\nthen\nUFW_OTHER_PLATFORM=iphonesimulator\nelse\nUFW_OTHER_PLATFORM=iphoneos\nfi\n\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$UFW_SDK_PLATFORM$ ]]\nthen\nUFW_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${UFW_OTHER_PLATFORM}\"\nelse\necho \"Could not find $UFW_SDK_PLATFORM in $BUILT_PRODUCTS_DIR\"\nexit 1\nfi\n\nONLY_ACTIVE_PLATFORM=${ONLY_ACTIVE_PLATFORM:-$ONLY_ACTIVE_ARCH}\n\n# Short-circuit if all binaries are up to date.\n# We already checked the other platform in the prerun script.\n\nif [[ -f \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\" ]] && [[ -f \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/${PRODUCT_NAME}\" ]] && [[ ! \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\" -nt \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/${PRODUCT_NAME}\" ]]\nthen\nexit 0\nfi\n\nif [ \"${ONLY_ACTIVE_PLATFORM}\" == \"YES\" ]\nthen\necho \"ONLY_ACTIVE_PLATFORM=${ONLY_ACTIVE_PLATFORM}: Skipping other platform build\"\nelse\n# Make sure the other platform gets built\n\necho \"Build other platform\"\n\necho xcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${UFW_OTHER_PLATFORM}${UFW_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" CONFIGURATION_TEMP_DIR=\"${PROJECT_TEMP_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\" $ACTION\nxcodebuild -project \"${PROJECT_FILE_PATH}\" -target \"${TARGET_NAME}\" -configuration \"${CONFIGURATION}\" -sdk ${UFW_OTHER_PLATFORM}${UFW_SDK_VERSION} BUILD_DIR=\"${BUILD_DIR}\" CONFIGURATION_TEMP_DIR=\"${PROJECT_TEMP_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\" $ACTION\n\n\n# Build the fat static library binary\n\necho \"Create universal static library\"\n\necho \"$PLATFORM_DEVELOPER_BIN_DIR/libtool\" -static \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" -o \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}.temp\"\n\"$PLATFORM_DEVELOPER_BIN_DIR/libtool\" -static \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" \"${UFW_OTHER_BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" -o \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}.temp\"\n\necho mv \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}.temp\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}\"\nmv \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}.temp\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}\"\nfi\n\n# Move executable to product name location\n\necho \"Moving Executable\"\necho \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\"\necho \"to\"\necho \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\nmv \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework/${PRODUCT_NAME}\"\n\n# Build embedded framework structure\n\necho \"Build Embedded Framework\"\n\necho rm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework\"\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework\"\necho mkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/Resources\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/Resources\"\necho cp -a \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/\"\ncp -a \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/\"\n\ndeclare -a UFW_FILE_LIST\nlist_files \"${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\" UFW_FILE_LIST\nfor filename in \"${UFW_FILE_LIST[@]}\"\ndo\nif [[ \"${filename}\" != \"Info.plist\" ]] && [[ ! \"${filename}\" =~ .*\\.lproj$ ]]\nthen\necho ln -sfh \"../${WRAPPER_NAME}/Resources/${filename}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/Resources/${filename}\"\nln -sfh \"../${WRAPPER_NAME}/Resources/${filename}\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.embeddedframework/Resources/${filename}\"\nfi\ndone\n\n\nif [ \"${ONLY_ACTIVE_PLATFORM}\" != \"YES\" ]\nthen\n# Replace other platform's framework with a copy of this one (so that both have the same universal binary)\n\necho \"Copy from $UFW_SDK_PLATFORM to $UFW_OTHER_PLATFORM\"\n\necho rm -rf \"${BUILD_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\"\nrm -rf \"${BUILD_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\"\necho cp -a \"${BUILD_DIR}/${CONFIGURATION}-${UFW_SDK_PLATFORM}\" \"${BUILD_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\"\ncp -a \"${BUILD_DIR}/${CONFIGURATION}-${UFW_SDK_PLATFORM}\" \"${BUILD_DIR}/${CONFIGURATION}-${UFW_OTHER_PLATFORM}\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		6682FEC31A8DB28600187325 /* Sources */ = {
+		66AFAD271A8DE02F00FD0263 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6682FEDE1A8DB2D500187325 /* SPRSimpleCloudKitManager.m in Sources */,
-				6682FEE01A8DB2D800187325 /* CKDiscoveredUserInfo+Extras.m in Sources */,
-				6682FEDF1A8DB2D600187325 /* SPRMessage.m in Sources */,
+				66AFAD421A8DE0B000FD0263 /* SPRSimpleCloudKitManager.m in Sources */,
+				66AFAD401A8DE0AC00FD0263 /* CKDiscoveredUserInfo+Extras.m in Sources */,
+				66AFAD411A8DE0AE00FD0263 /* SPRMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		6682FEF01A8DB38C00187325 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6682FEC61A8DB28600187325 /* SimpleCloudKitManager */;
-			targetProxy = 6682FEEF1A8DB38C00187325 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		660549A919A29BF300F5B17F /* Debug */ = {
@@ -331,49 +321,35 @@
 			};
 			name = Release;
 		};
-		6682FED91A8DB28600187325 /* Debug */ = {
+		66AFAD3B1A8DE02F00FD0263 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				OTHER_LDFLAGS = "-ObjC";
+				INFOPLIST_FILE = SimpleCloudKitManager/Info.plist;
+				ONLY_ACTIVE_PLATFORM = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = Headers;
 				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = NO;
-				STRIP_STYLE = "non-global";
+				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
 		};
-		6682FEDA1A8DB28600187325 /* Release */ = {
+		66AFAD3C1A8DE02F00FD0263 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				OTHER_LDFLAGS = "-ObjC";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = SimpleCloudKitManager/Info.plist;
+				ONLY_ACTIVE_PLATFORM = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = Headers;
 				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = NO;
-				STRIP_STYLE = "non-global";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		6682FEEC1A8DB33700187325 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		6682FEED1A8DB33700187325 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
 		};
@@ -389,19 +365,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6682FED81A8DB28600187325 /* Build configuration list for PBXNativeTarget "SimpleCloudKitManager" */ = {
+		66AFAD3A1A8DE02F00FD0263 /* Build configuration list for PBXNativeTarget "SimpleCloudKitManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6682FED91A8DB28600187325 /* Debug */,
-				6682FEDA1A8DB28600187325 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
-		6682FEEB1A8DB33700187325 /* Build configuration list for PBXAggregateTarget "Framework" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				6682FEEC1A8DB33700187325 /* Debug */,
-				6682FEED1A8DB33700187325 /* Release */,
+				66AFAD3B1A8DE02F00FD0263 /* Debug */,
+				66AFAD3C1A8DE02F00FD0263 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
