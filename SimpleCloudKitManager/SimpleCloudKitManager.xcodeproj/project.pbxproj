@@ -31,6 +31,7 @@
 		66AFAD2D1A8DE02F00FD0263 /* SimpleCloudKitManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = SimpleCloudKitManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66AFAD311A8DE02F00FD0263 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66AFAD341A8DE02F00FD0263 /* SimpleCloudKitManager-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SimpleCloudKitManager-Info.plist"; sourceTree = "<group>"; };
+		66AFAD531A8DE2E600FD0263 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		66BEBFEE19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CKDiscoveredUserInfo+Extras.h"; sourceTree = "<group>"; };
 		66BEBFEF19BBB92D0032D30C /* CKDiscoveredUserInfo+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CKDiscoveredUserInfo+Extras.m"; sourceTree = "<group>"; };
 		66F968A919C10BA700C1F696 /* SPRMessage+Protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SPRMessage+Protected.h"; sourceTree = "<group>"; };
@@ -51,6 +52,7 @@
 		6605498E19A29BF300F5B17F = {
 			isa = PBXGroup;
 			children = (
+				66AFAD531A8DE2E600FD0263 /* README.md */,
 				6623F66B19A2A1E100E21399 /* Source */,
 				66AFAD301A8DE02F00FD0263 /* Supporting Files */,
 				6605499B19A29BF300F5B17F /* Frameworks */,

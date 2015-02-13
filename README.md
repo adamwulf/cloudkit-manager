@@ -6,7 +6,7 @@ This messenger allows your users to send text and an image to their friends who 
 
 ## Building
 
-Install the 'Real Framework' Xcode tool from https://github.com/kstenerud/iOS-Universal-Framework. This lets the cloudkit-manager Xcode project build a proper static .framework that can be imported and linked to any other project.
+This project builds a static iOS framework bundle.
 
 ##Installation
 
