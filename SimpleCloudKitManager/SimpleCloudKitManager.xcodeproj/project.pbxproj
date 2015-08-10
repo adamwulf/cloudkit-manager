@@ -146,7 +146,7 @@
 		6605498F19A29BF300F5B17F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "Adam Wulf";
 				TargetAttributes = {
 					66AFAD2C1A8DE02F00FD0263 = {
@@ -364,6 +364,7 @@
 				66AFAD3C1A8DE02F00FD0263 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
