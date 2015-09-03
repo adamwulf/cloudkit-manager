@@ -40,19 +40,21 @@
     tv.dataSource = self;
     tv.delegate = self;
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
-    
-    if([SPRSimpleCloudKitManager sharedMessenger].isActiveUserForCloudKit){
-        NSLog(@"logged in as a real user");
-    }else{
-        NSLog(@"not logged in at all");
-    }
-    
-    [[SPRSimpleCloudKitManager sharedMessenger] discoverAllFriendsWithCompletionHandler:^(NSArray *friendRecords, NSError *error) {
-        if (error) {
-            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-        } else {
-            self.friends = [self filteredArrayOfFriendRecords:friendRecords];
-            [self.tableView reloadData];
+
+
+    [[SPRSimpleCloudKitManager sharedManager] silentlyVerifyiCloudAccountStatusOnComplete:^(SCKMAccountStatus accountStatus, SCKMApplicationPermissionStatus permissionStatus, NSError *error) {
+        if(accountStatus == SCKMAccountStatusAvailable){
+            NSLog(@"logged in as a real user");
+            [[SPRSimpleCloudKitManager sharedManager] discoverAllFriendsWithCompletionHandler:^(NSArray *friendRecords, NSError *error) {
+                if (error) {
+                    [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                } else {
+                    self.friends = [self filteredArrayOfFriendRecords:friendRecords];
+                    [self.tableView reloadData];
+                }
+            }];
+        }else{
+            NSLog(@"not logged in at all");
         }
     }];
 }
@@ -81,7 +83,7 @@
     CKDiscoveredUserInfo *userInfo = self.friends[indexPath.row];
     NSString * bundleImagePath = [[NSBundle mainBundle] pathForResource:@"Michael" ofType:@"jpg"];
     NSURL *imageURL = [NSURL fileURLWithPath:bundleImagePath];
-    [[SPRSimpleCloudKitManager sharedMessenger] sendMessage:@"Holy Cow" withImageURL:imageURL toUserRecordID:userInfo.userRecordID withCompletionHandler:^(NSError *error) {
+    [[SPRSimpleCloudKitManager sharedManager] sendFile:imageURL withAttributes:nil toUserRecordID:userInfo.userRecordID withProgressHandler:nil withCompletionHandler:^(NSError *error) {
         if (error) {
             [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
         } else {

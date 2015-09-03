@@ -39,13 +39,13 @@
     self.messageLabel = [[UILabel alloc] initWithFrame:labelRect];
     [self.view addSubview:self.messageLabel];
     
-    self.messageLabel.text = self.message.messageText;
-    if (self.message.messageImage) {
-        self.imageView.image = self.message.messageImage;
+    self.messageLabel.text = [self.message.messageData path];
+    if ([self.message.messageData path]) {
+        self.imageView.image = [UIImage imageWithContentsOfFile:[self.message.messageData path]];
     } else {
-        [[SPRSimpleCloudKitManager sharedMessenger] fetchDetailsForMessage:self.message withCompletionHandler:^(SPRMessage *message, NSError *error) {
-            self.messageLabel.text = message.messageText;
-            self.imageView.image = message.messageImage;
+        [[SPRSimpleCloudKitManager sharedManager] fetchDetailsForMessage:self.message withCompletionHandler:^(SPRMessage *message, NSError *error) {
+            self.messageLabel.text = [message.messageData path];
+            self.imageView.image = [UIImage imageWithContentsOfFile:[self.message.messageData path]];
         }];
     }
 }

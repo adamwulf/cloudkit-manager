@@ -33,7 +33,8 @@
     
     [tv registerClass:[UITableViewCell class] forCellReuseIdentifier:@"SPRMessageCell"];
 
-    [[SPRSimpleCloudKitManager sharedMessenger] fetchNewMessagesWithCompletionHandler:^(NSArray *messages, NSError *error) {
+
+    [[SPRSimpleCloudKitManager sharedManager] fetchNewMessagesAndMarkAsReadWithCompletionHandler:^(NSArray *messages, NSError *error) {
         self.messages = [self.messages arrayByAddingObjectsFromArray:messages];
         [self.tableView reloadData];
     }];
@@ -45,7 +46,7 @@
 
 - (void)refreshView:(UIRefreshControl *)sender {
     // Do something...
-    [[SPRSimpleCloudKitManager sharedMessenger] fetchNewMessagesWithCompletionHandler:^(NSArray *messages, NSError *error) {
+    [[SPRSimpleCloudKitManager sharedManager] fetchNewMessagesAndMarkAsReadWithCompletionHandler:^(NSArray *messages, NSError *error) {
         NSLog(@"finished fetching messages, in inbox controller");
         self.messages = [self.messages arrayByAddingObjectsFromArray:messages];
         [self.tableView reloadData];
@@ -74,7 +75,7 @@
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"SPRMessageCell"];
     SPRMessage *message = self.messages[indexPath.row];
-    cell.textLabel.text = message.messageText;
+    cell.textLabel.text = [message.messageData path];
     return cell;
 }
 

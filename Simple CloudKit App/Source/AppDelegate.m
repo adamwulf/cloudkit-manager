@@ -75,11 +75,11 @@
     NSString *notificationKey = [userInfo valueForKeyPath:@"ck.qry.sid"];
     if ([notificationKey isEqualToString:SPRSubscriptionIDIncomingMessages]) {
         CKQueryNotification *notification = [CKQueryNotification notificationFromRemoteNotificationDictionary:userInfo];
-        [[SPRSimpleCloudKitManager sharedMessenger] messageForQueryNotification:notification withCompletionHandler:^(SPRMessage *message, NSError *error) {
+        [[SPRSimpleCloudKitManager sharedManager] messageForQueryNotification:notification withCompletionHandler:^(SPRMessage *message, NSError *error) {
             // Do something with the message, like pushing it onto the stack
             NSLog(@"%@", message);
             if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Message!" message:message.messageText delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Message!" message:[message.messageData path] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [alertView show];
             }
 
@@ -90,9 +90,11 @@
 
 
 -(void) verifyAndLogIntoCloudKit{
-    [[SPRSimpleCloudKitManager sharedMessenger] verifyAndFetchActiveiCloudUserWithCompletionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
+    [[SPRSimpleCloudKitManager sharedManager] promptAndFetchUserInfoOnComplete:^(SCKMApplicationPermissionStatus permissionStatus, CKRecordID *recordID, CKDiscoveredUserInfo * userInfo, NSError *error) {
         if (error) {
             [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+        }else{
+            [[SPRSimpleCloudKitManager sharedManager] promptForRemoteNotificationsIfNecessary];
         }
     }];
 }

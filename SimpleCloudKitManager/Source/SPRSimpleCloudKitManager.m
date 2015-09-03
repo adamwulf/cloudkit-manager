@@ -395,7 +395,9 @@
     }
     if(!userRecordID){
         dispatch_async(dispatch_get_main_queue(), ^{
-            completionHandler(nil);
+            if(completionHandler){
+                completionHandler(nil);
+            }
         });
         return;
     }
@@ -424,7 +426,9 @@
     // save the record, and notify of progress + completion
     CKModifyRecordsOperation* saveOp = [[CKModifyRecordsOperation alloc] initWithRecordsToSave:@[record] recordIDsToDelete:@[]];
     saveOp.perRecordProgressBlock = ^(CKRecord *record, double progress){
-        progressHandler(progress);
+        if(progressHandler){
+            progressHandler(progress);
+        }
     };
     saveOp.perRecordCompletionBlock = ^(CKRecord *record, NSError *error){
         NSLog(@"cloudkit save complete %@", record.recordID);
@@ -455,7 +459,9 @@
                                    userInfo:@{NSLocalizedDescriptionKey: @"Can't fetch new messages without subscription"}];
             dispatch_async(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
-                    completionHandler(@[], err);
+                    if(completionHandler){
+                        completionHandler(@[], err);
+                    }
                 }
             });
             return;
@@ -499,7 +505,9 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     @autoreleasepool {
                         // theError will either be an error or nil, so we can always pass it in
-                        completionHandler(incomingMessages, theError);
+                        if(completionHandler){
+                            completionHandler(incomingMessages, theError);
+                        }
                     }
                 });
             }
