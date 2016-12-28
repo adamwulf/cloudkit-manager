@@ -1,6 +1,8 @@
 #Cloud Kit Messenger
 
-A simple, functioning example of building messaging for your app on top of CloudKit. It allows a user to send and receive messages to and from anyone in their address book who is also using your app (and has allowed themselves to be discoverable.)
+CloudKitMessenger is a part of [Loose Leaf](https://getlooseleaf.com), and allows for sending text and binary messages between users through CloudKit on iOS.
+
+A simple, functioning example is included showing how to build messaging for your app on top of CloudKit. It allows a user to send and receive messages to and from anyone in their address book who is also using your app (and has allowed themselves to be discoverable.)
 
 This messenger allows your users to send text and an image to their friends who are also using your app. It only has a few methods, and drastically shrinks the amount of error cases you will have to deal with.
 
