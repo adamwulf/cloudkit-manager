@@ -75,7 +75,10 @@
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"SPRMessageCell"];
     SPRMessage *message = self.messages[indexPath.row];
-    cell.textLabel.text = [message.messageData path];
+    if([message.messageText length])
+        cell.textLabel.text = message.messageText;
+    else
+        cell.textLabel.text = [message.messageData path];
     return cell;
 }
 

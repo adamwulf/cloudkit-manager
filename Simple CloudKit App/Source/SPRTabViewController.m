@@ -28,7 +28,8 @@
     
     SPRInboxTableViewController* inboxList = [[SPRInboxTableViewController alloc] initWithStyle:UITableViewStylePlain];
     UINavigationController* inboxNav = [[UINavigationController alloc] initWithRootViewController:inboxList];
-    inboxNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Inbox" image:nil tag:1];
+    //inboxNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Inbox" image:nil tag:1];
+    inboxNav.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemRecents tag:1];
     
     self.viewControllers = @[friendNav, inboxNav];
     

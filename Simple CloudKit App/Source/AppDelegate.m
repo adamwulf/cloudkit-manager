@@ -79,7 +79,19 @@
             // Do something with the message, like pushing it onto the stack
             NSLog(@"%@", message);
             if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"Message!" message:[message.messageData path] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                NSString *friendFirstName = [message senderFirstName];
+                NSString *messageTitle = @"Chat Message Received";
+                if([friendFirstName length])
+                    messageTitle = [NSString stringWithFormat:@"Chat Message Received from %@",friendFirstName];
+                NSString *messageTextTeaser = [message messageText];
+                NSString *messageTeaser = @"";
+                const int kCutoffIndex = 20;
+                if([messageTextTeaser length] && ([messageTextTeaser length] > kCutoffIndex))
+                {
+                    messageTeaser = [messageTextTeaser substringToIndex:kCutoffIndex];
+                    messageTeaser = [messageTextTeaser stringByAppendingString:@"..."];
+                }
+                UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:messageTitle message:messageTeaser delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [alertView show];
             }
 
@@ -90,7 +102,7 @@
 
 
 -(void) verifyAndLogIntoCloudKit{
-    [[SPRSimpleCloudKitManager sharedManager] promptAndFetchUserInfoOnComplete:^(SCKMApplicationPermissionStatus permissionStatus, CKRecordID *recordID, CKDiscoveredUserInfo * userInfo, NSError *error) {
+    [[SPRSimpleCloudKitManager sharedManager] promptAndFetchUserInfoOnComplete:^(SCKMApplicationPermissionStatus permissionStatus, CKRecordID *recordID, NSObject* userInfo, NSError *error) {
         if (error) {
             [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
         }else{
