@@ -20,7 +20,7 @@
 @property (nonatomic, copy, readonly) NSString *senderLastName;
 @property (nonatomic, strong, readonly) CKRecordID *senderRecordID;
 @property (nonatomic, strong, readonly) NSDictionary *attributes;
-@property (nonatomic, copy) NSString *messageText;  // FM re-add
+@property (nonatomic, copy) NSString *messageText;  
 
 - (id) initWithNotification:(CKQueryNotification *) notification;
 

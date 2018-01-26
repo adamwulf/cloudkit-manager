@@ -424,7 +424,7 @@
     notification.alertLocalizationArgs = @[SPRMessageSenderFirstNameField , SPRMessageTextField];
     notification.desiredKeys = @[SPRMessageSenderFirstNameField, SPRMessageTextField, SPRMessageSenderField];
     notification.shouldBadge = YES;
-    // FM turn back on to flag there is content available for download in background even though currently not well documented, and doesn't seem to actually startup the app in the background as promised.
+    // turn back on to flag there is content available for download in background even though currently not well documented, and doesn't seem to actually startup the app in the background as promised.
     notification.shouldSendContentAvailable = YES;
     itemSubscription.notificationInfo = notification;
     return itemSubscription;
@@ -460,7 +460,7 @@
     
     // assemble the new record
     CKRecord *record = [[CKRecord alloc] initWithRecordType:SPRMessageRecordType];
-    if([textMessage length])    //FM re-added the text message
+    if([textMessage length])    
         record[SPRMessageTextField] = textMessage;
 
     if (imageURL) {

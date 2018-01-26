@@ -57,9 +57,9 @@ static NSString * _Nonnull const SPRActiveiCloudIdentity = @"SPRActiveiCloudIden
 static NSString * _Nonnull const SPRSubscriptionID = @"SPRSubscriptionID";
 static NSString * _Nonnull const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
 static NSString * _Nonnull const SPRServerChangeToken = @"SPRServerChangeToken";
-static NSString * _Nonnull const SPRMessageTextField = @"text";   // FM
+static NSString * _Nonnull const SPRMessageTextField = @"text";   
 
 typedef void (^CKUserCloudInfoRequestHandler)(NSObject * _Nullable userInfo,
                                              NSError * _Nullable error);
-typedef void (^CKDiscoverCloudFriendsCompletionHandler)(NSArray *userInfos, NSError *error);
+typedef void (^CKDiscoverCloudFriendsCompletionHandler)(NSArray *   _Nullable userInfos, NSError *  _Nullable error);
 #endif

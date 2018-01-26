@@ -25,7 +25,7 @@
 @property (nonatomic, readonly) SCKMApplicationPermissionStatus permissionStatus;
 @property (nonatomic, readonly) CKRecordID *accountRecordID;
 @property (nonatomic, readonly) CKDiscoveredUserInfo *accountInfo;
-@property (nonatomic, retain) NSPersonNameComponents *personInfo;     // FM 
+@property (nonatomic, retain) NSPersonNameComponents *personInfo;
 @property (nonatomic, getter=isSubscribed) BOOL subscribed;
 
 
@@ -36,7 +36,7 @@
 
 - (void) silentlyVerifyiCloudAccountStatusOnComplete:(void (^)(SCKMAccountStatus accountStatus,  SCKMApplicationPermissionStatus permissionStatus, NSError *error)) completionHandler;
 
-// FM use an abstraction to allow replacement of DEPRECATED methods for iOS10 (to use UserIdentity under the hood)
+// use an abstraction to allow replacement of DEPRECATED methods for iOS10 (to use UserIdentity under the hood)
 - (void) silentlyFetchUserCloudInfoOnComplete:(void (^)(CKRecordID *recordID, NSObject *userCloudInfo, NSError *error)) completionHandler;
 
 - (void) silentlyFetchUserRecordIDOnComplete:(void (^)(CKRecordID *recordID, NSError *error))completionHandler;
