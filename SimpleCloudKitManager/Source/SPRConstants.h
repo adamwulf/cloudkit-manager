@@ -47,15 +47,19 @@ typedef NS_ENUM(NSUInteger, SPRSimpleCloudMessengerError) {
     SPRSimpleCloudMessengerErroriCloudAccountChanged,
 };
 
-static NSString *const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitMessenger.ErrorDomain";
-static NSString *const SPRMessageRecordType = @"Message";
-static NSString *const SPRMessageImageField = @"image";
-static NSString *const SPRMessageSenderField = @"sender";
-static NSString *const SPRMessageSenderFirstNameField = @"senderFirstName";
-static NSString *const SPRMessageReceiverField = @"receiver";
-static NSString *const SPRActiveiCloudIdentity = @"SPRActiveiCloudIdentity";
-static NSString *const SPRSubscriptionID = @"SPRSubscriptionID";
-static NSString *const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
-static NSString *const SPRServerChangeToken = @"SPRServerChangeToken";
+static NSString * _Nonnull const SPRSimpleCloudKitMessengerErrorDomain = @"com.SPRSimpleCloudKitMessenger.ErrorDomain";
+static NSString * _Nonnull const SPRMessageRecordType = @"Message";
+static NSString * _Nonnull const SPRMessageImageField = @"image";
+static NSString * _Nonnull const SPRMessageSenderField = @"sender";
+static NSString * _Nonnull const SPRMessageSenderFirstNameField = @"senderFirstName";
+static NSString * _Nonnull const SPRMessageReceiverField = @"receiver";
+static NSString * _Nonnull const SPRActiveiCloudIdentity = @"SPRActiveiCloudIdentity";
+static NSString * _Nonnull const SPRSubscriptionID = @"SPRSubscriptionID";
+static NSString * _Nonnull const SPRSubscriptionIDIncomingMessages = @"IncomingMessages";
+static NSString * _Nonnull const SPRServerChangeToken = @"SPRServerChangeToken";
+static NSString * _Nonnull const SPRMessageTextField = @"text";   
 
+typedef void (^CKUserCloudInfoRequestHandler)(NSObject * _Nullable userInfo,
+                                             NSError * _Nullable error);
+typedef void (^CKDiscoverCloudFriendsCompletionHandler)(NSArray *   _Nullable userInfos, NSError *  _Nullable error);
 #endif

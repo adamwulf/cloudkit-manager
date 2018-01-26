@@ -25,6 +25,7 @@
 @property (nonatomic, readonly) SCKMApplicationPermissionStatus permissionStatus;
 @property (nonatomic, readonly) CKRecordID *accountRecordID;
 @property (nonatomic, readonly) CKDiscoveredUserInfo *accountInfo;
+@property (nonatomic, retain) NSPersonNameComponents *personInfo;
 @property (nonatomic, getter=isSubscribed) BOOL subscribed;
 
 
@@ -35,11 +36,12 @@
 
 - (void) silentlyVerifyiCloudAccountStatusOnComplete:(void (^)(SCKMAccountStatus accountStatus,  SCKMApplicationPermissionStatus permissionStatus, NSError *error)) completionHandler;
 
-- (void) silentlyFetchUserInfoOnComplete:(void (^)(CKRecordID *recordID, CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler;
+// use an abstraction to allow replacement of DEPRECATED methods for iOS10 (to use UserIdentity under the hood)
+- (void) silentlyFetchUserCloudInfoOnComplete:(void (^)(CKRecordID *recordID, NSObject *userCloudInfo, NSError *error)) completionHandler;
 
 - (void) silentlyFetchUserRecordIDOnComplete:(void (^)(CKRecordID *recordID, NSError *error))completionHandler;
 
--(void) silentlyFetchUserInfoForUserId:(CKRecordID*)userRecordID onComplete:(void (^)(CKDiscoveredUserInfo *, NSError *))completionHandler;
+-(void) silentlyFetchUserCloudInfoForUserId:(CKRecordID*)userRecordID onComplete:(void (^)(NSObject *userCloudInfo, NSError *))completionHandler;
 
 /** The main entry point for using this class
  * 
@@ -57,17 +59,17 @@
  * All serious errors will carry the code SPRSimpleCloudMessengerErrorUnexpected.
  * 
  * Once "logged in", you should call this method every time your app becomes active so it can perform it's checks.
- * @param completionHandler will either return a CKDiscoveredUserInfo or an NSError
+ * @param completionHandler will either return a CKDiscoveredUserInfo (or an UserIdentity) or an NSError
  */
 - (void) promptAndFetchUserInfoOnComplete:(void (^)(SCKMApplicationPermissionStatus permissionStatus,
                                                     CKRecordID *recordID,
-                                                    CKDiscoveredUserInfo * userInfo,
+                                                    NSObject* userCloudInfo,
                                                     NSError *error)) completionHandler;
 
 -(void) promptForRemoteNotificationsIfNecessary;
 
 /** Method for retrieving all discoverable friends from the user's address book.
- * @param completionHandler will either return an NSArray of CKDiscoveredUserInfo or an NSError
+ * @param completionHandler will either return an NSArray of CKDiscoveredUserInfo (or an array of UserIdentitys) or an NSError
  */
 - (void) discoverAllFriendsWithCompletionHandler:(void (^)(NSArray *friendRecords, NSError *error)) completionHandler;
 
@@ -89,7 +91,7 @@
  * @param userRecordID a valid CKRecordID for the user the message is destined for
  * @param completionHandler will return an NSError if the send failed
  */
-- (void) sendFile:(NSURL *)imageURL withAttributes:(NSDictionary*)attributes toUserRecordID:(CKRecordID*)userRecordID withProgressHandler:(void (^)(CGFloat progress))progressHandler  withCompletionHandler:(void (^)(NSError *error)) completionHandler;
+- (void) sendMessage:(NSString *)userText withFile:(NSURL *)imageURL withAttributes:(NSDictionary*)attributes toUserRecordID:(CKRecordID*)userRecordID withProgressHandler:(void (^)(CGFloat progress))progressHandler  withCompletionHandler:(void (^)(NSError *error)) completionHandler;
 
 /** Method for turning a CKQueryNotification into a SPRMessage object
 *

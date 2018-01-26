@@ -1,4 +1,4 @@
-//
+    //
 //  SPRSimpleCloudKitMessenger.m
 //  CloudKit Manager
 //
@@ -8,6 +8,7 @@
 
 #import "SPRSimpleCloudKitManager.h"
 #import <CloudKit/CloudKit.h>
+#import "SPRConstants.h"
 #import "SPRMessage.h"
 #import "SPRMessage+Protected.h"
 
@@ -23,6 +24,10 @@
 @property (readonly) CKDatabase *publicDatabase;
 @property (nonatomic, strong) CKServerChangeToken *serverChangeToken;
 
+@end
+
+@interface SPRSimpleCloudKitManager (private)
+- (NSError *) simpleCloudMessengerErrorForError:(NSError *) error;
 @end
 
 @implementation SPRSimpleCloudKitManager{
@@ -117,14 +122,14 @@
 // Uses internal methods to do the majority of the setup for this class
 // If everything is successful, it returns the active user CKDiscoveredUserInfo
 // All internal methods fire completionHandlers on the main thread, so no need to use GCD in this method
-- (void) promptAndFetchUserInfoOnComplete:(void (^)(SCKMApplicationPermissionStatus permissionStatus, CKRecordID *recordID, CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
+- (void) promptAndFetchUserInfoOnComplete:(void (^)(SCKMApplicationPermissionStatus permissionStatus, CKRecordID *recordID, NSObject *userInfo, NSError *error)) completionHandler {
         [self promptToBeDiscoverableIfNeededOnComplete:^(SCKMApplicationPermissionStatus applicationPermissionStatus, NSError *error) {
             if (error) {
                 NSLog(@"Prompt Failed");
                 if(completionHandler) completionHandler(applicationPermissionStatus, nil, nil, error);
             } else {
                 NSLog(@"Prompted to be discoverable");
-                [self silentlyFetchUserInfoOnComplete:^(CKRecordID* recordID, CKDiscoveredUserInfo* userInfo, NSError* err){
+                [self silentlyFetchUserCloudInfoOnComplete:^(CKRecordID* recordID, NSObject* userInfo, NSError* err){
                     if(completionHandler) completionHandler(applicationPermissionStatus, recordID, userInfo, error);
                 }];
             }
@@ -164,8 +169,9 @@
     [[UIApplication sharedApplication] registerForRemoteNotifications];
 }
 
+
 // Fetches the active user CKDiscoveredUserInfo, fairly straightforward
-- (void) silentlyFetchUserInfoOnComplete:(void (^)(CKRecordID *recordID, CKDiscoveredUserInfo * userInfo, NSError *error)) completionHandler {
+- (void) silentlyFetchUserCloudInfoOnComplete:(void (^)(CKRecordID *recordID, NSObject * userCloudInfo, NSError *error)) completionHandler {
     [self silentlyFetchUserRecordIDOnComplete:^(CKRecordID *recordID, NSError *error) {
         if (error) {
             // don't have to wrap this in GCD main because it's in our internal method on the main queue already
@@ -173,12 +179,26 @@
         } else {
             self.accountRecordID = recordID;
             if(self.permissionStatus == SCKMApplicationPermissionStatusGranted){
-                [self.container discoverUserInfoWithUserRecordID:recordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
+                CKUserCloudInfoRequestHandler containedCompletionHandler = ^void(NSObject *userInfo, NSError *error){
                     NSError *theError = nil;
                     if (error) {
                         theError = [self simpleCloudMessengerErrorForError:error];
                     } else {
-                        self.accountInfo = userInfo;
+                        if([userInfo isKindOfClass:[CKDiscoveredUserInfo class]])
+                        {
+                            self.accountInfo = (CKDiscoveredUserInfo*)userInfo;
+                        }
+                        else if([userInfo isKindOfClass:[CKUserIdentity class]])
+                        {
+                            NSPersonNameComponents *nameComponents = [(CKUserIdentity *)userInfo nameComponents];
+                            self.personInfo = nameComponents;
+                        }
+                        else{
+#ifdef DEBUG
+                            BOOL userInfoIsNeitherCKDiscoveredUserInfoOrCKUserIdentity = FALSE;
+                            assert(userInfoIsNeitherCKDiscoveredUserInfoOrCKUserIdentity);
+#endif
+                        }
                     }
                     // theError will either be an error or nil, so we can always pass it in
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -186,7 +206,15 @@
                             if(completionHandler) completionHandler(recordID, userInfo, theError);
                         }
                     });
-                }];
+                };
+                if ([CKDiscoverAllUserIdentitiesOperation class])
+                {   // Use the newer operations that rely on CKUserIdentity
+                    [self.container discoverUserIdentityWithUserRecordID:recordID completionHandler:containedCompletionHandler];
+                }
+                else
+                {
+                    [self.container discoverUserInfoWithUserRecordID:recordID completionHandler:containedCompletionHandler];
+                }
             }else{
                 NSError* theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain code:SPRSimpleCloudMessengerErrorMissingDiscoveryPermissions userInfo:nil];
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -199,9 +227,9 @@
     }];
 }
 
--(void) silentlyFetchUserInfoForUserId:(CKRecordID*)userRecordID onComplete:(void (^)(CKDiscoveredUserInfo *, NSError *))completionHandler{
+-(void) silentlyFetchUserCloudInfoForUserId:(CKRecordID*)userRecordID onComplete:(void (^)(NSObject *userCloudInfo, NSError *))completionHandler{
     if(self.permissionStatus == SCKMApplicationPermissionStatusGranted){
-        [self.container discoverUserInfoWithUserRecordID:userRecordID completionHandler:^(CKDiscoveredUserInfo *userInfo, NSError *error) {
+        CKUserCloudInfoRequestHandler containedCompletionHandler = ^void(NSObject *userInfo, NSError *error){
             NSError *theError = nil;
             if (error) {
 //                NSLog(@"Failed Fetching Active User Info");
@@ -209,7 +237,21 @@
             } else {
 //                NSLog(@"Active User Info fetched");
                 if([self.accountRecordID isEqual:userRecordID]){
-                    self.accountInfo = userInfo;
+                    if([userInfo isKindOfClass:[CKDiscoveredUserInfo class]])
+                    {
+                        self.accountInfo = (CKDiscoveredUserInfo*)userInfo;
+                    }
+                    else if([userInfo isKindOfClass:[CKUserIdentity class]])
+                    {
+                        NSPersonNameComponents *nameComponents = [(CKUserIdentity *)userInfo nameComponents];
+                        self.personInfo = nameComponents;
+                    }
+                    else{
+#ifdef DEBUG
+                        BOOL userInfoIsNeitherCKDiscoveredUserInfoOrCKUserIdentity = FALSE;
+                        assert(userInfoIsNeitherCKDiscoveredUserInfoOrCKUserIdentity);
+#endif
+                    }
                 }
             }
             // theError will either be an error or nil, so we can always pass it in
@@ -218,7 +260,15 @@
                     if(completionHandler) completionHandler(userInfo, theError);
                 }
             });
-        }];
+        };
+        if ([CKDiscoverAllUserIdentitiesOperation class])
+        {   // Use the newer operations that rely on CKUserIdentity
+            [self.container discoverUserIdentityWithUserRecordID:userRecordID completionHandler:containedCompletionHandler];
+        }
+        else
+        {
+            [self.container discoverUserInfoWithUserRecordID:userRecordID completionHandler:containedCompletionHandler];
+        }
     }else{
         NSError* theError = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain code:SPRSimpleCloudMessengerErrorMissingDiscoveryPermissions userInfo:nil];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -254,7 +304,7 @@
 
 // grabs all friends discoverable in the address book, fairly straightforward
 - (void) discoverAllFriendsWithCompletionHandler:(void (^)(NSArray *friendRecords, NSError *error)) completionHandler {
-    [self.container discoverAllContactUserInfosWithCompletionHandler:^(NSArray *userInfos, NSError *error) {
+    CKDiscoverCloudFriendsCompletionHandler discoverCloudFriendsCompletionHandler=^(NSArray *userInfos, NSError *error) {
         NSError *theError = nil;
         if (error) {
             if (error.code != CKErrorRequestRateLimited) {
@@ -268,11 +318,18 @@
                 if(completionHandler) completionHandler(userInfos, theError);
             }
         });
-    }];
+    };
+    if ([CKDiscoverAllUserIdentitiesOperation class])
+        [self.container discoverAllIdentitiesWithCompletionHandler:discoverCloudFriendsCompletionHandler];
+    else
+        [self.container discoverAllContactUserInfosWithCompletionHandler:discoverCloudFriendsCompletionHandler];
+
 }
 
+
 #pragma mark - Subscription handling
-// handles clearing old subscriptions, and setting up the new one
+/* IF in doubt on what it contains the subscription can be inspected on the CloudKit Dashboard */
+ // handles clearing old subscriptions, and setting up the new one
 - (void)subscribeFor:(CKRecordID*)recordId {
     if (self.subscribed == NO) {
         @synchronized(self){
@@ -322,7 +379,7 @@
             _subscribed = YES;
             NSLog(@"subscribe success");
         }else{
-            NSLog(@"subscribe fail");
+            NSLog(@"subscribe fail %@", [error localizedDescription]);
             // can't subscribe, so try again in a bit...
             dispatch_async(dispatch_get_main_queue(), ^{
                 @autoreleasepool {
@@ -361,15 +418,14 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K == %@", SPRMessageReceiverField, receiver];
     CKSubscription *itemSubscription = [[CKSubscription alloc] initWithRecordType:SPRMessageRecordType
                                                                         predicate:predicate
-                                                                   subscriptionID:SPRSubscriptionIDIncomingMessages
-                                                                          options:CKSubscriptionOptionsFiresOnRecordCreation];
+                                                                   subscriptionID:SPRSubscriptionIDIncomingMessages                                                                          options:CKSubscriptionOptionsFiresOnRecordCreation];
     CKNotificationInfo *notification = [[CKNotificationInfo alloc] init];
-    notification.alertLocalizationKey = @"%@ just sent you a page!";
-    notification.alertLocalizationArgs = @[SPRMessageSenderFirstNameField];
-    notification.desiredKeys = @[SPRMessageSenderFirstNameField, SPRMessageSenderField];
+    notification.alertLocalizationKey =  @"Message from %@: %@.";
+    notification.alertLocalizationArgs = @[SPRMessageSenderFirstNameField , SPRMessageTextField];
+    notification.desiredKeys = @[SPRMessageSenderFirstNameField, SPRMessageTextField, SPRMessageSenderField];
     notification.shouldBadge = YES;
-    // currently not well documented, and doesn't seem to actually startup the app in the background as promised.
-//    notification.shouldSendContentAvailable = YES;
+    // turn back on to flag there is content available for download in background even though currently not well documented, and doesn't seem to actually startup the app in the background as promised.
+    notification.shouldSendContentAvailable = YES;
     itemSubscription.notificationInfo = notification;
     return itemSubscription;
 }
@@ -380,7 +436,7 @@
 // Does the work of "sending the message" e.g. Creating the message record.
 // the attributes is a dictionary, and all of the values must be:
 // strings, numbers, booleans, dates. no dictionary/array values are allowed.
-- (void) sendFile:(NSURL *)imageURL withAttributes:(NSDictionary*)attributes toUserRecordID:(CKRecordID*)userRecordID withProgressHandler:(void (^)(CGFloat progress))progressHandler  withCompletionHandler:(void (^)(NSError *error)) completionHandler {
+- (void) sendMessage:(NSString *)textMessage withFile:(NSURL *)imageURL withAttributes:(NSDictionary*)attributes toUserRecordID:(CKRecordID*)userRecordID withProgressHandler:(void (^)(CGFloat progress))progressHandler  withCompletionHandler:(void (^)(NSError *error)) completionHandler {
     // if we somehow don't have an active user record ID, raise an error about the iCloud account
     if (!self.accountRecordID) {
         NSError *error = [NSError errorWithDomain:SPRSimpleCloudKitMessengerErrorDomain
@@ -404,6 +460,9 @@
     
     // assemble the new record
     CKRecord *record = [[CKRecord alloc] initWithRecordType:SPRMessageRecordType];
+    if([textMessage length])    
+        record[SPRMessageTextField] = textMessage;
+
     if (imageURL) {
         CKAsset *asset = [[CKAsset alloc] initWithFileURL:imageURL];
         record[SPRMessageImageField] = asset;
@@ -412,7 +471,11 @@
     record[SPRMessageSenderField] = sender;
     CKReference *receiver = [[CKReference alloc] initWithRecordID:userRecordID action:CKReferenceActionNone];
     record[SPRMessageReceiverField] = receiver;
-    record[SPRMessageSenderFirstNameField] = self.accountInfo.firstName;
+    
+    if(self.accountInfo.firstName)
+        record[SPRMessageSenderFirstNameField] = self.accountInfo.firstName;
+    else if(self.personInfo.givenName)
+        record[SPRMessageSenderFirstNameField] = self.personInfo.givenName;
     
     for(NSString* key in [attributes allKeys]){
         if([SPRMessage isKeyValid:key]){

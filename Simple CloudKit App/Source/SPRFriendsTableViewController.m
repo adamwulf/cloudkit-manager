@@ -28,7 +28,14 @@
 
 -(NSArray*) filteredArrayOfFriendRecords:(NSArray*)friendRecords{
     return [friendRecords filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-        return [evaluatedObject firstName] != nil;
+        NSPersonNameComponents *nameComponentsObject = nil;
+        if([evaluatedObject isKindOfClass:[CKUserIdentity class]])
+        {
+            nameComponentsObject = [(CKUserIdentity*)evaluatedObject nameComponents];
+            return [nameComponentsObject givenName] != nil;
+        }
+        else
+            return [evaluatedObject firstName] != nil;
     }]];
 }
 
@@ -75,21 +82,59 @@
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
     CKDiscoveredUserInfo *userInfo = self.friends[indexPath.row];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", userInfo.firstName, userInfo.lastName];
+    if([userInfo isKindOfClass:[CKUserIdentity class]])
+    {
+        NSPersonNameComponents *nameComponentsObject = nil;
+        nameComponentsObject = [(CKUserIdentity*)userInfo nameComponents];
+        cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [nameComponentsObject givenName], [nameComponentsObject familyName]];
+    }
+    else
+        cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", userInfo.firstName, userInfo.lastName];
     return cell;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    CKDiscoveredUserInfo *userInfo = self.friends[indexPath.row];
-    NSString * bundleImagePath = [[NSBundle mainBundle] pathForResource:@"Michael" ofType:@"jpg"];
-    NSURL *imageURL = [NSURL fileURLWithPath:bundleImagePath];
-    [[SPRSimpleCloudKitManager sharedManager] sendFile:imageURL withAttributes:nil toUserRecordID:userInfo.userRecordID withProgressHandler:nil withCompletionHandler:^(NSError *error) {
-        if (error) {
-            [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-        } else {
-            [[[UIAlertView alloc] initWithTitle:@"Success!" message:@"Message sent" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-        }
+    __block NSString *usetEnteredText = nil;
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle: @"Chat Message"
+                                                                              message: @"Enter a chat text message to send"
+                                                                       preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"Chat Text";
+        textField.textColor = [UIColor blueColor];
+        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        textField.borderStyle = UITextBorderStyleRoundedRect;
     }];
+    UIAlertAction *cancelAction = [UIAlertAction
+                                   actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
+                                   style:UIAlertActionStyleCancel
+                                   handler:^(UIAlertAction *action)
+                                   {
+                                       NSLog(@"Cancel Chat action ");
+                                   }];
+    [alertController addAction:cancelAction];   // make the cancwl button appear first
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        NSArray * textfields = alertController.textFields;
+        UITextField *userTextfield = textfields[0];
+        NSLog(@"%@",userTextfield.text);
+        usetEnteredText = userTextfield.text;
+        
+        CKDiscoveredUserInfo *userInfo = self.friends[indexPath.row];
+        NSString * bundleImagePath = [[NSBundle mainBundle] pathForResource:@"Michael" ofType:@"jpg"];
+        NSURL *imageURL = [NSURL fileURLWithPath:bundleImagePath];
+        if([usetEnteredText length] || imageURL != nil)
+        {
+            [[SPRSimpleCloudKitManager sharedManager] sendMessage:usetEnteredText withFile:imageURL withAttributes:nil toUserRecordID:userInfo.userRecordID withProgressHandler:nil withCompletionHandler:^(NSError *error) {
+                if (error) {
+                    [[[UIAlertView alloc] initWithTitle:@"Error" message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                } else {
+                    [[[UIAlertView alloc] initWithTitle:@"Success!" message:@"Message sent" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                }
+            }];
+        }
+    }]];
+    [self presentViewController:alertController animated:YES completion:nil];
+    
     [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
 }
 
