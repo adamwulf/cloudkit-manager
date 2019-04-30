@@ -14,7 +14,7 @@ Check out [BarkLoud](https://github.com/FergalMohan/BarkLoud), a more fully feat
 
 This project builds a static iOS framework bundle.
 
-##Installation
+## Installation
 
 Download or clone the repository, and copy these files to your project:
 
@@ -25,15 +25,15 @@ SPRSimpleCloudKitMessenger.h
 SPRSimpleCloudKitMessenger.m
 ```
 
-##Setup
+## Setup
 
 You'll need to configure your iCloud/CloudKit capabilities. If you are running the sample app, you'll need to use a custom container name.
 
 ![iCloud Configuration](http://content.screencast.com/users/sprynmr/folders/Snagit/media/d2ad40e9-0ad4-4fd3-9cd1-931064a2d17a/cloudkit.png)
 
-##Basic Usage
+## Basic Usage
 
-###Login
+### Login
 
 CloudKit doesn't offer an exact equivalent to logging in. If the user is logged into iCloud on their device, they are logged into iCloud as far as your app is concerned.
 
@@ -79,11 +79,11 @@ Any errors returned from this method, or any other method on this class, will ha
 
 All serious errors will carry the code `SPRSimpleCloudMessengerErrorUnexpected`.
 
-###Friends
+### Friends
 
 To grab all the available friends from the user's address book that are using the app and discoverable, you'll use `discoverAllFriendsWithCompletionHandler`. It provides an array of `CKDiscoveredUserInfo` objects.
 
-###Sending message
+### Sending message
 
 To send a message, you'll use the `sendMessage:withImageURL:toUserRecordID:withCompletionHandler`. The `CKRecordID` can be pulled off of a `CKDiscoveredUserInfo` object from the previous method.  CloudKit makes it very easy to upload blob objects like images. You just need to provide the location to the image on disk.
 
@@ -102,7 +102,7 @@ To send a message, you'll use the `sendMessage:withImageURL:toUserRecordID:withC
 }
 ```
 
-###Fetching messages
+### Fetching messages
 
 Fetching messages is quite easy. Calling `fetchNewMessagesWithCompletionHandler` will give you an array of `SPRMessage` objects. Just be sure to store messages somewhere if you need to maintain them across app launches, as there is no way currently to retrieve old messages.
 
